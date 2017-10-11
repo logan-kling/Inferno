@@ -1,0 +1,44 @@
+\documentclass[10pt]{IEEEtran}
+\usepackage[utf8]{inputenc}
+
+\usepackage{geometry}
+\geometry{textheight=8.5in, textwidth=6in}
+
+\parindent = 0.0 in
+\parskip = 0.1 in
+
+\begin{document}
+\begin{titlepage}
+\centering
+{\scshape\Large Problem Statement \par}
+\vspace{0.5cm}
+{\scshape\LARGE Phoenix Solar Racing Simulation \par}
+\vspace{1.5cm}
+{\scshape\Large Dakota Zaengle \par}
+\vspace{0.5cm}
+{\scshape\small Abstract \par}
+\vspace{0.2cm}
+
+The goal of our project is to provide the Phoenix Solar Racing Team with an accurate estimate of their cars racing abilities under variable conditions which will enable them to develop a plan for success in their races. We will be using hardware specifications of the solar car, weather conditions, race location and other important factors to build our simulation and complete the project.
+
+\end{titlepage}
+
+\textbf{The Team:}
+Phoenix Solar Racing or PSR for this document have asked us to design a simulation of their race cars abilities on the track so they can talk strategy before the car gets to the track. Because they are students here at OSU we will be able to attend many of the team meetings and get constant feedback as we work through the project. Ideally we will attend their work meetings on Saturdays where they work in teams to complete different tasks to build the car and meet the requirements for competition. At these meetings we can at as an isolated team, not interrupting the other teams but getting information as it is needed and checking in regularly to ensure we stay on track.
+
+\textbf{The Program:}
+We will use Java or C++ to write a portable program that simulates the cars performance. We will build a simple GUI to let the team effectively use the program with little to no prior computer experience. The GUI will take the form of a series of form fields to be filled out for all of the variables. Because parts of the car are likely to change over time and the team is currently building a new car it will be important that they are able to change those values. In order to allow for changes to the car but avoid re-entry of every detail whenever the program is used we will allow import of text files to save and load car details.
+
+\textbf{The Data:}
+The data fields we will be using will include but may not be limited to: latitude and longitude of the race, cloud coverage, change in altitude over the course, length of the course, wind, and angle of the sun. Depending on the effect they have on the simulations accuracy some of the variables may be ignored. The vehicle hardware we will need to keep track of are: Battery charge at the start of the race, efficiency of the solar panels and at what angles are they most efficient, power draw from the engines and how that varies with speed, and any other variables that will have a significant impact on performance like wind resistance and tire friction.
+
+\textbf{The Time-line:}
+Because the car will not be finished when we start and the team may not even have the final parts picked out by the time we write the program, we may need to improvise and use data-sheets from potential hardware to design our simulation and make changes as those parts are purchased. For this reason our code will need to be kept clean to facilitate modification of any functions and equations to match new hardware. The basic skeleton of the simulation will be a simple program to write, allowing us to most likely have a working program very early on in development. The challenge will be slowly increasing the number of variables the simulation can account for. 
+
+\textbf{Metrics for desired outcome:}
+We will be designing this simulation to be as accurate as possible using only the data that will have a significant impact on the results of the drive and data that is available to the team before the race begins. Therefore, this project will be considered complete when we are able to provide PSR with a working simulation that provides information accurate enough to make informed decisions about the race. Because the project’s intended use is prediction of performance one or more days before the car will run the course, testing would ideally be done by running our simulation right before a test run and comparing the simulated performance against the real-world outcome. However, as the team is building a new car during this project and it may not be available to test the accuracy of the simulation we may be required to use data from the old car recorded during past races to verify our simulation.
+
+\textbf{In Review:}
+To build a simulation of PSR's solar car we will use C++ or Java to design a program with a simple GUI that will allow team members to quickly enter data covering a number of different race variables. This simulation will give the team a reasonable estimate of the cars performance for race day that will allow them to develop a race day strategy to make the most effective use of their car. We will work closely with the team of students, staying in contact with them in person at meetings and through email. Since the car may not be complete when we are ready to test our program we will need to make use of old race data and the specs of their previous car to verify the simulation. While building the program we can use hardware data sheets to design our equations around the most likely parts for the car. Ultimately we will provide Phoenix Solar Racing with a dependable simulation that will predict performance to a reasonable measure through a simple GUI, and allow for expansion by us or future programmers to best help PSR in competition.
+
+\end{document}
