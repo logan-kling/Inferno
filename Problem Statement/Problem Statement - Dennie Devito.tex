@@ -1,0 +1,66 @@
+\documentclass[journal, 10pt, draftclsnofoot, onecolumn]{IEEEtran}
+
+	
+\usepackage{graphicx}                                        
+\usepackage{amssymb}                                         
+\usepackage{amsmath}                                         
+\usepackage{amsthm}                                          
+
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{url}
+
+\usepackage{balance}
+%%\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+
+\usepackage[margin=0.75in]{geometry}
+\geometry{textheight=8.5in, textwidth=6in}
+
+\def\nameB{Dennie Devito}
+\begin{document}
+
+	\title{Solar Car Simulation}
+	\author{\IEEEauthorblockN{Dennie Devito}
+	\IEEEauthorblockA{\\Oregon State University
+		\\CS 461 Senior Capstone\\
+	Fall Term 2017}
+	}
+\begin{titlepage}
+\maketitle
+
+\begin{abstract}
+	The purpose of this project is to make a simulation program of a solar car to calculate several variables that affect the velocity and effectiveness of the solar car itself which will be used later in a race. We are happy to introduce our team name, Inferno which consists of three computer science major students: Dakota Zaengle, Dennie Devito, and Logan Kling. We work together with 6 other people incorporated in the OSU – Phoenix Solar Racing team. Phoenix Solar Racing team is building a new solar powered car to race in the “American Solar Challenge” which occur in the next summer in 2018. This race will travel across the country with different variety of environments which will test the solar car ability itself. To be successful in the race, our whole team must strategize how to maximize distance covered while minimizing energy usage and consider the challenges we will be facing during the race. Here is where team Inferno take part as the programmer of the racing team by making a simulation program that help us to reach our main objectives and then improves the solar car if possible. By looking at our simulation program, hopefully we can get the perfect idea for when we have to stop in the race to charge the car and even more to change some parts of the car or the body configuration shape so that it will be safe to drive and run as fast as we hope in the race. Finally, we hope that our simulation will be pretty much similar to the software used by Tesla to estimate range based on charge.   
+\end{abstract}
+\thispagestyle{empty}
+\end{titlepage}
+
+\section{Description of the Problem}
+	
+	As stated before, as the programmer team, we have several main objectives that had to be done before we think about further improvement for the solar car. There are 4 main objectives and they are : To provide a simple and easy to use interface to allow team members to use the software efficiently, To make the simulation program estimate the energy usage of the vehicle over a given time period or distance at a given speed, To estimate the required speed to use a given amount of energy to cover a given distance in a specified amount of time, and To include factors like the electrical and mechanical efficiency of the vehicle and the prevailing weather conditions. After the completion of all the main objectives, we can then make the simulation to work on the other phase of the solar car as the improvement idea for the engineer team for the solar car. 
+
+	For the first main objective, we as the programmer team are required to make an easy to use program with interface. As we already know, our simulation program will be include a lot of calculation of variables for the solar car. However, we cannot just show a bunch of numbers and words as the result for the solar car team. It is required for us to make an interface that can show them how actually the solar car will move through the wind, or how it will move in a rough road. It is required to make an interface, so that it is not only us, the programmers who can use the program, but all other people who are in the solar car team can also use it and improves the solar car without us being there with them all the time. 
+
+	The second objective is related with energy usage, the speed of the car, and given time period with distance. As stated in the abstract, our solar car cannot be used continuously. This problem occur because the solar car uses both energy from the sun and also battery to run their whole system. The energy from the sun will be accumulated and then channeled to the battery so that the battery can run the whole car. The problem is we have to know, how far the car can go for 1 charge and where and when the car have to be stopped for a recharge. That way, we can prevent the car from stopping all of a sudden in the middle of the road. 
+	
+	Our third objective has some similarity with our second objective. The thing that differs both of them are in the third objective we focus on how far and fast we can go with the solar car. Something that we cannot ever forget about this project is that this is a race between our solar car and other solar car. That’s why we still have to go as far and as fast as possible. However, just like on our second objective, we have to measure the power and the efficiency of our battery. That’s why here, on our third objective, we seek for the perfect speed that can travel as far as possible without burning out the battery, but also as fast as possible so that we will not be left behind from other racer. 
+
+	For our last objective, we have consider the other factor like the electrical and the mechanical efficiency of our solar car and prevent any problem that can be caused by weather conditions. We can always see the weather forecast to prevent any problem that can be caused by the weather, but we always have to be ready to face any weather condition. That’s why we as the programmer of the team will try our best to make the car be ready to face almost any weather condition, I.e. sunny, rainy, partly cloudy. This is also really important since the power of our car depends on the energy from the sun. That’s why we put this as one of our main objectives. 
+	
+\section{Solution}
+
+	Our solution for all the objective is of course to make the simulation as good as we can. We have already discuss which each other what language that will be perfect to make this simulation and we got some idea such as: using python, or C++. For some several reasons, we do not really want to use java or other language. However, this is not a final decision yet because when we contacted our client on the meeting, they say that we have to wait for another guy named Gray which will be our guider for this simulation program. Unfortunately we haven’t had a chance to meet him in person, so we contact him by email and try to arrange time for our first meeting with him which then will be occur on this very Tuesday at 2:45pm. The other solution that we know for sure we have to put as data in our simulation to answer all of our main objectives are that we have put Weather, Difference in altitude from the start of the race point to the end of the race point, physical constraints such as: the weight of the car, wheel size, rolling friction between the wheel of the car and the altitude of the terrain, the percentage of the battery, the speed of the car, and what speed is the best to make it to the given distance with the given amount of energy. 
+	
+\section{Performance metrics}
+
+	It is clear that if we want to say our project is done, we need some benchmark or check point for our project. Here, I list our project check point that have to be done to say that we have done our project completely : 
+	\begin{itemize}
+		\item Car may not be finished to be test, so we have to relay on all the data from our simulation program.
+		\item We have to compare all of our data with the past race data, and then input all of it to improve our solar car for this year.
+		\item We have to hand up all of our data including the simulation program to the main team of the solar car and get approved by them.
+		\item If by the time we finish the simulation program they have already finish building the car, we can test the data that we got from our simulation program with the car and if it is the same, then the whole project is complete. 
+	\end{itemize}
+	
+
+\end{document}
