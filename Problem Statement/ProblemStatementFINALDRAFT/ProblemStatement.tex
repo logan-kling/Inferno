@@ -1,0 +1,148 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		Inferno}
+\def \CapstoneTeamNumber{		43}
+\def \GroupMemberOne{			Dennie Devito}
+\def \GroupMemberTwo{			Logan Kling}
+\def \GroupMemberThree{			Dakota Zaengle}
+\def \CapstoneProjectName{		Solar Car Simulation}
+\def \CapstoneSponsorCompany{	Phoenix Solar Racing}
+\def \CapstoneSponsorPerson{		Cailin Moore}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		Problem Statement
+				%Requirements Document
+				%Technology Review
+				%Design Document
+				%Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	%\includegraphics[height=4cm]{Shirt_Graphic}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        % 6. Fill in your abstract    
+        	The purpose of this project is to program a simulation of a solar car to calculate several variables that affect the Watt-hours per mile of the solar car itself which will be used later in race. 
+        	The OSU Phoenix Solar Racing Team (PSRT) have asked us to design a simulation of their race cars abilities on the track so they can develop a strategy before each race. 
+        	On this project, we are allowed to use any language that we want as long as it fulfills the four main objectives PSRT gave us. 
+        	The general consensus for the GUI is that it should be pretty simple because it has to be usable by anybody in the PSRT team without depending on us every time they need the simulation. 
+        	This program also is based on physics as well, so with the right variables, equations, and a good map API we should be able to simulate the car with a small subset of its data. 
+        	Finally we can also establish some bonus goals that can improve the performance of the solar car, considering it's approved by our client, and as long as we have finished with the 4 main objectives.
+
+        \end{abstract}     
+    \end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+
+\section{The Problem}
+Phoenix Solar Racing needs a new strategic approach to planning their races. 
+In order to make the most of their car during their races they need more information about how it will perform in varying conditions and on different courses. 
+
+\section{Objectives}
+As discussed in the abstract, we the programming team have several objectives to complete in order to solve the problem. 
+The four main objectives are: 
+\begin{enumerate}
+    \item To provide a simple and easy to use interface to allow team members to use the software efficiently. 
+    \item To make the simulation program estimate the energy usage of the vehicle over a given time period or distance at a given speed.
+    \item To estimate the required speed to use a given amount of energy to cover a given distance in a specified amount of time. 
+    \item To include factors like the electrical and mechanical efficiency of the vehicle and the prevailing weather conditions. 
+\end{enumerate}
+After the completion of all the main objectives, we can then make the simulation to work on the other phase of the solar car as the improvement idea for the engineer team for the solar car.
+
+\section{Programming Language}
+We're allowed to code this in any language as long as it can be run on Windows. 
+Because this simulation will almost certainly be processor intensive, C++11 will be the best language to use. 
+It's lower than Java and C\#, both of which have been used by one of their electrical engineers, but it still has room for plenty of libraries---even if some of those necessary libraries will vary on different operating systems. 
+Java is incredibly slow and restrictive as it compiles everything written into it to byte code first. 
+This allows Java applications to run on wildly different operating systems with no conscious effort from the programmer being necessary. 
+However, the necessary process of compiling that bytecode every time one wishes to use the program is incredibly slow on top a fully compiled Java program also requiring more resources (RAM especially) on average. 
+While C\# has a lot to offer, it's still slower than C++11 in most cases. 
+Even using C++11, I predict we will have a tough time writing this program well enough to simulate a 2000 mile drive in under 30 seconds
+
+\section{User interface}
+We will build a simple GUI to let the team effectively use the program with little to no prior computer experience. 
+The GUI will include a basic menu system including the most useful features as buttons with helpful icons and clear, understandable labels underneath each one. 
+Data will be entered through a series of form fields to be filled out for each of the variables. 
+Because parts of the car are likely to change over time and the team is currently building a new car it will be important that they are able to change those values. 
+In order to allow for changes to the car but avoid re-entry of every detail whenever the program is used we will allow import of text files to save and load car details.
+
+\section{Implementation}
+The basic skeleton of the simulation will be a simple program to write, which will hopefully allow us to have a working program very early on in development. 
+The challenge will be slowly increasing the number of variables the simulation can account for. 
+Our goal is to build the GUI and add some basic equations quickly so we can test the interaction and output before we add complexity. 
+This will also allow us to keep PSRT included in the design process. Lastly we will make the program as simple as possible in order to allow them to update it in the future.
+
+\section{Program Variables}
+The data fields we will be using will include but may not be limited to: latitude and longitude of the race, cloud coverage, change in altitude over the course, length of the course, wind, and angle of the sun. 
+Depending on the effect they have on the simulations accuracy some of the variables may be ignored. 
+The vehicle hardware we will need to keep track of are: Battery charge at the start of the race, efficiency of the solar panels and at what angles are they most efficient, power draw from the engines and how that varies with speed, and any other variables that will have a significant impact on performance like wind resistance and basic tire friction.
+
+\section{Performance Metrics }
+We will be designing this simulation to be as accurate as possible, using only the data that will have a significant impact on the results of the drive and data that is available to the team before the race begins. Therefore, this project will be considered complete when we are able to provide PSRT with a working simulation that provides information accurate enough to make informed decisions about the race. 
+Because the project's intended use is prediction of performance one or more days before the car will run the course, testing would ideally be done by running our simulation right before a test run and comparing the simulated performance against the real-world outcome. 
+However, as the team is building a new car during this project---and it may not be available to test the accuracy of the simulation---we may be required to use data from the old car recorded during past races to verify our simulation. 
+
+\section{Bonus Goals}
+We have at least three identifiable bonus goals that we will tackle in order of increasing worth to the team.
+\begin{enumerate}
+\item The least ambitious of our bonus goals is to record the angle of the sun along with the direction of the car. 
+This would be much easier to implement than our other bonus goals as we likely wouldn't need any additional API for it.
+With some basic algebra, the starting time, and the map API that we would already have, this wouldn't be all that difficult to calculate. 
+\item We would like to be able to map the altitude minute by minute in order to calculate how much energy will need to be used far more accurately. 
+In theory, this would allow us to drastically improve the accuracy of our simulation, though it would also slow it down by an order of magnitude because of the need to fetch topographical data so frequently. 
+\item We could include weather data based on zip code pulled from a website at runtime to eliminate the need to fill the information out manually. Live weather data may or may not be as difficult as fetching topographical data, but it wouldn't affect the runtime as severely given that weather often changes far slower with location than altitude.
+\end{enumerate}
+
+\end{document}
