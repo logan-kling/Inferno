@@ -37,9 +37,11 @@
     \pagenumbering{gobble}
     \begin{singlespace}
     	%\includegraphics[height=4cm]{Shirt_Graphic}
-        \hfill 
+        \hfill
+        \begin{flushleft}
         % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
-        %\includegraphics[height=4cm]{CompanyLogo}   
+        \includegraphics[height=5cm]{Shirt_Graphic.png}
+        \end{flushleft}
         \par\vspace{.2in}
         \centering
         \scshape{
@@ -65,7 +67,8 @@
             \vspace{20pt}
         }
         \begin{abstract}
-        % 6. Fill in your abstract    
+        % 6. Fill in your abstract   
+        This project will simulate the performance of the Phoenix Solar Racing solar car to improve their race strategy. In this document we review the goals of this project and describe the requirements we will follow in order to achieve those goals. 
         	
 
         \end{abstract}     
@@ -89,22 +92,27 @@
     \subsection{Scope}
     For this project we will develop a Solar Car Simulation as a minimal software that takes variables from the user and uses them to calculate the solar car's performance.
     The software will be used by the Solar Racing Team to estimate their cars performance. 
-    They have not used software for this purpose in previous races and because any software to estimate the efficiency of vehicles is based on non-electric engines or does not take solar power into account they have created this project. There are some benefits from creating a new software including: designing a specific GUI that only includes the features they need, includes variables specific to the solar car, and can be modified by their team.
+    They have not used software for this purpose in previous races and because any software to estimate the efficiency of vehicles is based on non-electric engines or does not take solar power into account, they have created this project. There are some benefits from creating a new software including: designing a specific GUI that only includes the features they need, includes variables specific to the solar car, and can be modified by their team.
     
     \subsection{Definitions}
-    RAM corresponds to Random Access Memory, is a form of computer data storage which stores data and machine code currently being used.
+    \textbf{RAM} corresponds to Random Access Memory, is a form of computer data storage which stores data and machine code currently being used.
     
-    Memory refers to data as it takes up RAM.
+    \vspace{.1cm}
+    \noindent \textbf{Memory} refers to data as it takes up RAM.
     
-    An operating system simply refers to the piece of software we'll be running our program in.
+    \vspace{.1cm}
+    \noindent An \textbf{operating system} simply refers to the piece of software we'll be running our program in.
     Think Windows, Mac, Linux.
     Even mobile phones have their own operating systems.
     An operating system will make our lives easier.
     
-    \subsection{References}
+    \vspace{.1cm}
+    \noindent \textbf{C++11} simply refers to the most stable version of C++.
+    As it was created in 2011, there are still a wide variety of compilers which don't support it, but that shouldn't be an issue here.
+    This isn't going to be a low level program by any means.
     
     \subsection{Overview}
-    In this requirements document we discuss the interactions our software will have with the system it runs on and the required software functions. We briefly cover who will be using the software and what requirements come out of that. In the Specific Requirements (Section 3) we address the variables we will account for in the simulation, the user stories that will cover our requirements, the requirements that we will impose to ensure completion, and finally the timeline for this project.
+    In this requirements document we discuss the interactions our software will have with the system it runs on and the required software functions. We briefly cover who will be using the software and what requirements come out of that. In the Specific Requirements Section (3) we address the variables we will account for in the simulation, the user stories that will cover our requirements, the requirements that we will impose to ensure completion, and finally the time line for this project.
 
 \section{General Description}
     
@@ -121,6 +129,8 @@
         In order to allow for changes to the car but avoid re-entry of every detail whenever the program is used we will allow import of text files to save and load car details.
         
         \subsubsection{Software Interfaces} % Requirements for software we will use, like Mathematical packages and APIs
+        If we're able to implement and use a weather API for this program, we will most likely use Yahoo Weather's API. It seemed to have the fewest restrictions.
+        Unless we find a better map API which will allow us to download the altitude data for the world before the program runs, we'll use Google Maps API.
         
         \subsubsection{Memory Constraints}  % Requirements to make sure it doesn't use more resources that it has access to.
         The language in which we will be coding this is C++, which is an object oriented programming language. This means that almost every part of our program won't even be able to access every part of itself without explicit permission. Given this, our program won't be able to access memory outside of itself, ever! This is as it should be. Our program also shouldn't hog too much memory to itself. The computers this will be run on are unlikely to have more than four gigabytes of RAM. As a result, our program must never use more than four gigabytes of RAM at any time.
@@ -136,9 +146,9 @@
     \end{enumerate}
     
     \subsection{User Characteristics}
-    Our users will be the members of the OSU Phoenix Solar team (PSRT). The overwhelming majority of the PSRT are mechanical \& electrical engineers.
+    Our users will be the members of the OSU Phoenix Solar team (PSRT). The overwhelming majority of the PSRT are mechanical and electrical engineers.
     With this in mind, the PSRT will have absolutely no issue using a program, but they may have difficulty changing such a program. 
-    With this in mind one of our final requirements will be to make sure they are able to confidently use all the features of the software.
+    One of our final requirements will be to make sure they are able to confidently use all the features of the software.
     
     \subsection{Constraints}
     We're allowed to code this in any language as long as it can be run on Windows. 
@@ -146,7 +156,7 @@
     It's lower than Java and C\#, both of which have been used by one of their electrical engineers, but it still has room for plenty of libraries---even if some of those necessary libraries will vary on different operating systems.
     
     \subsection{Assumptions and Dependencies}
-    Our main assumption is that PSR will have Windows computers running Windows 7 or newer available to run the software. If this assumption proves incorrect we will need to make sure the program can on the systems they bring with them to the race events.
+    Our main assumption is that PSR will have computers with Windows 7 or newer available to run the software. If this assumption proves incorrect we will need to make sure the program can run on the systems they bring with them to the race events.
     
 \section{Specific Requirements}
 
@@ -155,50 +165,55 @@
     \begin{enumerate}
         \item Group 1: Our first set of variables. We can use these to test the program both for accuracy and for usability.
         \begin{enumerate}
-            \item Engine Consumption
+            \item Electric Motor Consumption
             \item Battery Charge
             \item Solar Panel Input
             \item Distance
         \end{enumerate}
-        \item Group 2: After testing the GUI and making sure the first group is reasonably accurate we will add these next variables.
+        \item Group 2: After testing the GUI and making sure the first group is working correctly we will add these next variables.
         \begin{enumerate}
             \item Cloud Coverage
             \item Wind Resistance
-            \item Engine Consumption Based on Speed
-            \item Course Altitude Change from Start to End
+            \item Electric Motor Consumption Based on Speed
         \end{enumerate}
         \item Group 3: These are variables that may not have enough of an effect on the car to justify the extra calculations. We will look into adding them after we are sure the other two groups are correctly implemented. These variables are closer to stretch goals than actual requirements.
         \begin{enumerate}
             \item Tire friction
             \item Change in Sun Angle Over the Course
+            \item Course Altitude Change from Start to End
             \item Latitude/Longitude of the Course (to account for different solar intensity)
         \end{enumerate}
     \end{enumerate}
     
     \subsection{User Stories}
     These User Stories are goals we will achieve by the end of the project. They are small sections of the project that when completed will help us verify we have completed the project.
+    %add time to complete, and how important they are
     \begin{enumerate}
-        \item As a PSR team member I want a simple interface so that I can use the program quickly and without confusion.
-        \item As a user I want to be able to save certain variables so that I don't have to re-enter information for every simulation.
-        \item As a driver I want enough variables for the simulation to be accurate so that I can get an idea of where I will be during the race.
-        \item As a user I want a minimum of variables so the program can run quickly while maintaining accuracy.
-        \item As a programmer I want well documented code so I can update the program a year or more down the road.
-        \item As a driver I want to give the program time and speed and see how much energy will be used with those variables so I can judge the race.
-        \item As a driver I want to give the program energy, distance, and time to determine the speed at which I should drive to cover that given distance using that given amount of energy.
+        \item As a PSR team member I want a simple interface so that I can use the program quickly and without confusion. \textit{This is something we will test and make changes till PSR is comfortable using the program.}
+        \item As a user I want to be able to save certain variables so that I don't have to re-enter information for every simulation. \textit{This can be implemented with the GUI and will not take more than an hour or two.}
+        \item As a driver I want enough variables for the simulation to be accurate so that I can get an idea of where I will be during the race. \textit{After implementing variable Group 2 we will test for completion of this story.}
+        \item As a user I want a minimum of variables so the program can run quickly while maintaining accuracy. \textit{This user story will be complete when the variable Group 2 is implemented.}
+        \item As a programmer I want well documented code so I can update the program a year or more down the road. \textit{We will look over the code at the end to make sure it meets this requirement but it will be part of the coding process to keep it clean. The review should take no more than a day.}
+        \item As a driver I want to give the program time and speed and see how much energy will be used with those variables so I can judge the race. \textit{This can be added after the second group of variables. It should take us a week along with story number seven.}
+        \item As a driver I want to give the program energy, distance, and time to determine the speed at which I should drive to cover that given distance using that given amount of energy. \textit{This can be added after the second group of variables. It should take us a week}
     \end{enumerate}
     
     \subsection{Requirements}
     %add something to clear up the user story #1 so its less vague, like Kevin talked about in class. Maybe explain how we would like to demo it with psr?
+    %acceptance testing
     \begin{enumerate}
-        \item Provide a program that can incorporate variables from Group 1 and Group 2 described in 3.1
-        \item Make sure the PSR team members are comfortable using the software. We would like to have them test the GUI before we finish.
-        \item Verify the program can be run reliably on the system they will be using.
-        \item Improve the accuracy enough that PSR is comfortable making judgments based on the output.
+        \item Provide a program that uses the variables from Group 1 and Group 2 described in Section 3.1 to calculate the performance of the simulated car. 
+        \item Make sure \textit{at least} Cailin Moore, Nolan Dahl, and Gray Johnson are comfortable using the software. We would like to have them test the GUI using acceptance testing before we finish. As long as the three of them give it a 4 out of 7 or above we will consider this complete.
+        % number that can run
+        \item Verify the program can be run without crashing on the system the PSR team will be using at least 95\% of the time.
+        % remove psr, give a percent accuracy?
+        \item Make the program accurate to within 60\% of the results of the real car based on a given 10 mile drive.
+        Make sure our margin of error never exceeds 40\%.
     \end{enumerate}
     
     \subsection{Time-line}
         \subsubsection{The Remaining Fall Term}
-        The focus of this term has been---\& will continue to be---establishing \textit{all} of the requirements for this project. The very end of this term will also be used to start basic programming on this project.
+        The focus of this term has been---and will continue to be---establishing \textit{all} of the requirements for this project. The very end of this term will also be used to start basic programming on this project.
         %\vspace{.1in}
         
         \subsubsection{Winter Term}
@@ -208,17 +223,19 @@
         \subsubsection{Spring Term}
         The project will be finished within the first 3 weeks of the term, or before. If there's any remaining time before we need to start work on our project report, we may try to implement our stretch goal of calculating how the angle of the sun changes the efficiency of the solar car. At this point, it will probably be too late to implement that, though.
         
-    \begin{figure}
-        \includegraphics{461Chartcut.jpg}
-        \caption{Gantt Chart}
-        \label{fig:Gantt}
-    \end{figure}
-    
+        \begin{figure}[!hb]
+            \includegraphics{461Chartcut.jpg}
+            \caption{Gantt Chart}
+            \label{fig:Gantt}
+        \end{figure}
+        
     \subsection{Stretch Goals}
     \begin{enumerate}
         \item Record the angle of the sun and the direction the car is facing.
         \item Include some API to map the elevation changes of the route in detail. 
         \item Import weather data from an API using a zip code. Then the user will not need to enter all the values for weather manually.
     \end{enumerate}
+    
+    
 
 \end{document}

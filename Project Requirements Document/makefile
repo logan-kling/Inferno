@@ -1,7 +1,7 @@
 #build pdf from latex
-all: ProblemStatement.tex IEEEtran.cls clean
-	latex --output-format=pdf ProblemStatement.tex
+all: ProjectRequirements.tex IEEEtran.cls 461Chartcut.jpg Shirt_Graphic.png clean
+	latex --output-format=pdf ProjectRequirements.tex
 	
 	
 clean:
-	$(RM) ProblemStatement.pdf Problemstatement.toc ProblemStatement.log ProblemStatement.aux
+	$(RM) ProjectRequirements.pdf ProjectRequirements.log ProjectRequirements.aux
