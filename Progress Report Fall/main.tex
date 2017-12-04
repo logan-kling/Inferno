@@ -1,0 +1,515 @@
+%\documentclass{article}
+%\usepackage[utf8]{inputenc}
+
+%\title{Capstone Progress Report}
+%\author{zaengled }
+%\date{December 2017}
+
+%\begin{document}
+
+%\maketitle
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+%\usepackage{gensymb}
+
+\usepackage[letterpaper, textheight=9.5in, textwidth=7in]{geometry}
+%\geometry{textheight=9.5in, textwidth=7in}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		Inferno}
+\def \CapstoneTeamNumber{		43}
+\def \GroupMemberOne{			Dennie Devito}
+\def \GroupMemberTwo{			Logan Kling}
+\def \GroupMemberThree{			Dakota Zaengle}
+\def \CapstoneProjectName{		Inferno}
+\def \CapstoneSponsorCompany{	OSU - Phoenix Solar Racing}
+\def \CapstoneSponsorPerson{		Cailin Moore}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		Progress Report}
+
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+\makeindex
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{singlespace}
+\begin{titlepage}
+    \pagenumbering{arabic}
+    	\includegraphics[height=4cm]{Shirt_Graphic}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            %{\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \GroupMemberOne \par
+                \GroupMemberTwo \par
+                \GroupMemberThree \par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        	This document is a review of what has been done over the past ten weeks to develop our project. The Progress Report reviews what we have worked on individually and restates the major points of this project. In the Retrospectives section we also discuss our plans for moving forward in the following months.
+        \end{abstract}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+\newpage
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\section{Introduction}
+
+\subsection{Purpose}
+For this project we will develop a Solar Car Simulation as a minimal software that takes variables from the user and uses them to calculate the solar car's performance.
+The software will be used by the Solar Racing Team to estimate their cars performance. 
+They have not used software for this purpose in previous races and because any software to estimate the efficiency of vehicles is based on non-electric engines or does not take solar power into account, they have created this project. 
+There are some benefits from creating a new software including: designing a specific GUI that only includes the features they need, includes variables specific to the solar car, and can be modified by their team.
+
+\subsection{Goals}
+The end goals for this project are: 
+    \begin{enumerate}
+        \item To provide a simple and easy to use interface to allow team members to use the software efficiently. 
+        \item To make the simulation program estimate the energy usage of the vehicle over a given time period or distance at a given speed.
+        \item To estimate the required speed to use a given amount of energy to cover a given distance in a specified amount of time. 
+        \item To include factors like the electrical and mechanical efficiency of the vehicle and the prevailing weather conditions. 
+    \end{enumerate}
+These goals are discussed in greater detail in our project requirements document and include more specific criteria for completion of the project.
+
+\section{Progress}
+In the past ten weeks we have focused on documenting the project, including the requirements set by our clients and the design decisions we have had the freedom to make ourselves. The research we have done for these documents has given us a strong base to start building the software. Our interactions with our clients have been positive and we are looking forward to working with them to deliver a quality final program.
+
+Over the last few weeks we have begun to familiarize ourselves with the libraries we will use in our software and have begun to discuss the development we will be executing over the next few months. 
+% where we are at in this project
+% we can talk about how the documents have helped us set up our plans and include a quick blurb about anything we have done so far to test out the software/libraries we will be using
+\subsection{Problems}
+% here just include any quick summary of latex problems/ software problems/ coming to terms with not having rigid guidelines like in other classes
+One of the biggest difficulties we have encountered is how few rigid guidelines there are. Unlike most classes, the schedule of the project itself is up to us and that makes it easy to take a step back and concentrate on our other courses when we still need to get work done for this course. Adjusting to this has been a challenge however we were still able to produce quality documents on time. Over break and during winter quarter we will need to extend this to actually completing the software.
+
+A more minor problem we have faced is adjusting to using \LaTeX for all our documents. While using the language there are so many different options to solve each problem it is difficult to remain consistent and confusing to find one source of documentation. 
+
+\section{Retrospective}
+
+%positives column: anything good that happened
+%deltas column: changes that need to be implemented
+%actions column: specific actions that will be implemented in order to create the necessary changes
+
+\vspace{1cm}
+\begin{center}
+\begin{tabular}{|p{0.3\linewidth}|p{0.3\linewidth}|p{0.3\linewidth}|} 
+\hline
+Positives   & Deltas   & Actions   \\
+\hline
+Phoenix Solar Racing has given us a good deal of freedom & The freedom should not be misused to delay work on the program & The testing during winter break will help us create the first version this program \\
+The Technology Review was helpful in starting our software & We need to begin making progress on the real software & Over break we will start experimenting with the basics of the software \\
+wxWidgets is well documented and has a large user community \cite{wx}& To use it we will have to pick an IDE to build it with & Visual studio 2015 and 2017 will be the likely choices as OSU provides licences \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Weekly Reviews: Logan Kling}
+\subsection{Week One}
+I have to choose my top five favorite choices for projects.
+I chose the following for the following reasons:
+\begin{enumerate}
+	\item OSU - Phoenix Solar Racing: Solar Car Simulation
+	
+	Deliverable:
+	\begin{quote}
+	    A functional application with an intuitive GUI that provides accurate estimates with varying parameters.
+    	\cite{SolarCarSimulation}
+	\end{quote}
+	
+	This seems like such a great way to make a contribution to the world without becoming too wrapped up in the toxic mess the American political system has become.
+	The technology behind solar panels has nearly doubled in efficiency in just the past two decades.
+	While I don't see this project contributing to the advancement of solar technology directly, this will only provide good publicity for solar technology and the solar industry.
+	With the fossil fuel industry doing everything in their power to discredit the solar industry, the solar industry needs as much help as it can get.
+	
+	\vspace{0.1in}
+	\item HedgeServ: Stock Analytics Website
+	
+	Deliverable:
+	\begin{quote}
+    	A website that calculates some important metrics (which will be provided by HedgeServ) that can be used to inform investment decisions
+    	\cite{StockAnalyticsWebsite}
+	\end{quote}
+	
+	Growing up surrounded by peers who were more fortunate than me, I've learned that there's effectively nothing more important than money in this country.
+	This is what gives me the passion for contributing to a stock analytics website.
+	Given the hundreds of stories I've heard, read and seen about various Americans who were screwed for nothing more than bad luck and being born into the bottom 95\% wealth and income of Americans, I established a retirement fund early.
+	I know that's my only hope for even having a retirement in this plutocracy.
+	While this is certainly a strong bias, and I naturally believe that the best investments are semi-long-term investments in mutual funds, I'm more than willing (and excited) to try something new and better.
+	HTML, CSS, JavaScript, PHP, and MySQL were also some of the first languages I learned and I would love the opportunity to improve those skills.
+	
+	\vspace{0.1in}
+	\item Oregon State University: Winter is coming…
+	
+	Deliverable:
+	\begin{quote}
+    	At the end of the process, there will be a designed, programmed and working indoor grow light system prototype. Depending on the desires of the team, the code and hardware can be released as open source, or can be marketed and sold as kits.
+    	\cite{WinterIsComing}
+	\end{quote}
+	
+	I have thought in the back of my mind for a while now that using specific LED's to grow plants with as little power usage is possible, but too large an undertaking for my busy schedule.
+	My parents have been able to grow enough produce to support a large part of our five person families diet for every summer since 2008.
+	What's impressive is that they were able to do that without a greenhouse, and with less than a hundred square feet of space.
+	While growing plants inside is clearly a cool idea, what my parents have been able to do shows that this is also practical.
+	
+	\vspace{0.1in}
+	\item Oregon State University: Molecules in 3D?! And in color?! That I can hold in my hand?! No way!!!
+	
+	Deliverable:
+	\begin{quote}
+    	At the end of the process, there will be a robust workflow for multicolor 3D printing.
+    	I would then propose to write and submit for publication a journal article describing the process.
+    	There are examples of such articles, but for monochromatic prints 
+    	(http://pubs.acs.org/doi/pdf/10.1021/acs.jchemed.5b00168, 
+    	
+    	http://pubs.acs.org/doi/abs/10.1021/acs.jchemed.5b00207?journalCode=jceda8, 
+    	
+    	https://jcheminf.springeropen.com/articles/10.1186/s13321-016-0181-z, etc.).
+	    \cite{3DMolecules}
+	\end{quote}
+	
+	This is a pretty cool and seemingly simple project, which is why I'm surprised nobody has done anything like this before.
+	The resulting program from this project would also have an enormous amount of usability.
+	I remember taking chemistry, and while it started off easy, it became exponentially more difficult.
+	Chemistry is just one of the fields in which this could be used to help some students by being able to see and touch representations of complex molecules.
+	
+	\vspace{0.1in}
+    \item PrisonMatch
+	
+	Deliverable:
+	\begin{quote}
+    	Using forms, this project will need to gather information and then select the appropriate end results based on the form entries from a list.
+    	Views will need to be created that can present well on multiple screens (i.e., mobile devices, desktops and phones) and a final product with the selected information into a printable PDF for official documentation.
+    	This will all need to be confined to the Wordpress environment.
+	    \cite{PrisonMatch}
+	\end{quote}
+	
+    This is not an exciting project.
+    In fact, facing the statistics of just how corrupt our prison system is, is incredibly depressing.
+    However, I have an obligation to do the right thing whenever possible, being as fortunate as I am.
+    After all, if I don't volunteer for this, who will?
+    Sure, people rush to help each other during and immediately after disasters, but it barely takes a layer of abstraction for people to treat their own species worse than animals.
+\end{enumerate}
+Many of those reasons from my wanting the project were actually revised editions that I had to rewrite from scratch. For some reason, the website didn't save a lot of my choices. That website probably didn't save a lot of my choices because I left it been open for several hours.
+
+\subsection{Week Two}
+I did not do a lot this week.
+I met with Dakota after Tuesdays class, but I did not meet Dennie until the next day because he had something scheduled before the class even ended, so he had to leave early.
+Dakota, Dennie, and I all went to the OSU Phoenix Solar Racing Teams Wednesday evening meeting the next day.
+Since that meeting was still one of the Phoenix Solar Racing Teams first meetings, Cailin ended up giving most of the presentation, with very little input.
+Had this been more of a meeting for the four computer science majors in the group we would have learned more.
+We did learn that Gray was the person we should meet with as he was the person with the most technical knowledge on their team.
+We were told that he would be at Saturday afternoons meeting.
+Wednesday meetings are more general group meetings according to them, while Saturday meetings take place in one of the computer labs at Dearborn hall and are far more technical.
+Gray was very busy, though.
+As Gray wasn't there, Dakota and I did the best we could to gain information about what the Phoenix Solar Racing Team wanted from us, as at this point, we believed our Project Requirements document was due by the Friday of next week.
+These are some of the requirements Dakota and I acquired from Cailin and Nolan:
+
+\begin{quote}
+GUI:
+    \begin{quote}
+	How simple should we make it?
+	    \begin{quote}
+		Form fields
+		\end{quote}
+	What features should be included
+	    \begin{quote}
+		Save hardware specs in text file to be easily updated
+		\end{quote}
+	\end{quote}
+	
+Data we should include:
+    \begin{quote}
+	Weather
+	\end{quote}
+	%Superfluous quotes back to back seemed a better way to fix the quotes inconsistent spacing than by putting \vspace{0} in between each line that wasn't the beginning or end of a quote
+	\begin{quote}
+	Difference in altitude from start to end
+	\end{quote}
+	\begin{quote}
+	Physical constraints (drag, weight, rolling friction, wheel size ecetera)
+	\end{quote}
+	\begin{quote}
+	Starting battery charge
+	\end{quote}
+	\begin{quote}
+	Set time and or speed for the car
+	\end{quote}
+	\begin{quote}
+	With a given amount of energy, what speed is best to make it a given distance
+	\end{quote}
+	
+Performance metrics:
+    \begin{quote}
+	Car may not be finished to test
+	    \begin{quote}
+		Use past race data
+		\end{quote}
+	    \begin{quote}
+		Hand calculations from the individual hardware
+		\end{quote}
+	If car is finished we can test with it instead
+	\end{quote}
+
+Next steps/Bonus goals:
+    \begin{quote}
+	Google maps altitude changes
+	\end{quote}
+	\begin{quote}
+	Add updating weather conditions on the fly
+	\end{quote}
+	\begin{quote}
+    Angle of the sun/direction of the car
+    \end{quote}
+\end{quote}
+
+Dakota then sent those requirements in an E-mail to Gray asking if they were everything he wanted and to make any changes to them that he saw fit.
+
+\subsection{Week Three}
+Gray then responded the following Monday.
+His response was a long E-mail simply explaining how he approved of each of our features.
+I did not really end up using that feedback for my individual Problem Statement.
+I just ended up using the notes Dakota took, and everything else I remembered from Wednesday and Saturday meeting of last week to complete my individual problem statement.
+The individual problem statement had to be submitted to TEACH by that Monday night, and Gray did not give us much new information.
+Now, before you form the notion that Gray is somehow lazy, just keep in mind that he is a graduate student.
+The work involved with being a graduate student is no small task for anyone, especially in engineering.
+
+We then had our first group TA meeting with Daniel Lin.
+We caught Daniel up with everything we had done (which wasn't much) and he made a strong suggestion to make sure that we really push our client for technical specifications if they were being vague about their requirements.
+He also highly recommended we use a gaming engine such as Unreal or Fallout New Vegas's for its map capabilities.
+This was probably our fault for not describing our project in enough detail to him.
+This idea was officially scrapped just a few weeks later.
+
+I went to the Phoenix Solar teams Wednesday meeting for this week because I was pretty sure I wasn't going to be there for Saturdays meeting.
+As to be expected, I did not gain a whole lot from this meeting, but that wasn't an issue as we had already received feedback from Gray, even if it wasn't in person.
+I did learn that Gray rarely went to Wednesday meetings, and that there was a good chance this team would be using regenerative brakes in their car.
+
+I also went to the extra Friday meeting the Phoenix Solar team held.
+Gray was there, but I didn't gain a lot of extra information from him.
+It's hard to think of specific questions to ask for a somewhat vague project.
+I did clarify that this was going to be a simulation, and that a program that worked with minute by minute feedback from the car was just a bonus.
+
+\subsection{Week Four}
+While we were a lot less involved with the Phoenix Solar Racing team this week, we did finish the final draft of our Problem Statement.
+This wasn't too difficult, though.
+It only took our group a few hours to combine and finalize our individual problem statements into one problem statement.
+We made minute changes to the problem statement until Thursday, though.
+We then had a very brief meeting with our TA where we discussed what little we had done.
+He specifically agreed with us that C++ is the best language to program in.
+Our client verified our Problem statement that Friday.
+
+\subsection{Week Five}
+For week five I did almost nothing.
+We met with our groups TA, and I made some small additions to the rough draft of our project requirements document.
+Most of my focus was on my other classes.
+
+\subsection{Week Six}
+We met with our TA.
+He hadn't read the rough draft of our project requirements document as he was even more busy with other classes than we were.
+He did mention that his focus was on the user stories.
+Dakota focused on the user stories, Gantt chart, compiling the document, and client verification while Dennie and I did our best to add to the necessary subsections for the project requirements document.
+Dakota and I even made a few small changes to the Project Requirements document in an extra Friday meeting with the Phoenix solar racing team, but we didn't confirm those last few changes with our client because I am an idiot and forgot.
+That wasn't a huge issue, though, because the changes we made that evening weren't essential for the final project requirements document.
+
+\subsection{Week Seven}
+This week was difficult.
+We met with Kevin as we didn't know what subsections we had for our technology review and he gave us these:
+\begin{itemize}
+    \item Language
+    \item UI Creation Software
+    \item QT, WPF, Linux
+    \item Weather API
+    \item Math Library
+    \item User Testing Method
+    \item Statistical Model
+    \item Visualization Software
+    \item Interaction Model
+    \item Data Entry
+    \item Modeling System
+    \item Complex Fluid Dynamics (CFD) Packages
+    \item Aerodynamics
+    \item Map Sources
+    \item Road Grade
+    \item Physics Framework
+\end{itemize}
+We also met with our TA soon after this, but Kevin's feedback was far more helpful than Daniels suggestions.
+I agreed with my group to work on deciding the math library, the physics framework, the aerodynamics and CFD packages, and the statistical model.
+Other than that, I made almost no progress on my technology review.
+I was somewhat busy this week, but I'm somewhat busy every week.
+I guess I was just lazy.
+
+\subsection{Week Eight}
+I dedicated my Sunday to finishing the rough draft of my technology review.
+It only took me a few hours.
+I don't know why I put it off for so long.
+I reviewed the rough draft of Thomas Noelcke's technology review in class, and he reviewed mine.
+Our group then met with our TA shortly afterwards, which was basically two minutes of us telling him we had been working on our technology reviews and him giving as much feedback as he could not having had time to read our technology reviews.
+I worked on citations for my technology review a bit and then gave up because BibTeX didn't make any sense to me.
+
+\subsection{Week Nine}
+Our group had no TA meeting or CS461 class this week.
+I waited until the last day to seriously start working on the final draft of my problem statement.
+I had all my citations, but putting them into BibTeX was no small task.
+I ended up exchanging over fifty high stress E-mails with Kevin that day.
+I managed to make it work with the makefile, but I really need to stop doing this to myself.
+
+\subsection{Week Ten}
+This week we met with our TA, and actually discussed more than we usually do.
+
+Dennie and I also went to the writing workshop. While the workshop was far from essential, it was helpful to see the design documents and final reports of various groups.
+
+We didn't even start working on the design document until Friday evening because of how busy we have been.
+We somehow managed to finish it in time, but it will need improvement.
+
+Now, we're here, working on this progress report.
+This entire week has been a giant rollercoster between all the classes I have had to juggle.
+Only thirteen credit hours and this term has been Hell.
+I don't know why I have become so lazy.
+I was able to take eighteen credit hours a term while working twenty hours a week at Portland Community College.
+My counselor says this is just my depression manifesting itself, but I feel like that's just an excuse.
+Either way, I need to do some serious catching up over the break, and I need to figure out how not to loathe my time awake so much.
+
+
+
+
+
+
+\section{Weekly Reviews: Dakota Zaengle}
+\subsection{Week One}
+Week zero and Week one I started looking at all the potential capstone projects. 
+There were a few that stood out but a friend of mine mentioned that the solar racing team he was on was making a CS project this year and suggested I look at it. 
+After I saw what they were looking for I liked the idea of working on their project and hopefully getting involved in the team outside of just the project. 
+I talked more with my friend Nolan Dahl about the project and decided it was one I would really enjoy doing so in class I asked McGrath about working on that project asked the Solar Racing Team if they would request me by name to work on the project. 
+That Saturday I went with Nolan to their team meeting to discuss what they were looking for, so I could get an idea of what exactly I would be building.
+
+\subsection{Week Two}
+Week two I got to meet my other two group members: Logan Kling and Dennie Divito and we set up a Discord server, so we could keep in contact. 
+Logan, Dennie, and I went to Phoenix Solar Racing’s Wednesday meeting to officially introduce our team to theirs and to exchange contact info with them. 
+We also discussed the project specifics with them and wrote the problem statement document.
+
+\subsection{Week Three}
+Week three our team met with Daniel Lin who is our capstone TA and he answered some of our questions and gave us some good advice about working with our client and communication. 
+He suggested we create user stories to better define some of our goals for the project and warned us not to overestimate how much we can do or under-deliver on the project. Lastly, we made corrections to our problem statement from the rough draft.
+
+\subsection{Week Four}
+Week four we turned in our final draft of the problem statement and sent it to our client for verification. 
+Most of the feedback we received for the document was related to having too much information about how we looked to solve the problem and not enough information about the problem Phoenix Solar Racing was having. 
+Along with fixing the content of the document we had some trouble formatting the document while we were still familiarizing ourselves with \LaTeX. 
+During the second meeting with our TA we talked about using game engines to map the solar car route but decided it was beyond the scope of the project.
+
+\subsection{Week Five}
+Week five included turning in our project requirements rough draft, our TA meeting, and two more meetings with PSR. 
+I tried a few different options to create a Gantt chart for our document and after having trouble properly displaying the dependencies I finally found a web service that produced a reasonable chart. 
+At our TA meeting Daniel requested user stories specifically for our project requirements document and answered some of my questions about the Gantt chart. 
+On Wednesday at the PSR meeting we shared our document with Cailin and Gray and they were happy with what we had so far. 
+Friday we sent them the rough draft and they verified it for us with minor changes.
+
+\subsection{Week Six}
+Week six we turned in the project requirements and started picking topics for our tech review. 
+In Thursdays class we discussed the parts of this project that would be like the research projects other groups were working on. 
+Professor McGrath answered a question we had about what the tech review would focus on.
+We wanted to know if we should include information about what choices PSR was making related to building the car and he suggested we keep to only the choices we make for our project.
+
+\subsection{Week Seven}
+Week seven was the official start of the technology review document. 
+Professor McGrath was very helpful in giving us more ideas for what we should research for project choices. 
+With how many topics he listed we needed to cut down to just three for each of us. 
+In class and over Discord we talked about who would be doing what and I started leaning toward doing the front end because I enjoy the subject.
+
+\subsection{Week Eight}
+Week eight the in-class peer review helped me consolidate my tech review and make sure it was cohesive.
+One thing the professors mentioned about unnecessary sections in the tech review made me wonder if I should still include user testing or not. 
+I decided to keep it in because it is ultimately a choice we must make if we want to dedicate the time to it or not.
+
+\subsection{Week Nine}
+Week nine being the second to last week of classes got a little busy outside of capstone. 
+I finished the tech review after having some trouble with the makefile. 
+I also started looking at the design document assignment page to get an idea of what we would need to do for it.
+
+\subsection{Week Ten}
+Week ten we met up to finish the design document and work on the progress report. 
+When we started the design document it was difficult to decide what exactly we should include in it but after looking at other examples and the IEEE standard paper I think we reached a happy medium of content between too much information and being to vague.
+
+\section{Weekly Reviews: Dennie Devito}
+\subsection{Week One}
+\begin{itemize}
+    \item On both week zero and week 1, I tried to read all the "preference submission" and tried to submit my preference as soon as possible since there is limited space for each project. I was really interested on the "Solar Racing" project from the beginning of the week because I was already inspired by the solar system even before I came to America. That's why I choose the solar car project as my first choice and really hopping that I can get the project. 
+    \item Also on this week, I have a lot of problem using onenote since this is my first time using it. I cannot sync the notes between my computer and the one on the Internet and so I ask Professor Winters about it and she said I dont have to worry about that for it still the first week. So I decided to keep writing on the one note as consistent as I can without thinking on the sync at first. But I tried to ask her every week and ask my friend what is the problem about my one note. 
+    \item The last thing that I have to do on this week is to submit my biography and resume which I was late to submit it. When I submit both of them to Professor Winters, She said it is okay. 
+\end{itemize}
+
+\subsection{Week Two}
+\begin{itemize}
+    \item Finally on the second week of class I got my first choice on the senior design project submission which is the Solar Car project. I met up with the rest of my team, Dakota and Logan and setting up a way for all of us to keep in touch. In the end, we decided to use discord as a communication tool for us. 
+    \item Also on this week, Dakota, one of our team members decided to send an email to our client so that we can arrange a meeting time with them. It turns out that our first meeting is on wednesday and we as a group come to talk with our client to ask them specifically what they want from us as a group that help the solar car racing team. 
+\end{itemize}
+
+\subsection{Week Three}
+This is the week when we officially need to meat with our TA for the first time which will occur on every Tuesday. Besides that, on this week we started on making the problem statement document together as a team. We as a team honestly was a little bit confuse on what to write for the project document. So we decided to ask our TA about what to write on it and he gave us a lot of advise about that. Some of the advise from him was to write user stories and the goals/objectives for our simulation program. 
+
+\subsection{Week Four}
+On this week, we need to work fast on our problem statement document and combine all our individual problem statement document to be one piece. The problem about this was coming from latex. This is not really our first time using latex, but it's still hard to find the right command and codes for it especially when we tried to implement the IEEEtran. 
+
+\subsection{Week Five}
+This week is pretty special for myself because I have an individual goal starting this week which is coming earlier to the TA meetings and be a secretary for my team by taking notes for the whole TA meeting on my onenote and than share it with TA just like the requirement for class. Honestly, I set this goal by myself because this was the third meeting we had with Daniel ( our TA ) and I had already been late for the first and the second meeting. The other thing is that Professor McGrath said a couple times in class that we need to have a shared notes as the result from the TA meeting with the TA himself. Also on this week, We as a group need to complete our rough draft for the requirements document which again we brought up that problem to Dan. Dan was very helpful especially on answering our question this week about the requirements document. One of the best advice from him was the use of "Gantt Chart" for our timeline for working on the project which then we put in our requirements document. 
+
+\subsection{Week Six}
+There is not much thing that I do as an individual on week six aside from finishing the requirement document together as a group. After we are done with the rough draft, we sent it to our client and she reply us immediately with some good advice to improve our document. But other besides that, she said it was a good job and happy for us. 
+
+\subsection{Week Seven}
+\begin{itemize}
+    \item In this week, we officially have a new assignment about technology review which was really confusing at first. We don't really know what we need to write on the technology review because we think there were not much idea that we can put on our technology review based on our project ( about the simulation program ). However, surprisingly after we brought up this problem to Professor McGrath and our TA, we got a lot of ideas that we can write in our technology reivew that then brought up another problem which was we had too much ideas for what we can put in our individual / team technology review. 
+    \item In the end, each of us still have to choose 3 specific item to put on our individual technical review document. Here are the three technical review ideas for my document: 
+        \begin{enumerate}
+            \item Weather API 
+            \item Mapping API
+            \item Road Grade
+        \end{enumerate}
+\end{itemize}
+
+\subsection{Week Eight}
+In this week, the most important thing that I remember was to bring my technical review document as a rough draft to class and do a peer review with people in class. This is also an opportunity for me to ask Professor Winters about my technical review document since it's a crucial point for our individual grade. In the end I had some problems with my technical review that I need to fix before I submit it.
+
+\subsection{Week Nine}
+On this week and the last week which is week 10, I got really busy with school and in an organization I am currently in. There are a lot of things that I have to do especially regarding my visa status on America. On this week also I finish my technical review document and also submit it by sending it as an email to both professor McGrath and professor Winters. There is no TA meeting this week although Dan (our TA) shot us an email asking whether we have any question regarding the capstone class or not, because if we have some, then we can arrange a meeting on different day than usual to ask him the question. 
+
+\subsection{Week Ten}
+\begin{enumerate}
+    \item This is the last week of fall quarter and we as a group still have 2 more works which are the design document and the progress report. We were really confuse on the making of design document because we felt like everything was vague. Me and Logan went to the Thursday class (which occur on the senior design lab on Kelley) to see example of the design document and we still did not really understand what to put into our design document because every design document from each group from last year were different one another. Our group end up spending the whole Friday together to finish up the design document and then submit it later on. 
+    \item The last assignment for this class is the progress report which will be submitted on monday at 2 PM. It's not as hard as the design document to be honest, but our group has some confusion on what we need to talk about on the presentation. In the end, we met each other on sunday evening to do this assignment together and hopefully we can close this fall quarter with a smile on our face. 
+\end{enumerate}
+
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{Citations}
+
+\end{singlespace}
+\end{document}
