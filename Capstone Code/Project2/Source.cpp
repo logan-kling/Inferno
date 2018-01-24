@@ -1,3 +1,6 @@
+#include <string>
+#pragma warning(disable:4996)
+
 #include <wx/wx.h>
 #include <wx/app.h>
 #include <wx/frame.h>
@@ -8,6 +11,8 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 
+#include "Sim.h"
+
 class MinApp : public wxApp {
 public:
 	virtual bool OnInit();
@@ -16,6 +21,9 @@ public:
 class InputPanel : public wxPanel {
 public:
 	InputPanel(wxWindow * parent);
+	float GetV1() const { return (float)atof(i_v1->GetValue()); };
+	float GetV2() const { return (float)atof(i_v2->GetValue()); };
+	float GetV3() const { return (float)atof(i_v3->GetValue()); };
 private:
 	wxStaticText *i_test;
 	wxTextCtrl *i_v1, *i_v2, *i_v3, *i_v4;
@@ -25,8 +33,10 @@ private:
 class OutputPanel : public wxPanel {
 public:
 	OutputPanel(wxWindow * parent);
+	void SetOutputField(float out);
 private:
 	wxStaticText *o_test;
+	wxTextCtrl *o_v1;
 	wxSizer *o_sizer;
 };
 
@@ -42,7 +52,21 @@ private:
 	wxMenu *fileMenu;
 	wxMenu *editMenu;
 	wxMenu *helpMenu;
+
+	void OnRun(wxCommandEvent& event);
+
+	wxDECLARE_EVENT_TABLE();
 };
+
+/* wxIDs for menu items */
+enum {
+	Edit_Run
+};
+
+/* Event tables for menu items! */
+wxBEGIN_EVENT_TABLE(MinFrame, wxFrame)
+	EVT_MENU(Edit_Run, MinFrame::OnRun)
+wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MinApp);
 
@@ -62,11 +86,11 @@ MinFrame::MinFrame(const wxString& title)
 	fileMenu->Append(wxID_ANY, "&Export_Settings", "Export variables");
 	fileMenu->AppendSeparator();
 	fileMenu->Append(wxID_EXIT, "&Exit", "Quit the program");
-	menuBar->Append(fileMenu, _T("&File"));
+	menuBar->Append(fileMenu, "&File");
 
 	// Edit Menu
 	editMenu->Append(wxID_ANY, "&Clear_Forms", "Empty all the form fields");
-	editMenu->Append(wxID_ANY, "&Run/Cancel", "Begin or end the simulation");
+	editMenu->Append(Edit_Run, "&Run/Cancel", "Begin or end the simulation");
 	menuBar->Append(editMenu, "&Edit");
 
 	// Help Menu
@@ -102,21 +126,17 @@ InputPanel::InputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY){
 	
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Input");
+	i_v1 = new wxTextCtrl(this, -1, "Distance", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	i_v2 = new wxTextCtrl(this, -1, "Charge", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	i_v3 = new wxTextCtrl(this, -1, "Motor Consumption", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	
 	i_sizer->Add(
-		new wxTextCtrl(this, -1, "Distance", wxDefaultPosition, wxDefaultSize, wxTE_LEFT),
+		i_v1,
 		0,            // not vertically stretchable
 		wxALL,        // and make border all around
 		10);          // set border width to 10
-	i_sizer->Add(
-	new wxTextCtrl(this, -1, "Charge", wxDefaultPosition, wxDefaultSize, wxTE_LEFT),
-		0,
-		wxALL,
-		10);
-	i_sizer->Add(
-		new wxTextCtrl(this, -1, "Motor Consumption", wxDefaultPosition, wxDefaultSize, wxTE_LEFT),
-		0,
-		wxALL,
-		10);
+	i_sizer->Add(i_v2, 0, wxALL, 10);
+	i_sizer->Add(i_v3, 0, wxALL, 10);
 
 	SetSizer(i_sizer);
 	i_sizer->SetSizeHints(this);
@@ -126,8 +146,9 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY) {
 
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Output");
+	o_v1 = new wxTextCtrl(this, -1, "Output", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	o_sizer->Add(
-		new wxTextCtrl(this, -1, "Output", wxDefaultPosition, wxDefaultSize, wxTE_LEFT),
+		o_v1,
 		0,
 		wxALL,
 		10);
@@ -139,4 +160,14 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	
 	SetSizer(o_sizer);
 	o_sizer->SetSizeHints(this);
+}
+
+void OutputPanel::SetOutputField(float out)
+{
+	o_v1->SetValue(std::to_string(out));
+}
+
+void MinFrame::OnRun(wxCommandEvent & event)
+{
+	out_p->SetOutputField(testIToO(in_p->GetV1(), in_p->GetV2(), in_p->GetV3()));
 }
