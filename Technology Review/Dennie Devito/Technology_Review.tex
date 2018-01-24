@@ -1,0 +1,135 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		Inferno}
+\def \CapstoneTeamNumber{		43}
+\def \GroupMemberOne{			Dennie Devito}
+\def \GroupMemberTwo{			Logan Kling}
+\def \GroupMemberThree{			Dakota Zaengle}
+\def \CapstoneProjectName{		Inferno}
+\def \CapstoneSponsorCompany{	OSU - Phoenix Solar Racing}
+\def \CapstoneSponsorPerson{		Cailin Moore}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		%Problem Statement
+				%Requirements Document
+				Technology Review
+				%Design Document
+				%Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{singlespace}
+\begin{titlepage}
+    \pagenumbering{arabic}
+
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            %{\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                %\NameSigPair{\GroupMemberOne}\par
+               Dennie Devito%\NameSigPair{\GroupMemberTwo}\par
+                %\NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        %\begin{abstract}
+        	%This Problem Statement is a detailed explanation for building a simulation for a solar car. This document starts broad, asking how to solve OSU Solar Teams testing problem, then by answering that with this project. It then describes why we will choose to program this in C++11. The general consensus for the GUI is that it should be pretty simple. We agreed on having the program store all specs of the car that significantly affect its performance in a text file. We also wanted to calculate what the most efficient speed given those parameters would be. We also determined that we should try to finish our simulator well before the car was finished, as we do have data on the last car. This is entirely physics based as well, so with the right variables, equations, \& a good map API we should be able to simulate the car with a surprisingly small subset of its data. When the car is finished, we will take its stats into account. Lastly, we established some bonus goals. Most of which were impractical, but goals we should still aim for.
+        %\end{abstract}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+\newpage
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\section{Weather API}
+
+\subsection{Overview}
+Weather application programming interface ( or we can call it Weather API ) is an application that allows the user to access current, past, and future weather data for use in apps ( a program ) and on websites. We would like to choose and use a perfect weather API to be implied into our simulation program so that we can pass on the information that we got from the weather API to our simulation program that will be used later on to calculate data for the car itself. \%.
+
+\subsection{Criteria}
+Honestly, we do not really need a really advance weather API for our simulation. All we really require from the weather API is the ability to tell us the movement of the clouds over the area of the race, how fast is the wind movement, rainfall and solar energy over the area, and the current temperature change. 
+
+\subsection{Potential Choices}
+
+\subsubsection{Open Weather Map}
+One of the reasons we consider Open Weather Map is because it provides free weather data and forecast API that can be suitable for any cartographic services for any programming language, smartphones applications, and even web applications. It also provides a wide range of weather data such as map with current weather, week forecast, precipitation, clouds, and data from weather stations.  
+
+\subsubsection{APIXU Weather API }
+APIXU Weather API is one of the free weather API that we consider because of its capability to support C++ programming language. Its price is also considerable remembering we can use it for free with up to 5,000 API request calls per month. 
+
+\subsubsection{The Weather Channel }
+The Weather Channel actually is an American satellite television channel. Together with the Weather Underground, Inc, they now can provide weather API with global coverage. However, little knows that this app actually focusing on the weather on America. It does not mean that their global weather forecast is bad, but they offer better information for weather forecast all over US. They also send their data to our application in JSON or XML. GIF, PNG, and SWF format. 
+
+\subsection{Discussion}
+As we have said before, we only need a decent weather API that can send valuable information to our simulation program. This of course also requires a perfect match weather API that can send the data in the form of our preferred programming language so that it does not need to be changed anymore before we can actually use it. The very first consideration that we make while we are choosing a perfect weather API is the price of the app. It’s true that all of our weather API choices have a free API request calls until certain points and in fact, we only really need the weather API during the car race. That’s the reason why we do not really need too much API call and the free trial from all of our choices is actually enough. However, it would also be convenient if we have a lot of API request calls to be made so that we can also use it over and over again when we test the car, not only during the race. Moving into its capability to pass the data to our program, The APIXU weather API is actually really convincing because its capability to support C++ programming language which will be the main programming language we use on our simulation program. However, Open Weather Map can gives us more valuable information then the rest of the app and it can pass the data in the form of a map which will be easier to be visualized. The Weather Channel on the other hand, has the upper hand on giving an exact weather forecast on America because of its accuracy. 
+
+
+\subsection{Conclusion}
+It is still undecided for us to choose one of the applications. However, our preferences are more into the Open Weather Map. The first important thing that we like from the open weather map is its consistency. Although people say that The Weather Channel gives more accurate information over the America, its information keep changing periodically every time we start the app because of its “accuracy”. The open weather maps also have an interactive maps separately after passing the data to our application. This interactive map shows precipitation, clouds, pressure, wind, and solar energy which will be easier to use during the race. It is also reliable remembering it gathers data from other nearest weather stations.   
+
+
+
+\section{Mapping API  / GIS Software}
+
+\subsection{Overview}
+GIS or Geographic Information System lets us visualize, question, analyze, and interpret geographic data whereas Mapping API is a software for viewing maps, waypoints, routes and tracks. This software will help us visualize the whole race track and will be our guidance in the race day. 
+
+\subsection{Criteria}
+Our GIS or Mapping API should be the basic one since we only want two information data from the map source aside from its ability to show us where the finish line is. The two other data information that we need are altitude and road incline / decline grades. The road incline-decline grade is actually really important since we definitely need more power to run the car on an incline road and we can reduce its power to run in a decline road since the car itself will be pulled by the power of gravity. This will be included into our calculation so that we can increase the efficiency of the car. 
+
+\subsection{Potential Choices}
+
+\subsubsection{MapSource}
+MapSource is definitely be our first choice since it is the original software from Garmin. It is included with some Garmin GPS devices and with some Garmin map products. They also claim that their software can be run on any operating system such as windows, apple, and linux.  
+
+\subsubsection{Google Maps}
+Almost everybody knows google maps. It is easy to use and give us just the right amount of data without confusing us any further. The google map that we see every day in our phone actually has more feature other than navigating through traffic. It can also pass the data information in the form of variables which will be easier for us to pass all those information to our simulation program. 
+
+\subsubsection{OpenLayers}
+OpenLayers is an open source JavaScript library that utilizes WebGL, Canvas 2D and other HTML5 features for rendering maps in modern Web browsers. OpenLayers is capable of pulling tiles from OpenStreetMap, Bing, MapQuest, Stamen and many other mapping sources. OpenLayers is also capable of rendering vector data from GeoJSON, TopoJSON, KML, GML and other geographic data formats.
+
+\subsection{Discussion}
+Although MapSource is going as our first choice, it is focusing too much on its GPS service. What we really need right now is the mapping API which can tell us the exact information of the road geographically. Honestly, we do not really need a navigation for the race, since it will be provided along the road later. What we really need is to know where do we have to have more power for the car for a certain road condition. The documentation for OpenLayers is pretty promising because it is well-organized and can be passed on in multiple formats. The other interesting thing from OpenLayers is its popularity due to its open source license and ability to pull tiles from other mapping platforms. 
+
+\subsection{Conclusion}
+Up until now, our interest goes to google map. Google map provides a very detailed API documentation as well as code samples, libraries, SDKs and other digital mapping tools. There is also an API picker that developers can use to find the right mapping API for our projects. Although it feels like google map is a little bit overkill for our simulation program, we can actually choose what API documentation we want google map to pass to us. So basically, we do not have to pass all API documentation that google map get. There are also a variety of Google Maps APIs, including an Embed API, Maps Image APIs, Places API, Web Services API and Google Maps API for work. 
+
+\vspace{1in}
+
+
+
+
+    \end{singlespace}
+\end{document}
