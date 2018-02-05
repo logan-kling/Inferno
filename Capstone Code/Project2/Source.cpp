@@ -126,16 +126,22 @@ InputPanel::InputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY){
 	
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Input");
-	i_v1 = new wxTextCtrl(this, -1, "Distance", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	i_v2 = new wxTextCtrl(this, -1, "Charge", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	i_v3 = new wxTextCtrl(this, -1, "Motor Consumption", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	i_v1 = new wxTextCtrl(this, -1, "Voltage", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	i_v2 = new wxTextCtrl(this, -1, "Availble Kwh", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	i_v3 = new wxTextCtrl(this, -1, "259 wh/m", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	i_v3->SetEditable(0);
 	
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Voltage:"));
 	i_sizer->Add(
 		i_v1,
 		0,            // not vertically stretchable
 		wxALL,        // and make border all around
 		10);          // set border width to 10
+
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Availble Kwh:"));
 	i_sizer->Add(i_v2, 0, wxALL, 10);
+
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Watt-Hours per Mile:"));
 	i_sizer->Add(i_v3, 0, wxALL, 10);
 
 	SetSizer(i_sizer);
@@ -146,6 +152,7 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY) {
 
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Output");
+	o_sizer->Add(new wxStaticText(this, wxID_ANY, "Miles on availible Kwh:"));
 	o_v1 = new wxTextCtrl(this, -1, "Output", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	o_sizer->Add(
 		o_v1,
@@ -169,5 +176,5 @@ void OutputPanel::SetOutputField(float out)
 
 void MinFrame::OnRun(wxCommandEvent & event)
 {
-	out_p->SetOutputField(testIToO(in_p->GetV1(), in_p->GetV2(), in_p->GetV3()));
+	out_p->SetOutputField(testMiles(in_p->GetV1(), in_p->GetV2()));
 }
