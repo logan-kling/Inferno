@@ -11,6 +11,8 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/webview.h>
+#include <wx/webviewarchivehandler.h>
+#include <wx/webviewfshandler.h>
 #include <wx/wxhtml.h>
 
 #include "Sim.h"
@@ -18,17 +20,6 @@
 class MinApp : public wxApp {
 public:
 	virtual bool OnInit();
-};
-
-//Web frame to show the Google Map and elevation chart
-class WebFrame : public wxFrame {
-public:
-	WebFrame(const wxString& url);
-	virtual ~WebFrame();
-
-private:
-	wxTextCtrl* m_url;
-	wxWebView* m_browser;
 };
 
 class InputPanel : public wxPanel {
@@ -41,6 +32,8 @@ private:
 	wxStaticText *i_test;
 	wxTextCtrl *i_v1, *i_v2, *i_v3, *i_v4;
 	wxSizer *i_sizer;
+	wxString m_url;
+	wxWebView *m_webview;
 };
 
 class OutputPanel : public wxPanel {
@@ -135,21 +128,11 @@ bool MinApp::OnInit() {
 	return true;
 }
 
-WebFrame::WebFrame(const wxString& url) :
-	wxFrame(NULL, wxID_ANY, "wxWebView Test")
-{
-	SetTitle("wxWebViewSample");
-	wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
-
-	m_browser = wxWebView::New(this, wxID_ANY, url);
-	topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
-	SetSizer(topsizer);
-	SetSize(wxSize(800, 600));
-}
-
 InputPanel::InputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY){
 	
+	m_url = "";
+	m_webview = wxWebView::New(this, wxID_ANY, m_url);
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Input");
 	i_v1 = new wxTextCtrl(this, -1, "Voltage", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	i_v2 = new wxTextCtrl(this, -1, "Availble Kwh", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
@@ -168,6 +151,7 @@ InputPanel::InputPanel(wxWindow * parent)
 
 	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Watt-Hours per Mile:"));
 	i_sizer->Add(i_v3, 0, wxALL, 10);
+	i_sizer->Add(m_webview, 1, wxEXPAND | wxALL, 0);
 
 	SetSizer(i_sizer);
 	i_sizer->SetSizeHints(this);
