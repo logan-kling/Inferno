@@ -40,10 +40,15 @@
     <input type="text" name="end" id="end" value="Seattle">
 	<button type="button" id="go">Go!</button>
     </div>
-    <div id="map"style="height:250px;"></div>
+    <div id="map"style="height:50%;"></div>
+	<div id="buttons" style="height:30px;">
+		<button type="button" id="elv">Calculate Elevation</button>
+		<button type="button" id="save">Save</button>
+	</div>
 	<div id="elevation_chart"></div>
     <script>
 	  google.load('visualization', '1', {packages: ['columnchart']});
+	  var path = [];
       function initMap() {
         var directionsService = new google.maps.DirectionsService;
         var directionsDisplay = new google.maps.DirectionsRenderer({
@@ -54,11 +59,20 @@
           center: {lat: 41.85, lng: -87.65}
         });
         directionsDisplay.setMap(map);
+		
 		var elevator = new google.maps.ElevationService;
         var onChangeHandler = function() {
           calculateAndDisplayRoute(directionsService, directionsDisplay, map, elevator);
         };
+		var doElevation = function() {
+		  pathElevation(path, elevator, map);
+		};
+		var doSave = function() {
+		  download(path, 'path.txt', 'text/plain');
+		};
         document.getElementById('go').addEventListener('click', onChangeHandler);
+		document.getElementById('elv').addEventListener('click', doElevation);
+		document.getElementById('save').addEventListener('click', doSave);
 		
       }
 
@@ -70,15 +84,15 @@
         }, function(response, status) {
           if (status === 'OK') {
             directionsDisplay.setDirections(response);
-			pathElevation(response.routes[0].overview_path, elevator, map);
+			path = response.routes[0].overview_path;
           } else {
             window.alert('Directions request failed due to ' + status);
           }
         });
       }
-	  function pathElevation(path, elevator, map){
+	  function pathElevation(p, elevator, map){
 		elevator.getElevationAlongPath({
-			'path':path,
+			'path':p,
 			'samples':500
 		}, plotElevation);
 	  }
@@ -111,7 +125,18 @@
           titleY: 'Elevation (m)'
         });
       }
-	  
+	  function download(text, name, type) {
+		var a = document.createElement("a"), url = URL.createObjectURL(file);
+		var file = new Blob([text], {type: type});
+		a.href = url;
+		a.download = name;
+		document.body.appendChild(a);
+		a.click();
+		setTimeout(function() {
+			document.body.removeChild(a);
+			window.URL.revokeObjectURL(url);
+		}, 0);
+	  }
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL52m1hRkjWP0bdbqHDF6So--4o7sGtIY&callback=initMap">
