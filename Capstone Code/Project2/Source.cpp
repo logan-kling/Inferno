@@ -54,22 +54,30 @@ private:
 	wxMenu *fileMenu;
 	wxMenu *editMenu;
 	wxMenu *helpMenu;
+	wxString CurrentDocPath;
+	wxTextCtrl *MainEditBox;
 
 	void OnRun(wxCommandEvent& event);
 	void OnImport(wxCommandEvent& event);
+	void OnSave(wxCommandEvent& event);
+	void OnLoad(wxCommandEvent& event);
 	wxDECLARE_EVENT_TABLE();
 };
 
 /* wxIDs for menu items */
 enum {
 	Edit_Run,
-	Edit_Import
+	Edit_Import,
+	File_Save,
+	File_Load
 };
 
 /* Event tables for menu items! */
 wxBEGIN_EVENT_TABLE(MinFrame, wxFrame)
 	EVT_MENU(Edit_Run, MinFrame::OnRun)
 	EVT_MENU(Edit_Import, MinFrame::OnImport)
+	EVT_MENU(File_Save, MinFrame::OnSave)
+	EVT_MENU(File_Load, MinFrame::OnLoad)
 wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MinApp);
@@ -84,8 +92,8 @@ MinFrame::MinFrame(const wxString& title)
 	helpMenu = new wxMenu();
 
 	// File Menu
-	fileMenu->Append(wxID_OPEN, "&Load_Run", "Load a previous run");
-	fileMenu->Append(wxID_SAVE, "&Save_Run", "Save the current run");
+	fileMenu->Append(File_Load, "&Load_Run", "Load a previous run");
+	fileMenu->Append(File_Save, "&Save_Run", "Save the current run");
 	fileMenu->AppendSeparator();
 	fileMenu->Append(wxID_ANY, "&Import_Settings", "Import variables");
 	fileMenu->Append(wxID_ANY, "&Export_Settings", "Export variables");
@@ -216,4 +224,26 @@ void MinFrame::OnImport(wxCommandEvent & event)
 		str = tfile.GetNextLine();
 		processLine(str); // placeholder, do whatever you want with the string
 	}*/
+}
+
+void MinFrame::OnSave(wxCommandEvent & event)
+{
+	wxFileDialog* SaveDialog = new wxFileDialog(this, _("Save to a file"), wxEmptyString, wxEmptyString, _("Text files (*.txt)"), wxFD_SAVE, wxDefaultPosition);
+
+	if (SaveDialog->ShowModal() == wxID_OK) {
+		CurrentDocPath = SaveDialog->GetPath();
+		MainEditBox->SaveFile(CurrentDocPath);
+		SetTitle(wxString("Saving - ") << SaveDialog->GetFilename());
+	}
+}
+
+void MinFrame::OnLoad(wxCommandEvent & event) 
+{
+	wxFileDialog* OpenDialog = new wxFileDialog(this, _("Load a file"), wxEmptyString, wxEmptyString, _("Text files (*.txt)"), wxFD_OPEN, wxDefaultPosition);
+
+	if (OpenDialog->ShowModal() == wxID_OK) {
+		CurrentDocPath = OpenDialog->GetPath();
+		MainEditBox->LoadFile(CurrentDocPath);
+		SetTitle(wxString("Edit - ") << OpenDialog->GetFilename());
+	}
 }
