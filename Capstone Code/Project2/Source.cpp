@@ -10,10 +10,8 @@
 #include <wx/splitter.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/webview.h>
-#include <wx/webviewarchivehandler.h>
-#include <wx/webviewfshandler.h>
-#include <wx/wxhtml.h>
+#include <wx/textfile.h>
+#include <wx/msgdlg.h>
 
 #include "Sim.h"
 
@@ -32,8 +30,6 @@ private:
 	wxStaticText *i_test;
 	wxTextCtrl *i_v1, *i_v2, *i_v3, *i_v4;
 	wxSizer *i_sizer;
-	wxString m_url;
-	wxWebView *m_webview;
 };
 
 class OutputPanel : public wxPanel {
@@ -60,21 +56,24 @@ private:
 	wxMenu *helpMenu;
 
 	void OnRun(wxCommandEvent& event);
-
+	void OnImport(wxCommandEvent& event);
 	wxDECLARE_EVENT_TABLE();
 };
 
 /* wxIDs for menu items */
 enum {
-	Edit_Run
+	Edit_Run,
+	Edit_Import
 };
 
 /* Event tables for menu items! */
 wxBEGIN_EVENT_TABLE(MinFrame, wxFrame)
 	EVT_MENU(Edit_Run, MinFrame::OnRun)
+	EVT_MENU(Edit_Import, MinFrame::OnImport)
 wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MinApp);
+
 
 MinFrame::MinFrame(const wxString& title) 
 	: wxFrame(NULL, wxID_ANY, title)
@@ -97,6 +96,7 @@ MinFrame::MinFrame(const wxString& title)
 	// Edit Menu
 	editMenu->Append(wxID_ANY, "&Clear_Forms", "Empty all the form fields");
 	editMenu->Append(Edit_Run, "&Run/Cancel", "Begin or end the simulation");
+	editMenu->Append(Edit_Import, "&Import_Elevation", "Import elevation data from Google");
 	menuBar->Append(editMenu, "&Edit");
 
 	// Help Menu
@@ -131,8 +131,6 @@ bool MinApp::OnInit() {
 InputPanel::InputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY){
 	
-	m_url = "";
-	m_webview = wxWebView::New(this, wxID_ANY, m_url);
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Input");
 	i_v1 = new wxTextCtrl(this, -1, "Voltage", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	i_v2 = new wxTextCtrl(this, -1, "Availble Kwh", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
@@ -151,7 +149,6 @@ InputPanel::InputPanel(wxWindow * parent)
 
 	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Watt-Hours per Mile:"));
 	i_sizer->Add(i_v3, 0, wxALL, 10);
-	i_sizer->Add(m_webview, 1, wxEXPAND | wxALL, 0);
 
 	SetSizer(i_sizer);
 	i_sizer->SetSizeHints(this);
@@ -186,4 +183,37 @@ void OutputPanel::SetOutputField(float out)
 void MinFrame::OnRun(wxCommandEvent & event)
 {
 	out_p->SetOutputField(testMiles(in_p->GetV1(), in_p->GetV2()));
+}
+
+void MinFrame::OnImport(wxCommandEvent & event) 
+{
+	wxString        file;
+	wxFileDialog    fdlog(this);
+
+	// show file dialog and get the path to
+	// the file that was selected.
+	if (fdlog.ShowModal() != wxID_OK) return;
+	file.Clear();
+	file = fdlog.GetPath();
+
+	wxString        str;
+
+	// open the file
+	wxTextFile      tfile;
+	tfile.Open(file);
+
+	// read the first line
+	str = tfile.GetFirstLine();
+
+	wxMessageBox(str);
+
+	/*processLine(str); // placeholder, do whatever you want with the string
+
+					  // read all lines one by one
+					  // until the end of the file
+	while (!tfile.Eof())
+	{
+		str = tfile.GetNextLine();
+		processLine(str); // placeholder, do whatever you want with the string
+	}*/
 }
