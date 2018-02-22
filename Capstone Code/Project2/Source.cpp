@@ -14,6 +14,7 @@
 #include <wx/msgdlg.h>
 
 #include "Sim.h"
+#include "mathplot.h"
 
 class MinApp : public wxApp {
 public:
@@ -40,6 +41,7 @@ private:
 	wxStaticText *o_test;
 	wxTextCtrl *o_v1;
 	wxSizer *o_sizer;
+	mpWindow *outputGraph;
 };
 
 class MinFrame : public wxFrame {
@@ -168,13 +170,14 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Output");
 	o_sizer->Add(new wxStaticText(this, wxID_ANY, "Miles on availible Kwh:"));
 	o_v1 = new wxTextCtrl(this, -1, "Output", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	outputGraph = new mpWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 	o_sizer->Add(
 		o_v1,
 		0,
 		wxALL,
 		10);
 	o_sizer->Add(
-		new wxTextCtrl(this, -1, "Graph will go here", wxDefaultPosition, wxDefaultSize, wxTE_LEFT),
+		outputGraph,
 		1,				// Yes stretch
 		wxALL,
 		10);
