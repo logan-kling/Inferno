@@ -21,6 +21,7 @@
     <ClCompile Include="Sim.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sim.h">
@@ -34,5 +35,7 @@
     <ResourceCompile Include="CapstoneBase.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+=======
+>>>>>>> d661fedfe8d12487567ce6f082fd339224e1b335
   </ItemGroup>
 </Project>
