@@ -34,6 +34,8 @@ public:
 class InputPanel : public wxPanel {
 public:
 	InputPanel(wxWindow * parent);
+
+	// Get functions for private member content
 	float	GetConsumption() const { return (float)atof(consumption->GetValue()); };
 	float	GetWeight() const { return (float)atof(weight->GetValue()); };
 	float	GetResistance() const { return (float)atof(resistance->GetValue()); };
@@ -41,21 +43,22 @@ public:
 	float	GetIncline() const { return (float)atof(incline->GetValue()); };
 	float	GetSpeed() const { return (float)atof(speed->GetValue()); };
 	int		GetRunOption() { return buttonGroup->GetSelection(); };
-	std::vector<std::string> SaveInputForms();
-	void	MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY);
+
+	// Helper functions
+	std::vector<std::string> SaveInputForms();										//Save form helper
+	void	MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY);	//Elevation graph maker
 
 private:
-	void	OnRadioBoxChange(wxCommandEvent& event);
-	void	PrepElvGraph();
+	void	OnRadioBoxChange(wxCommandEvent& event);								//Radio Box Listener
+	void	PrepElvGraph();															//Elevation graph setup
 
 private:
-	int runOption;
 	wxStaticText *i_test;
 	wxTextCtrl *consumption, *weight, *resistance, *charge, *incline, *speed;
 	wxSizer *i_sizer;
-	wxRadioBox *buttonGroup;
+	wxRadioBox *buttonGroup;	//Radio buttons for selecting run mode
 	mpWindow *elevationGraph;
-	mpFXYVector *vectorLayer;
+	mpFXYVector *vectorLayer;	//layer for our elevation plot added to 'elevationGraph' in 'MakeElvGraph()'
 	wxDECLARE_EVENT_TABLE();
 };
 
@@ -165,10 +168,15 @@ MinFrame::MinFrame(const wxString& title)
 	// Create a split window so we can have input and output side by side
 	wxSplitterWindow *splitter = new wxSplitterWindow(this, 
 		wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER);
+
+	// Create input and output pannels with the splitter window as their parent
 	in_p = new InputPanel(splitter);
 	out_p = new OutputPanel(splitter);
 	splitter->SplitVertically(in_p, out_p);
-	splitter->SetMinimumPaneSize(20);
+	splitter->SetMinimumPaneSize(200);
+
+	// Sets the window size explicitly!
+	SetSize(600, 600);
 }
 
 
@@ -265,7 +273,7 @@ void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> v
 	vectorLayer->SetDrawOutsideMargins(false);
 	elevationGraph->SetMargins(10, 10, 30, 60);
 	elevationGraph->AddLayer(vectorLayer);
-	//elevationGraph->Fit();
+	elevationGraph->Fit();
 	wxMessageBox("Elevation Graph Set");
 }
 
