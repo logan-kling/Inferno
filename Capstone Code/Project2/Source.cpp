@@ -38,10 +38,11 @@ public:
 	float	GetSpeed() const { return (float)atof(speed->GetValue()); };
 	int		GetRunOption() { return buttonGroup->GetSelection(); };
 	std::vector<std::string> SaveInputForms();
-	
+	void	MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY);
 
 private:
 	void	OnRadioBoxChange(wxCommandEvent& event);
+	void	PrepElvGraph();
 
 private:
 	int runOption;
@@ -49,6 +50,8 @@ private:
 	wxTextCtrl *consumption, *weight, *resistance, *charge, *incline, *speed;
 	wxSizer *i_sizer;
 	wxRadioBox *buttonGroup;
+	mpWindow *elevationGraph;
+	mpFXYVector *vectorLayer;
 	wxDECLARE_EVENT_TABLE();
 };
 
@@ -170,6 +173,11 @@ InputPanel::InputPanel(wxWindow * parent)
 	choices.Add("Get Distance");
 	choices.Add("Get Speed");
 
+	vectorLayer = new mpFXYVector(_("Vector"));
+	elevationGraph = new mpWindow(this, -1, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
+
+	PrepElvGraph();
+
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Input");
 	consumption = new wxTextCtrl(this, -1, "consumption", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	weight = new wxTextCtrl(this, -1, "weight", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
@@ -210,6 +218,8 @@ InputPanel::InputPanel(wxWindow * parent)
 	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Incline:"));
 	i_sizer->Add(incline, 0, wxALL, 10);
 
+	i_sizer->Add(elevationGraph, 1, wxEXPAND);
+
 	SetSizer(i_sizer);
 	i_sizer->SetSizeHints(this);
 }
@@ -223,6 +233,38 @@ std::vector<std::string> InputPanel::SaveInputForms()
 	toSave.push_back(std::to_string(this->GetSpeed()));
 	toSave.push_back(std::to_string(this->GetWeight()));
 	return toSave;
+}
+
+
+/*	Use two vectors of x and y coords to make a plot and add it to the graph
+	in the inputPannel
+*/
+void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY)
+{
+	
+	vectorLayer->SetData(vectorX, vectorY);
+	vectorLayer->SetContinuity(true);
+	wxPen vectorpen(*wxBLUE, 5, wxPENSTYLE_SOLID);
+	vectorLayer->SetPen(vectorpen);
+	vectorLayer->SetDrawOutsideMargins(false);
+	elevationGraph->SetMargins(10, 10, 30, 60);
+	elevationGraph->AddLayer(vectorLayer);
+	//elevationGraph->Fit();
+	wxMessageBox("Elevation Graph Set");
+}
+
+void InputPanel::PrepElvGraph() {
+	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);
+	mpScaleY* yaxis = new mpScaleY(wxT("Y"), mpALIGN_LEFT, true);
+	xaxis->SetFont(graphFont);
+	yaxis->SetFont(graphFont);
+	xaxis->SetDrawOutsideMargins(false);
+	yaxis->SetDrawOutsideMargins(false);
+	elevationGraph->AddLayer(xaxis);
+	elevationGraph->AddLayer(yaxis);
+	elevationGraph->EnableDoubleBuffer(true);
+	elevationGraph->SetMPScrollbars(true);
 }
 
 /* This Function looks at the radio button box in InputPanel and is called when
@@ -255,7 +297,7 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	// Add the graph element
 	o_sizer->Add(
 		outputGraph,
-		1,				// Yes stretch
+		0,				// Yes stretch
 		wxALL,
 		10);
 	
@@ -317,34 +359,26 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	// read the first line
 	str = tfile.GetFirstLine();
 
-	//wxMessageBox(str);
-
 	std::string cString = str.ToStdString();
 	std::stringstream ss(cString);
-	std::vector<float> vec;
-	float i; 
+	std::vector<double> vectorY, vectorX;
+	double i, j = 0;
 	while (ss >> i) {
-		vec.push_back(i);
+		vectorY.push_back(i);
 		if (ss.peek() == ',' || ss.peek() == ' ') {
 			ss.ignore();
 		}
+		vectorX.push_back(j);
+		j++;
 	}
+	
+	in_p->MakeElvGraph(vectorX, vectorY);
 
-	std::string finishedString;
-	for (i = 0; i < vec.size(); i++) {
-		finishedString.append(std::to_string(vec.at(i)).append("\n"));
+	/*std::string finishedString;
+	for (i = 0; i < vectorY.size(); i++) {
+		finishedString.append(std::to_string(vectorY.at(i)).append("\n"));
 	}
-	wxMessageBox(wxString(finishedString));
-
-	/*processLine(str); // placeholder, do whatever you want with the string
-
-					  // read all lines one by one
-					  // until the end of the file
-	while (!tfile.Eof())
-	{
-		str = tfile.GetNextLine();
-		processLine(str); // placeholder, do whatever you want with the string
-	}*/
+	wxMessageBox(wxString(finishedString));*/
 }
 
 void MinFrame::OnSave(wxCommandEvent & event)
