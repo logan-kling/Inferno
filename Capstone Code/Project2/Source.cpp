@@ -179,11 +179,11 @@ InputPanel::InputPanel(wxWindow * parent)
 	PrepElvGraph();
 
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Input");
-	consumption = new wxTextCtrl(this, -1, "consumption", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	weight = new wxTextCtrl(this, -1, "weight", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	resistance = new wxTextCtrl(this, -1, "resistance", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	charge = new wxTextCtrl(this, -1, "charge", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	speed = new wxTextCtrl(this, -1, "speed", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	consumption = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	weight = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	resistance = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	charge = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	speed = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	incline = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 
 	speed->SetEditable(0);
@@ -203,10 +203,10 @@ InputPanel::InputPanel(wxWindow * parent)
 		wxALL,        // and make border all around
 		10);          // set border width to 10
 
-	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Weight in kg:"));
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Weight:"));
 	i_sizer->Add(weight, 0, wxALL, 10);
 
-	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Coefficient of resistance:"));
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Coefficient of Air Resistance:"));
 	i_sizer->Add(resistance, 0, wxALL, 10);
 
 	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Charge:"));
@@ -275,6 +275,7 @@ void InputPanel::OnRadioBoxChange(wxCommandEvent& event)
 {
 	if (buttonGroup->GetString(event.GetSelection()) == "Get Distance") {
 		speed->SetEditable(1);
+		
 	}
 	else if (buttonGroup->GetString(event.GetSelection()) == "Get Speed") {
 		speed->SetEditable(0);
@@ -285,7 +286,7 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY) {
 
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Output");
-	o_sizer->Add(new wxStaticText(this, wxID_ANY, "Miles on availible Kwh:"));
+	o_sizer->Add(new wxStaticText(this, wxID_ANY, "Result:"));
 	o_v1 = new wxTextCtrl(this, -1, "Output", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	outputGraph = new mpWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 	o_sizer->Add(
@@ -314,7 +315,7 @@ void OutputPanel::SetOutputField(float* out)
 {
 	wxString outString;
 	for (int i = sizeof(out); i > 0; i--) {
-		outString.append(std::to_string(out[i]));
+		outString.append(std::to_string(out[i]).append(" "));
 	}
 	o_v1->SetValue(outString);
 }
