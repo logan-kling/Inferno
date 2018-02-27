@@ -1,5 +1,8 @@
 #include <string>
 #pragma warning(disable:4996)
+#include <vector>
+#include <sstream>
+#include <iostream>
 
 #include <wx/wx.h>
 #include <wx/app.h>
@@ -12,9 +15,12 @@
 #include <wx/textctrl.h>
 #include <wx/textfile.h>
 #include <wx/msgdlg.h>
+#include <wx/radiobox.h>
+#include <wx/wfstream.h>
 
-#include "Sim.h"
 #include "mathplot.h"
+#include "Sim.h"
+#include "SimIDs.h"
 
 class MinApp : public wxApp {
 public:
@@ -24,19 +30,33 @@ public:
 class InputPanel : public wxPanel {
 public:
 	InputPanel(wxWindow * parent);
-	float GetV1() const { return (float)atof(i_v1->GetValue()); };
-	float GetV2() const { return (float)atof(i_v2->GetValue()); };
-	float GetV3() const { return (float)atof(i_v3->GetValue()); };
+	float	GetConsumption() const { return (float)atof(consumption->GetValue()); };
+	float	GetWeight() const { return (float)atof(weight->GetValue()); };
+	float	GetResistance() const { return (float)atof(resistance->GetValue()); };
+	float	GetCharge() const { return (float)atof(charge->GetValue()); };
+	float	GetIncline() const { return (float)atof(incline->GetValue()); };
+	float	GetSpeed() const { return (float)atof(speed->GetValue()); };
+	int		GetRunOption() { return buttonGroup->GetSelection(); };
+	std::vector<std::string> SaveInputForms();
+	
+
 private:
+	void	OnRadioBoxChange(wxCommandEvent& event);
+
+private:
+	int runOption;
 	wxStaticText *i_test;
-	wxTextCtrl *i_v1, *i_v2, *i_v3, *i_v4;
+	wxTextCtrl *consumption, *weight, *resistance, *charge, *incline, *speed;
 	wxSizer *i_sizer;
+	wxRadioBox *buttonGroup;
+	wxDECLARE_EVENT_TABLE();
 };
 
 class OutputPanel : public wxPanel {
 public:
 	OutputPanel(wxWindow * parent);
 	void SetOutputField(float out);
+	void SetOutputField(float * out);
 private:
 	wxStaticText *o_test;
 	wxTextCtrl *o_v1;
@@ -80,6 +100,11 @@ wxBEGIN_EVENT_TABLE(MinFrame, wxFrame)
 	EVT_MENU(Edit_Import, MinFrame::OnImport)
 	EVT_MENU(File_Save, MinFrame::OnSave)
 	EVT_MENU(File_Load, MinFrame::OnLoad)
+wxEND_EVENT_TABLE()
+
+/* Event table for Input Pannel! */
+wxBEGIN_EVENT_TABLE(InputPanel, wxPanel)
+	EVT_RADIOBOX(wxID_RADIOBOX, InputPanel::OnRadioBoxChange)
 wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MinApp);
@@ -141,27 +166,77 @@ bool MinApp::OnInit() {
 InputPanel::InputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY){
 	
+	wxArrayString choices;
+	choices.Add("Get Distance");
+	choices.Add("Get Speed");
+
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Input");
-	i_v1 = new wxTextCtrl(this, -1, "Voltage", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	i_v2 = new wxTextCtrl(this, -1, "Availble Kwh", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	i_v3 = new wxTextCtrl(this, -1, "259 wh/m", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	i_v3->SetEditable(0);
+	consumption = new wxTextCtrl(this, -1, "consumption", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	weight = new wxTextCtrl(this, -1, "weight", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	resistance = new wxTextCtrl(this, -1, "resistance", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	charge = new wxTextCtrl(this, -1, "charge", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	speed = new wxTextCtrl(this, -1, "speed", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	incline = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+
+	speed->SetEditable(0);
+	incline->SetEditable(0);
 	
-	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Voltage:"));
+	buttonGroup = new wxRadioBox(this, wxID_RADIOBOX, "Distance/Speed:", wxDefaultPosition, wxDefaultSize, choices, 2, wxHORIZONTAL);
+	
+	// Set the radio button
+	buttonGroup->SetSelection(1);
+	
+	i_sizer->Add(buttonGroup);
+
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Motor Consumption:"));
 	i_sizer->Add(
-		i_v1,
+		consumption,
 		0,            // not vertically stretchable
 		wxALL,        // and make border all around
 		10);          // set border width to 10
 
-	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Availble Kwh:"));
-	i_sizer->Add(i_v2, 0, wxALL, 10);
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Weight in kg:"));
+	i_sizer->Add(weight, 0, wxALL, 10);
 
-	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Watt-Hours per Mile:"));
-	i_sizer->Add(i_v3, 0, wxALL, 10);
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Coefficient of resistance:"));
+	i_sizer->Add(resistance, 0, wxALL, 10);
+
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Charge:"));
+	i_sizer->Add(charge, 0, wxALL, 10);
+
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Speed:"));
+	i_sizer->Add(speed, 0, wxALL, 10);
+
+	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Incline:"));
+	i_sizer->Add(incline, 0, wxALL, 10);
 
 	SetSizer(i_sizer);
 	i_sizer->SetSizeHints(this);
+}
+
+std::vector<std::string> InputPanel::SaveInputForms()
+{
+	std::vector<std::string> toSave;
+	toSave.push_back(std::to_string(this->GetCharge()));
+	toSave.push_back(std::to_string(this->GetConsumption()));
+	toSave.push_back(std::to_string(this->GetResistance()));
+	toSave.push_back(std::to_string(this->GetSpeed()));
+	toSave.push_back(std::to_string(this->GetWeight()));
+	return toSave;
+}
+
+/* This Function looks at the radio button box in InputPanel and is called when
+*  that changes. 
+*  When called, depending on the option it should change which simulation function gets run.
+*/
+void InputPanel::OnRadioBoxChange(wxCommandEvent& event)
+{
+	if (buttonGroup->GetString(event.GetSelection()) == "Get Distance") {
+		speed->SetEditable(1);
+	}
+	else if (buttonGroup->GetString(event.GetSelection()) == "Get Speed") {
+		speed->SetEditable(0);
+	}
 }
 
 OutputPanel::OutputPanel(wxWindow * parent)
@@ -176,6 +251,8 @@ OutputPanel::OutputPanel(wxWindow * parent)
 		0,
 		wxALL,
 		10);
+
+	// Add the graph element
 	o_sizer->Add(
 		outputGraph,
 		1,				// Yes stretch
@@ -191,9 +268,33 @@ void OutputPanel::SetOutputField(float out)
 	o_v1->SetValue(std::to_string(out));
 }
 
+void OutputPanel::SetOutputField(float* out)
+{
+	wxString outString;
+	for (int i = sizeof(out); i > 0; i--) {
+		outString.append(std::to_string(out[i]));
+	}
+	o_v1->SetValue(outString);
+}
+
 void MinFrame::OnRun(wxCommandEvent & event)
 {
-	out_p->SetOutputField(testMiles(in_p->GetV1(), in_p->GetV2()));
+	//out_p->SetOutputField(testMiles(in_p->GetConsumption(), in_p->GetWeight()));
+	if (in_p->GetRunOption() == 0) {
+		out_p->SetOutputField(getDistance(in_p->GetCharge(), 
+			in_p->GetConsumption(), 
+			in_p->GetIncline(), 
+			in_p->GetWeight(), 
+			in_p->GetSpeed(), 
+			in_p->GetResistance()));
+	}
+	else if (in_p->GetRunOption() == 1) {
+		out_p->SetOutputField(getBestSpeed(in_p->GetConsumption(), 
+			in_p->GetIncline(), 
+			in_p->GetWeight(), 
+			in_p->GetResistance(), 
+			in_p->GetCharge()));
+	}
 }
 
 void MinFrame::OnImport(wxCommandEvent & event) 
@@ -216,7 +317,24 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	// read the first line
 	str = tfile.GetFirstLine();
 
-	wxMessageBox(str);
+	//wxMessageBox(str);
+
+	std::string cString = str.ToStdString();
+	std::stringstream ss(cString);
+	std::vector<float> vec;
+	float i; 
+	while (ss >> i) {
+		vec.push_back(i);
+		if (ss.peek() == ',' || ss.peek() == ' ') {
+			ss.ignore();
+		}
+	}
+
+	std::string finishedString;
+	for (i = 0; i < vec.size(); i++) {
+		finishedString.append(std::to_string(vec.at(i)).append("\n"));
+	}
+	wxMessageBox(wxString(finishedString));
 
 	/*processLine(str); // placeholder, do whatever you want with the string
 
@@ -231,22 +349,51 @@ void MinFrame::OnImport(wxCommandEvent & event)
 
 void MinFrame::OnSave(wxCommandEvent & event)
 {
-	wxFileDialog* SaveDialog = new wxFileDialog(this, _("Save to a file"), wxEmptyString, wxEmptyString, _("Text files (*.txt)"), wxFD_SAVE, wxDefaultPosition);
 
-	if (SaveDialog->ShowModal() == wxID_OK) {
-		CurrentDocPath = SaveDialog->GetPath();
-		MainEditBox->SaveFile(CurrentDocPath);
-		SetTitle(wxString("Saving - ") << SaveDialog->GetFilename());
+	wxFileDialog
+		saveFileDialog(this, _("Save txt file"), "", "",
+			"text files (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	if (saveFileDialog.ShowModal() == wxID_CANCEL)
+		return;     // the user changed idea...
+
+					// save the current contents in the file;
+					// this can be done with e.g. wxWidgets output streams:
+	wxFileOutputStream output_stream(saveFileDialog.GetPath());
+	if (!output_stream.IsOk())
+	{
+		wxLogError("Cannot save current contents in file '%s'.", saveFileDialog.GetPath());
+		return;
+	}
+	std::vector<std::string> savingThis = in_p->SaveInputForms();
+
+	for (std::vector<std::string>::iterator it = savingThis.begin(); it != savingThis.end(); ++it) {
+		output_stream.Write((*it).c_str(), sizeof((*it).c_str()));
 	}
 }
 
 void MinFrame::OnLoad(wxCommandEvent & event) 
 {
-	wxFileDialog* OpenDialog = new wxFileDialog(this, _("Load a file"), wxEmptyString, wxEmptyString, _("Text files (*.txt)"), wxFD_OPEN, wxDefaultPosition);
+
+	wxFileDialog
+		openFileDialog(this, _("Open txt file"), "", "",
+			"text files (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	if (openFileDialog.ShowModal() == wxID_CANCEL)
+		return;     // the user changed idea...
+
+					// proceed loading the file chosen by the user;
+					// this can be done with e.g. wxWidgets input streams:
+	wxFileInputStream input_stream(openFileDialog.GetPath());
+	if (!input_stream.IsOk())
+	{
+		wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
+		return;
+	}
+
+	/*wxFileDialog* OpenDialog = new wxFileDialog(this, _("Load a file"), wxEmptyString, wxEmptyString, _("Text files (*.txt)"), wxFD_OPEN, wxDefaultPosition);
 
 	if (OpenDialog->ShowModal() == wxID_OK) {
 		CurrentDocPath = OpenDialog->GetPath();
 		MainEditBox->LoadFile(CurrentDocPath);
 		SetTitle(wxString("Edit - ") << OpenDialog->GetFilename());
-	}
+	}*/
 }

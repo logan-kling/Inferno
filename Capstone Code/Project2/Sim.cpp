@@ -1,3 +1,5 @@
+#include "Sim.h"
+
 // Everything math-y and not GUI can go here
 
 float testIToO(float in1, float in2, float in3) {
@@ -49,7 +51,7 @@ float* getBestSpeed(float consumption, //How many Watt hours the car consumes pe
 	float incline, //The incline of the road the car's driving on (-50 < incline < 50)
 	float weight, //The weight of the car
 	float resistance, /*The coefficient of resistance of the car*/
-	float charge = 90000.0 /*The initial charge of the car*/) {
+	float charge  /*The initial charge of the car*/) {
 	float inclineFactor; //turns incline into a number between 0.2 & 4
 	if (incline == 0) //If the road is flat
 		inclineFactor = 1;

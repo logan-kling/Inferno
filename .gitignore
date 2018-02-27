@@ -40,3 +40,8 @@ Capstone Code/Project2/Debug/Project2.log
 Capstone Code/Project2/Debug/CapstoneBase.res
 Capstone Code/Project2/CapstoneBase.rc
 Capstone Code/Project2/CapstoneBase.aps
+*.vcxproj
+Capstone Code/Project2/Project2.vcxproj
+*.ipch
+*.idb
+*.pdb
