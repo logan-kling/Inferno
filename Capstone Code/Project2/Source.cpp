@@ -18,15 +18,19 @@
 #include <wx/radiobox.h>
 #include <wx/wfstream.h>
 
-#include "mathplot.h"
-#include "Sim.h"
-#include "SimIDs.h"
+#include "mathplot.h"	// The library we are using to create graphs
+#include "Sim.h"		// The file for our simulation functions
+#include "SimIDs.h"		// Contains our custom wxIDs
 
 class MinApp : public wxApp {
 public:
 	virtual bool OnInit();
 };
 
+// This class contains:
+//  all the forms the user needs to fill out to run the program
+//  a selector for the run option
+//  a graph to display imported elevation data
 class InputPanel : public wxPanel {
 public:
 	InputPanel(wxWindow * parent);
@@ -55,6 +59,9 @@ private:
 	wxDECLARE_EVENT_TABLE();
 };
 
+// This class contains:
+//  the output fields to display our run data
+//  a graph for display use of data after run
 class OutputPanel : public wxPanel {
 public:
 	OutputPanel(wxWindow * parent);
@@ -67,6 +74,11 @@ private:
 	mpWindow *outputGraph;
 };
 
+// This class contains:
+//  The overall layout of our program
+//  The menu bar
+//  The input and output panels
+//  This class is the parent of the other classes.
 class MinFrame : public wxFrame {
 public:
 	MinFrame(const wxString& title);
@@ -112,7 +124,9 @@ wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MinApp);
 
-
+// The default constructor for our frame
+// This is the highest level window. Everything in the GUI is
+// some level of child of 'this'
 MinFrame::MinFrame(const wxString& title) 
 	: wxFrame(NULL, wxID_ANY, title)
 {
@@ -166,6 +180,7 @@ bool MinApp::OnInit() {
 	return true;
 }
 
+// The default constructor for our input panel
 InputPanel::InputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY){
 	
@@ -224,6 +239,7 @@ InputPanel::InputPanel(wxWindow * parent)
 	i_sizer->SetSizeHints(this);
 }
 
+// This is a helper function for saving the input forms to a file.
 std::vector<std::string> InputPanel::SaveInputForms()
 {
 	std::vector<std::string> toSave;
@@ -253,6 +269,9 @@ void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> v
 	wxMessageBox("Elevation Graph Set");
 }
 
+// Using no input,
+// This function prepares the elevation graph by setting up the x and y axis,
+// And scaling the graph window.
 void InputPanel::PrepElvGraph() {
 	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);
@@ -282,6 +301,7 @@ void InputPanel::OnRadioBoxChange(wxCommandEvent& event)
 	}
 }
 
+// Default constructor for our OutputPanel.
 OutputPanel::OutputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY) {
 
@@ -306,11 +326,13 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	o_sizer->SetSizeHints(this);
 }
 
+// Set the first output field to the given float value
 void OutputPanel::SetOutputField(float out)
 {
 	o_v1->SetValue(std::to_string(out));
 }
 
+// Overload for multiple floats
 void OutputPanel::SetOutputField(float* out)
 {
 	wxString outString;
@@ -320,6 +342,10 @@ void OutputPanel::SetOutputField(float* out)
 	o_v1->SetValue(outString);
 }
 
+// When the Run event is generated:
+// Take the given input and the run option,
+// Call the appropriate simulation function,
+// Set the output field with the results of the run.
 void MinFrame::OnRun(wxCommandEvent & event)
 {
 	//out_p->SetOutputField(testMiles(in_p->GetConsumption(), in_p->GetWeight()));
@@ -340,6 +366,10 @@ void MinFrame::OnRun(wxCommandEvent & event)
 	}
 }
 
+// When the elevation event is generated:
+// Open a file dialog to select which file to load from,
+// parse the contents and send them to in_p memeber function:
+// MakeElvGraph to create a graph from our vector.
 void MinFrame::OnImport(wxCommandEvent & event) 
 {
 	wxString        file;
@@ -382,6 +412,9 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	wxMessageBox(wxString(finishedString));*/
 }
 
+// When the OnSave event is generated:
+// Open a file dialog and ask user for a name and a save path,
+// Save the input fields to a file for later use.
 void MinFrame::OnSave(wxCommandEvent & event)
 {
 
@@ -406,6 +439,9 @@ void MinFrame::OnSave(wxCommandEvent & event)
 	}
 }
 
+// When the OnLoad event is generated:
+// Ask the user for a file to load from,
+// Read from the file and place the contents in the appropriate input columns.
 void MinFrame::OnLoad(wxCommandEvent & event) 
 {
 
