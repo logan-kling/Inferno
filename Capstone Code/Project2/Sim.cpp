@@ -65,3 +65,42 @@ float* getBestSpeed(float consumption, //How many Watt hours the car consumes pe
 	}
 	return speeds;
 }
+
+/* 
+Drag Function from https://physics.info/drag/
+pressure drag: R=1/2qCAv^2 or simple drag: R=-bv
+a typical car has C of 0.25 to 0.35
+
+Relating power: 
+Simple drag: P=bv^(n+1)
+Pressure drag: P=1/2qCAv^3
+
+Variables: 
+q is the fluid density,
+C is the coefficient of drag,
+A is the area,
+v of course is the speed
+*/
+
+/*
+Power or work to go up an given height function
+P=W/t
+W=(Sum of forces)(distance)+(mass)(gravity)(change in height)
+
+(Power)(efficiency of the motor) = (mass)(gravity)(sin of the incline)
+(Watts)(in %, the old car had 95%)=(kg  )(m/s^2  )(sin of the degrees)
+*/
+
+/*
+Conversion functions:
+Hp to Watt
+Watt to Hp
+*/
+
+double HpToWatt(double Hp) {
+	return Hp * (double)745.699872;	//From Google
+}
+
+double WattToHp(double Watt) {
+	return Watt * (double)0.00134102; //From Google
+}
