@@ -266,14 +266,14 @@ std::vector<std::string> InputPanel::SaveInputForms()
 void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY)
 {
 	
-	vectorLayer->SetData(vectorX, vectorY);
-	vectorLayer->SetContinuity(true);
-	wxPen vectorpen(*wxBLUE, 5, wxPENSTYLE_SOLID);
-	vectorLayer->SetPen(vectorpen);
-	vectorLayer->SetDrawOutsideMargins(false);
-	elevationGraph->SetMargins(10, 10, 30, 60);
-	elevationGraph->AddLayer(vectorLayer);
-	elevationGraph->Fit();
+	vectorLayer->SetData(vectorX, vectorY);			//Adds the x and y coords to the layer
+	vectorLayer->SetContinuity(true);				//Draw lines in between the points
+	wxPen vectorpen(*wxBLUE, 5, wxPENSTYLE_SOLID);	//Set line size and color
+	vectorLayer->SetPen(vectorpen);					//gives the pen to the layer
+	vectorLayer->SetDrawOutsideMargins(false);		//Makes sure the graph isnt drawn outside of the graph bounds
+	elevationGraph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
+	elevationGraph->AddLayer(vectorLayer);			//Adds the plotted x/y coordinates to our graph
+	elevationGraph->Fit();							//Zoom the graph properly after everything has been added
 	wxMessageBox("Elevation Graph Set");
 }
 
@@ -281,17 +281,17 @@ void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> v
 // This function prepares the elevation graph by setting up the x and y axis,
 // And scaling the graph window.
 void InputPanel::PrepElvGraph() {
-	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
-	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);
-	mpScaleY* yaxis = new mpScaleY(wxT("Y"), mpALIGN_LEFT, true);
-	xaxis->SetFont(graphFont);
-	yaxis->SetFont(graphFont);
-	xaxis->SetDrawOutsideMargins(false);
+	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);	//Set the font for the graph
+	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);			//Label the x axis
+	mpScaleY* yaxis = new mpScaleY(wxT("Y"), mpALIGN_LEFT, true);						//Label the y axis
+	xaxis->SetFont(graphFont);															//Set font for x axis
+	yaxis->SetFont(graphFont);															//Set font for y axis
+	xaxis->SetDrawOutsideMargins(false);												//Dont't draw the axis outside margins
 	yaxis->SetDrawOutsideMargins(false);
-	elevationGraph->AddLayer(xaxis);
+	elevationGraph->AddLayer(xaxis);													//add the axis to the graph
 	elevationGraph->AddLayer(yaxis);
-	elevationGraph->EnableDoubleBuffer(true);
-	elevationGraph->SetMPScrollbars(true);
+	elevationGraph->EnableDoubleBuffer(true);											//reduces flicker when graph is drawn
+	elevationGraph->SetMPScrollbars(true);												//adds scroll bars if the graph window is too small
 }
 
 /* This Function looks at the radio button box in InputPanel and is called when
@@ -316,6 +316,8 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Output");
 	o_sizer->Add(new wxStaticText(this, wxID_ANY, "Result:"));
 	o_v1 = new wxTextCtrl(this, -1, "Output", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+
+	//Assign a graph element to the outputGraph variable
 	outputGraph = new mpWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 	o_sizer->Add(
 		o_v1,
