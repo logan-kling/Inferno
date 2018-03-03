@@ -33,6 +33,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+\begin{singlespace}
 \begin{titlepage}
     \pagenumbering{gobble}
     \begin{singlespace}
@@ -90,7 +91,7 @@
     This document is intended for the members of the Phoenix Solar Racing Team, and anyone who is interested in the outcome of the project.
     
     \subsection{Scope}
-    For this project we will develop a Solar Car Simulation as a minimal software that takes variables from the user and uses them to calculate the solar car's performance.
+    For this project we will develop a Solar Car Simulation as a minimal piece of software that takes variables from the user and uses them to calculate the solar car's performance.
     The software will be used by the Solar Racing Team to estimate their cars performance. 
     They have not used software for this purpose in previous races and because any software to estimate the efficiency of vehicles is based on non-electric engines or does not take solar power into account, they have created this project. There are some benefits from creating a new software including: designing a specific GUI that only includes the features they need, includes variables specific to the solar car, and can be modified by their team.
     
@@ -140,8 +141,8 @@
     \begin{enumerate}
         % Here we might want to be more specific like McGrath talked about in class.
         \item To provide a simple and easy to use interface to allow team members to use the software efficiently. 
-        \item To make the simulation program estimate the energy usage of the vehicle over a given time period or distance at a given speed.
-        \item To estimate the required speed to use a given amount of energy to cover a given distance in a specified amount of time. 
+        \item To make the simulation program estimate the energy usage of the vehicle over a given distance at a given speed.
+        \item To estimate the required speed to use a given amount of energy to cover a given distance. 
         \item To include factors like the electrical and mechanical efficiency of the vehicle and the prevailing weather conditions. 
     \end{enumerate}
     
@@ -173,14 +174,13 @@
         \item Group 2: After testing the GUI and making sure the first group is working correctly we will add these next variables.
         \begin{enumerate}
             \item Cloud Coverage
-            \item Wind Resistance
-            \item Electric Motor Consumption Based on Speed
+            \item Air Resistance (Drag)
+            \item Course Altitude Change from Start to End
         \end{enumerate}
-        \item Group 3: These are variables that may not have enough of an effect on the car to justify the extra calculations. We will look into adding them after we are sure the other two groups are correctly implemented. These variables are closer to stretch goals than actual requirements.
+        \item Group 3: These are variables that may not have enough of an effect on the car to justify the extra calculations. We will look into adding them after we are sure the other two groups are correctly implemented. These variables can be considered stretch goals.
         \begin{enumerate}
             \item Tire friction
             \item Change in Sun Angle Over the Course
-            \item Course Altitude Change from Start to End
             \item Latitude/Longitude of the Course (to account for different solar intensity)
         \end{enumerate}
     \end{enumerate}
@@ -189,13 +189,14 @@
     These User Stories are goals we will achieve by the end of the project. They are small sections of the project that when completed will help us verify we have completed the project.
     %add time to complete, and how important they are
     \begin{enumerate}
-        \item As a PSR team member I want a simple interface so that I can use the program quickly and without confusion. \textit{This is something we will test and make changes till PSR is comfortable using the program.}
-        \item As a user I want to be able to save certain variables so that I don't have to re-enter information for every simulation. \textit{This can be implemented with the GUI and will not take more than an hour or two.}
-        \item As a driver I want enough variables for the simulation to be accurate so that I can get an idea of where I will be during the race. \textit{After implementing variable Group 2 we will test for completion of this story.}
-        \item As a user I want a minimum of variables so the program can run quickly while maintaining accuracy. \textit{This user story will be complete when the variable Group 2 is implemented.}
-        \item As a programmer I want well documented code so I can update the program a year or more down the road. \textit{We will look over the code at the end to make sure it meets this requirement but it will be part of the coding process to keep it clean. The review should take no more than a day.}
-        \item As a driver I want to give the program time and speed and see how much energy will be used with those variables so I can judge the race. \textit{This can be added after the second group of variables. It should take us a week along with story number seven.}
-        \item As a driver I want to give the program energy, distance, and time to determine the speed at which I should drive to cover that given distance using that given amount of energy. \textit{This can be added after the second group of variables. It should take us a week}
+        \item As a PSR team member I want an interface in one window with the input fields for our car variables, and the output graphs for battery charge and speed so that I can use the program quickly and without confusion. \textit{This is something we will test and make changes till PSR is comfortable using the program.}
+        \item As a user I want to be able to save and load certain variables so that I don't have to re-enter information for every simulation. \textit{This can be implemented with the GUI and will not take more than an hour or two.}
+        \item As a driver I want at least the variables from Group 1 and Group 2 so the simulation is accurate I can get an idea of where I will be during the race. \textit{After implementing variable Group 2 we will test for completion of this story.}
+        \item As a user I don't want to type in  more than the three variable groups so that I can avoid setting the program up by hand for every run. \textit{This user story will be complete after we have implemented the save/load feature and the variables from at least Group 1 and Group 2.}
+        \item As a driver I want to give the program speed and battery charge to see how far the car can go with my given conditions so I can plan the race. \textit{This can be added after the second group of variables. It should take a week with story number seven.}
+        \item As a driver I want to give the program battery charge and the car's information to see what speeds will save the most energy. \textit{This can be added after the second group of variables. It should take us a week.}
+        \item As a driver I want the program to use information about the altitude of the course so it can take into account variation in uphill vs downhill.
+        \item As a driver I want the program to use information from the weather to calculate how much sunlight the solar panels will get.
     \end{enumerate}
     
     \subsection{Requirements}
@@ -208,7 +209,8 @@
         \item Verify the program can be run without crashing on the system the PSR team will be using at least 95\% of the time.
         % remove psr, give a percent accuracy?
         \item Make the program accurate to within 60\% of the results of the real car based on a given 10 mile drive.
-        Make sure our margin of error never exceeds 40\%.
+        Make sure our margin of error never exceeds 40\%. \textit{This requirement may be considered fulfilled after testing with the race logs from the team's last car in case they are unable to build the new car before we finish the project in Spring of 2018.}
+        \item Provide an API to plan a route and return elevation data for the simulation.
     \end{enumerate}
     
     \subsection{Time-line}
@@ -232,10 +234,11 @@
     \subsection{Stretch Goals}
     \begin{enumerate}
         \item Record the angle of the sun and the direction the car is facing.
-        \item Include some API to map the elevation changes of the route in detail. 
-        \item Import weather data from an API using a zip code. Then the user will not need to enter all the values for weather manually.
+        %\item Include some API to map the elevation changes of the route in detail. 
+        \item Include variables from Group 3.
     \end{enumerate}
     
     
 
+\end{singlespace}
 \end{document}
