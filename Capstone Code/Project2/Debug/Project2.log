@@ -1,3 +1,21 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Project2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Source.cpp
+c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\source.cpp(408): error C2664: 'void OutputPanel::makeSpeedsGraph(std::vector<double,std::allocator<_Ty>>)': cannot convert argument 1 from 'float *' to 'std::vector<double,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=double
+          ]
+  c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\source.cpp(412): note: No constructor could take the source type, or constructor overload resolution was ambiguous
   Sim.cpp
-  Project2.vcxproj -> C:\Users\logan\Documents\Logan\Computer Science\CS462\Inferno\Capstone Code\Debug\CapstoneBase.exe
+c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\sim.cpp(55): error C2556: 'std::vector<double,std::allocator<_Ty>> getBestSpeed(float,float,float,float,float)': overloaded function differs only by return type from 'float *getBestSpeed(float,float,float,float,float)'
+          with
+          [
+              _Ty=double
+          ]
+  c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\sim.h(40): note: see declaration of 'getBestSpeed'
+c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\sim.cpp(55): error C2040: 'getBestSpeed': 'std::vector<double,std::allocator<_Ty>> (float,float,float,float,float)' differs in levels of indirection from 'float *(float,float,float,float,float)'
+          with
+          [
+              _Ty=double
+          ]
+  Generating Code...

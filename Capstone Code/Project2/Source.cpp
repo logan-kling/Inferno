@@ -1,6 +1,5 @@
 #include <string>
 #pragma warning(disable:4996)
-#include <vector>
 #include <sstream>
 #include <iostream>
 
@@ -70,11 +69,15 @@ public:
 	OutputPanel(wxWindow * parent);
 	void SetOutputField(float out);
 	void SetOutputField(float * out);
+	// Helper functions
+	void	makeSpeedsGraph(std::vector<double> distances);	//Elevation graph maker
 private:
 	wxStaticText *o_test;
 	wxTextCtrl *o_v1;
 	wxSizer *o_sizer;
 	mpWindow *outputGraph;
+	mpFXYVector *vectorLayer;	//layer for our elevation plot added to 'speedGraph' in 'MakeSpeedsGraph()'
+	void	prepareSpeedsGraph();
 };
 
 // This class contains:
@@ -261,8 +264,7 @@ std::vector<std::string> InputPanel::SaveInputForms()
 
 
 /*	Use two vectors of x and y coords to make a plot and add it to the graph
-	in the inputPannel
-*/
+	in the inputPannel */
 void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY)
 {
 	
@@ -281,17 +283,51 @@ void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> v
 // This function prepares the elevation graph by setting up the x and y axis,
 // And scaling the graph window.
 void InputPanel::PrepElvGraph() {
-	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);	//Set the font for the graph
-	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);			//Label the x axis
-	mpScaleY* yaxis = new mpScaleY(wxT("Y"), mpALIGN_LEFT, true);						//Label the y axis
-	xaxis->SetFont(graphFont);															//Set font for x axis
-	yaxis->SetFont(graphFont);															//Set font for y axis
-	xaxis->SetDrawOutsideMargins(false);												//Dont't draw the axis outside margins
+	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);//Set the font for the graph
+	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);		//Label the x axis
+	mpScaleY* yaxis = new mpScaleY(wxT("Y"), mpALIGN_LEFT, true);					//Label the y axis
+	xaxis->SetFont(graphFont);														//Set font for x axis
+	yaxis->SetFont(graphFont);														//Set font for y axis
+	xaxis->SetDrawOutsideMargins(false);											//Dont't draw the axis outside margins
 	yaxis->SetDrawOutsideMargins(false);
-	elevationGraph->AddLayer(xaxis);													//add the axis to the graph
+	elevationGraph->AddLayer(xaxis);												//add the axis to the graph
 	elevationGraph->AddLayer(yaxis);
-	elevationGraph->EnableDoubleBuffer(true);											//reduces flicker when graph is drawn
-	elevationGraph->SetMPScrollbars(true);												//adds scroll bars if the graph window is too small
+	elevationGraph->EnableDoubleBuffer(true);										//reduces flicker when graph is drawn
+	elevationGraph->SetMPScrollbars(true);											//adds scroll bars if the graph window is too small
+}
+
+
+/*	Use two vectors of x and y coords to make a plot and add it to the graph
+in the inputPannel */
+void OutputPanel::makeSpeedsGraph(std::vector<double> distances)
+{
+	std::vector<double> speeds = {15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65};
+	vectorLayer->SetData(speeds, distances);			//Adds the x and y coords to the layer
+	vectorLayer->SetContinuity(true);				//Draw lines in between the points
+	wxPen vectorpen(*wxBLUE, 5, wxPENSTYLE_SOLID);	//Set line size and color
+	vectorLayer->SetPen(vectorpen);					//gives the pen to the layer
+	vectorLayer->SetDrawOutsideMargins(false);		//Makes sure the graph isnt drawn outside of the graph bounds
+	outputGraph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
+	outputGraph->AddLayer(vectorLayer);			//Adds the plotted x/y coordinates to our graph
+	outputGraph->Fit();							//Zoom the graph properly after everything has been added
+	wxMessageBox("Elevation Graph Set");
+}
+
+// Using no input,
+// This function prepares the graph of speeds by setting up the x and y axis,
+// And scaling the graph window.
+void OutputPanel::prepareSpeedsGraph() {
+	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);//Set the font for the graph
+	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);		//Label the x axis
+	mpScaleY* yaxis = new mpScaleY(wxT("Y"), mpALIGN_LEFT, true);					//Label the y axis
+	xaxis->SetFont(graphFont);														//Set font for x axis
+	yaxis->SetFont(graphFont);														//Set font for y axis
+	xaxis->SetDrawOutsideMargins(false);											//Dont't draw the axis outside margins
+	yaxis->SetDrawOutsideMargins(false);
+	outputGraph->AddLayer(xaxis);												//add the axis to the graph
+	outputGraph->AddLayer(yaxis);
+	outputGraph->EnableDoubleBuffer(true);										//reduces flicker when graph is drawn
+	outputGraph->SetMPScrollbars(true);											//adds scroll bars if the graph window is too small
 }
 
 /* This Function looks at the radio button box in InputPanel and is called when
@@ -318,6 +354,7 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	o_v1 = new wxTextCtrl(this, -1, "Output", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 
 	//Assign a graph element to the outputGraph variable
+	vectorLayer = new mpFXYVector(_("Vector"));
 	outputGraph = new mpWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 	o_sizer->Add(
 		o_v1,
@@ -368,7 +405,7 @@ void MinFrame::OnRun(wxCommandEvent & event)
 			in_p->GetResistance()));
 	}
 	else if (in_p->GetRunOption() == 1) {
-		out_p->SetOutputField(getBestSpeed(in_p->GetConsumption(), 
+		out_p->makeSpeedsGraph(getBestSpeed(in_p->GetConsumption(), 
 			in_p->GetIncline(), 
 			in_p->GetWeight(), 
 			in_p->GetResistance(), 
