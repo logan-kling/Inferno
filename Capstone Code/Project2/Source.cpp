@@ -310,7 +310,7 @@ void OutputPanel::makeSpeedsGraph(std::vector<double> distances)
 	outputGraph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
 	outputGraph->AddLayer(vectorLayer);			//Adds the plotted x/y coordinates to our graph
 	outputGraph->Fit();							//Zoom the graph properly after everything has been added
-	wxMessageBox("Elevation Graph Set");
+	wxMessageBox("Distance versus Speed Graph Set");
 }
 
 // Using no input,
@@ -379,7 +379,7 @@ void OutputPanel::SetOutputField(float out)
 	o_v1->SetValue(std::to_string(out));
 }
 
-// Overload for multiple floats
+/*/ Overload for multiple floats
 void OutputPanel::SetOutputField(float* out)
 {
 	wxString outString;
@@ -387,7 +387,7 @@ void OutputPanel::SetOutputField(float* out)
 		outString.append(std::to_string(out[i]).append(" "));
 	}
 	o_v1->SetValue(outString);
-}
+}*/
 
 // When the Run event is generated:
 // Take the given input and the run option,
