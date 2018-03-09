@@ -132,6 +132,9 @@
         });
       }
 	  function download(text, name, type) {
+		text.unshift("samp:"+samp);
+		text.unshift("dist:"+dist);
+	  
 	    var file = new Blob([text], {type: type});
 		var a = document.createElement("a"), url = URL.createObjectURL(file);
 		

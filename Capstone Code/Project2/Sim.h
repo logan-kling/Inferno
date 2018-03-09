@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <vector>
 
 //Air density at 1 atm of pressure at 15 degrees Celcius (about 59 degrees Ferhente )
 #define AIR_DENSITY 1.225
@@ -37,7 +38,7 @@ float getDistance(float charge, //The initial charge of the car
 	float speed, //The speed the car will travel
 	float resistance /*The coefficient of resistance of the car*/);
 
-float* getBestSpeed(float consumption, //How many Watt hours the car consumes per mile driven
+std::vector<double> getBestSpeed(float consumption, //How many Watt hours the car consumes per mile driven
 	float incline, //The incline of the road the car's driving on (-50 < incline < 50)
 	float weight, //The weight of the car
 	float resistance, /*The coefficient of resistance of the car*/

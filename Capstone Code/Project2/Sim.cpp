@@ -1,5 +1,6 @@
 #include "Sim.h"
 
+
 // Everything math-y and not GUI can go here
 
 float testIToO(float in1, float in2, float in3) {
@@ -47,7 +48,7 @@ float getDistance(float charge, //The initial charge of the car
 	return ((charge * weight) / (consumption * inclineFactor + speed * resistance));
 }
 
-float* getBestSpeed(float consumption, //How many Watt hours the car consumes per mile driven
+std::vector<double> getBestSpeed(float consumption, //How many Watt hours the car consumes per mile driven
 	float incline, //The incline of the road the car's driving on (-50 < incline < 50)
 	float weight, //The weight of the car
 	float resistance, /*The coefficient of resistance of the car*/
@@ -59,9 +60,9 @@ float* getBestSpeed(float consumption, //How many Watt hours the car consumes pe
 		inclineFactor = incline / 50 + 1;
 	else if (incline < 0) //If the car goes downhill
 		inclineFactor = -1 * incline / 50;
-	float* speeds = new float[50];
+	std::vector<double> speeds(51);// = new float[50];
 	for (uint_fast8_t itterator = 15, j = 0; itterator <= 65; itterator++, j++) {
-		speeds[j] = (charge * weight) / (consumption * inclineFactor + itterator * resistance);
+		speeds[j] = (double)((charge * weight) / (consumption * inclineFactor + itterator * resistance));
 	}
 	return speeds;
 }

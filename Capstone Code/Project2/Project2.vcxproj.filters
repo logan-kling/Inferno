@@ -7,7 +7,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sim.h" />
-    <ClInclude Include="mathplot.h" />
     <ClInclude Include="SimIDs.h" />
+    <ClInclude Include="mathplot.h" />
   </ItemGroup>
 </Project>
