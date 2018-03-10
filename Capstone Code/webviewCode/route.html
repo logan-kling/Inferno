@@ -88,7 +88,7 @@
           if (status === 'OK') {
             directionsDisplay.setDirections(response);
 			path = response.routes[0].overview_path;
-			dist = response.routes[0].legs[0].distance.text;
+			dist = response.routes[0].legs[0].distance.value;
 			window.alert("distance is: " + dist);
           } else {
             window.alert('Directions request failed due to ' + status);
@@ -132,8 +132,8 @@
         });
       }
 	  function download(text, name, type) {
-		text.unshift("samp:"+samp);
-		text.unshift("dist:"+dist);
+		text.unshift(samp);
+		text.unshift(dist);
 	  
 	    var file = new Blob([text], {type: type});
 		var a = document.createElement("a"), url = URL.createObjectURL(file);

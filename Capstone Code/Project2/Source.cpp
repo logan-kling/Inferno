@@ -2,6 +2,7 @@
 #pragma warning(disable:4996)
 #include <sstream>
 #include <iostream>
+#include <cctype>
 
 #include <wx/wx.h>
 #include <wx/app.h>
@@ -46,6 +47,7 @@ public:
 	// Helper functions
 	std::vector<std::string> SaveInputForms();										//Save form helper
 	void	MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY);	//Elevation graph maker
+	void	SetElvFields(float distance, float samples);
 
 private:
 	void	OnRadioBoxChange(wxCommandEvent& event);								//Radio Box Listener
@@ -53,8 +55,8 @@ private:
 
 private:
 	wxStaticText *i_test;
-	wxTextCtrl *consumption, *weight, *resistance, *charge, *incline, *speed;
-	wxSizer *i_sizer;
+	wxTextCtrl *consumption, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples;
+	wxSizer *i_sizer, *route_sizer;
 	wxRadioBox *buttonGroup;	//Radio buttons for selecting run mode
 	mpWindow *elevationGraph;
 	mpFXYVector *vectorLayer;	//layer for our elevation plot added to 'elevationGraph' in 'MakeElvGraph()'
@@ -178,15 +180,13 @@ MinFrame::MinFrame(const wxString& title)
 	splitter->SplitVertically(in_p, out_p);
 	splitter->SetMinimumPaneSize(200);
 
-	// Sets the window size explicitly!
-	SetSize(600, 600);
 }
 
 
 // This is basically the 'main()' function, program starts here
 
 bool MinApp::OnInit() {
-	MinFrame* frame = new MinFrame("Basic");
+	MinFrame* frame = new MinFrame("SolarSim");
 	frame->Show(true);
 	return true;
 }
@@ -205,15 +205,20 @@ InputPanel::InputPanel(wxWindow * parent)
 	PrepElvGraph();
 
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Input");
+	route_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Route Information");
 	consumption = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	weight = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	resistance = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	charge = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	speed = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	incline = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	routeDistance = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	routeSamples = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 
 	speed->SetEditable(0);
 	incline->SetEditable(0);
+	routeDistance->SetEditable(0);
+	routeSamples->SetEditable(0);
 	
 	buttonGroup = new wxRadioBox(this, wxID_RADIOBOX, "Distance/Speed:", wxDefaultPosition, wxDefaultSize, choices, 2, wxHORIZONTAL);
 	
@@ -244,10 +249,15 @@ InputPanel::InputPanel(wxWindow * parent)
 	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Incline:"));
 	i_sizer->Add(incline, 0, wxALL, 10);
 
-	i_sizer->Add(elevationGraph, 1, wxEXPAND);
+	route_sizer->Add(elevationGraph, 1, wxEXPAND);
+	route_sizer->Add(new wxStaticText(this, wxID_ANY, "Distance(Meters):"));
+	route_sizer->Add(routeDistance, 0, wxALL, 10);
+	route_sizer->Add(new wxStaticText(this, wxID_ANY, "Samples:"));
+	route_sizer->Add(routeSamples, 0, wxALL, 10);
 
-	SetSizer(i_sizer);
-	i_sizer->SetSizeHints(this);
+	i_sizer->Add(route_sizer, 0, wxEXPAND, 10);
+
+	this->SetSizer(i_sizer);
 }
 
 // This is a helper function for saving the input forms to a file.
@@ -277,6 +287,12 @@ void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> v
 	elevationGraph->AddLayer(vectorLayer);			//Adds the plotted x/y coordinates to our graph
 	elevationGraph->Fit();							//Zoom the graph properly after everything has been added
 	wxMessageBox("Elevation Graph Set");
+}
+
+void InputPanel::SetElvFields(float distance, float samples)
+{
+	routeDistance->SetValue(wxString(std::to_string(distance)));
+	routeSamples->SetValue(wxString(std::to_string(samples)));
 }
 
 // Using no input,
@@ -370,7 +386,6 @@ OutputPanel::OutputPanel(wxWindow * parent)
 		10);
 	
 	SetSizer(o_sizer);
-	o_sizer->SetSizeHints(this);
 }
 
 // Set the first output field to the given float value
@@ -419,28 +434,47 @@ void MinFrame::OnRun(wxCommandEvent & event)
 // MakeElvGraph to create a graph from our vector.
 void MinFrame::OnImport(wxCommandEvent & event) 
 {
-	wxString        file;
-	wxFileDialog    fdlog(this);
+	wxString        file;						//File name
+	wxFileDialog    fdlog(this);				//File load dialog object
+	wxString        elv;		
+	double distVal, sampVal;					//to find the distance and samples 
+	double i, j = 0;							//iterators
+	wxTextFile      tfile;						//file object
+	std::vector<double> vectorY, vectorX;		//vectors for our graph
+
 
 	// show file dialog and get the path to
 	// the file that was selected.
 	if (fdlog.ShowModal() != wxID_OK) return;
 	file.Clear();
 	file = fdlog.GetPath();
-
-	wxString        str;
+	
 
 	// open the file
-	wxTextFile      tfile;
 	tfile.Open(file);
 
-	// read the first line
-	str = tfile.GetFirstLine();
+	elv = tfile.GetFirstLine();
+	std::string elvCString = elv.ToStdString();
+	std::stringstream ss(elvCString);
 
-	std::string cString = str.ToStdString();
-	std::stringstream ss(cString);
-	std::vector<double> vectorY, vectorX;
-	double i, j = 0;
+	/* ### This section grabs FIRST the distance in meters from the file ###
+	   ### THEN the number of samples from the file	### */
+	ss >> i;
+	distVal = i;
+	if (ss.peek() == ',' || ss.peek() == ' ') {
+		ss.ignore();
+	}
+
+	ss >> i;
+	sampVal = i;
+	if (ss.peek() == ',' || ss.peek() == ' ') {
+		ss.ignore();
+	}
+	//wxMessageBox(wxString(std::to_string(distStr)));
+	//wxMessageBox(wxString(std::to_string(sampStr)));
+	in_p->SetElvFields(distVal, sampVal);
+	
+	/* ### This section reads in all the elevation points in the file ### */
 	while (ss >> i) {
 		vectorY.push_back(i);
 		if (ss.peek() == ',' || ss.peek() == ' ') {
@@ -451,12 +485,6 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	}
 	
 	in_p->MakeElvGraph(vectorX, vectorY);
-
-	/*std::string finishedString;
-	for (i = 0; i < vectorY.size(); i++) {
-		finishedString.append(std::to_string(vectorY.at(i)).append("\n"));
-	}
-	wxMessageBox(wxString(finishedString));*/
 }
 
 // When the OnSave event is generated:
