@@ -48,6 +48,7 @@ public:
 	std::vector<std::string> SaveInputForms();										//Save form helper
 	void	MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY);	//Elevation graph maker
 	void	SetElvFields(float distance, float samples);
+	void    SetLoadedValues(std::vector<double> loadvec);
 
 private:
 	void	OnRadioBoxChange(wxCommandEvent& event);								//Radio Box Listener
@@ -104,8 +105,10 @@ private:
 
 	void OnRun(wxCommandEvent& event);
 	void OnImport(wxCommandEvent& event);
+	void OnClear(wxCommandEvent& event);
 	void OnSave(wxCommandEvent& event);
 	void OnLoad(wxCommandEvent& event);
+
 	wxDECLARE_EVENT_TABLE();
 };
 
@@ -113,16 +116,18 @@ private:
 enum {
 	Edit_Run,
 	Edit_Import,
+	Edit_Clear,
 	File_Save,
 	File_Load
 };
 
 /* Event tables for menu items! */
 wxBEGIN_EVENT_TABLE(MinFrame, wxFrame)
-	EVT_MENU(Edit_Run, MinFrame::OnRun)
-	EVT_MENU(Edit_Import, MinFrame::OnImport)
-	EVT_MENU(File_Save, MinFrame::OnSave)
-	EVT_MENU(File_Load, MinFrame::OnLoad)
+EVT_MENU(Edit_Run, MinFrame::OnRun)
+EVT_MENU(Edit_Import, MinFrame::OnImport)
+EVT_MENU(File_Save, MinFrame::OnSave)
+EVT_MENU(File_Load, MinFrame::OnLoad)
+EVT_MENU(Edit_Clear, MinFrame::OnClear)
 wxEND_EVENT_TABLE()
 
 /* Event table for Input Pannel! */
@@ -144,19 +149,16 @@ MinFrame::MinFrame(const wxString& title)
 	helpMenu = new wxMenu();
 
 	// File Menu
-	fileMenu->Append(File_Load, "&Load_Run", "Load a previous run");
-	fileMenu->Append(File_Save, "&Save_Run", "Save the current run");
-	fileMenu->AppendSeparator();
-	fileMenu->Append(wxID_ANY, "&Import_Settings", "Import variables");
-	fileMenu->Append(wxID_ANY, "&Export_Settings", "Export variables");
+	fileMenu->Append(File_Load, "&Load Car Settings", "Load a previous run");
+	fileMenu->Append(File_Save, "&Save Car Settings", "Save the current run");
 	fileMenu->AppendSeparator();
 	fileMenu->Append(wxID_EXIT, "&Exit", "Quit the program");
 	menuBar->Append(fileMenu, "&File");
 
 	// Edit Menu
-	editMenu->Append(wxID_ANY, "&Clear_Forms", "Empty all the form fields");
-	editMenu->Append(Edit_Run, "&Run/Cancel", "Begin or end the simulation");
-	editMenu->Append(Edit_Import, "&Import_Elevation", "Import elevation data from Google");
+	editMenu->Append(Edit_Clear, "&Clear Forms", "Empty all the form fields");
+	editMenu->Append(Edit_Run, "&Run", "Begin or end the simulation");
+	editMenu->Append(Edit_Import, "&Import Elevation", "Import elevation data from Google");
 	menuBar->Append(editMenu, "&Edit");
 
 	// Help Menu
@@ -286,13 +288,23 @@ void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> v
 	elevationGraph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
 	elevationGraph->AddLayer(vectorLayer);			//Adds the plotted x/y coordinates to our graph
 	elevationGraph->Fit();							//Zoom the graph properly after everything has been added
-	wxMessageBox("Elevation Graph Set");
+	//wxMessageBox("Elevation Graph Set");
 }
 
 void InputPanel::SetElvFields(float distance, float samples)
 {
 	routeDistance->SetValue(wxString(std::to_string(distance)));
 	routeSamples->SetValue(wxString(std::to_string(samples)));
+}
+
+void InputPanel::SetLoadedValues(std::vector<double> loadvec)
+{
+	consumption->SetValue(wxString(std::to_string(loadvec[0])));
+	weight->SetValue(wxString(std::to_string(loadvec[1])));
+	resistance->SetValue(wxString(std::to_string(loadvec[2])));
+	charge->SetValue(wxString(std::to_string(loadvec[3])));
+	incline->SetValue(wxString(std::to_string(loadvec[4])));
+	speed->SetValue(wxString(std::to_string(loadvec[5])));
 }
 
 // Using no input,
@@ -437,8 +449,8 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	wxString        file;						//File name
 	wxFileDialog    fdlog(this);				//File load dialog object
 	wxString        elv;		
-	double distVal, sampVal;					//to find the distance and samples 
-	double i, j = 0;							//iterators
+	double			distVal, sampVal;			//to find the distance and samples 
+	double			i, j = 0;					//iterators
 	wxTextFile      tfile;						//file object
 	std::vector<double> vectorY, vectorX;		//vectors for our graph
 
@@ -485,6 +497,15 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	}
 	
 	in_p->MakeElvGraph(vectorX, vectorY);
+}
+
+void MinFrame::OnClear(wxCommandEvent & event)
+{
+	std::vector<double> zeroVec;
+	for (int i = 0; i < 10; i++) {
+		zeroVec.push_back(0.0);
+	}
+	in_p->SetLoadedValues(zeroVec);
 }
 
 // When the OnSave event is generated:
