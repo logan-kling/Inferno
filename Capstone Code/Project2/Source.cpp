@@ -46,6 +46,8 @@ public:
 
 	// Helper functions
 	std::vector<std::string> SaveInputForms();										//Save form helper
+	void	LoadInputForms(std::vector<std::string> loaded);
+
 	void	MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY);	//Elevation graph maker
 	void	SetElvFields(float distance, float samples);
 	void    SetLoadedValues(std::vector<double> loadvec);
@@ -263,15 +265,28 @@ InputPanel::InputPanel(wxWindow * parent)
 }
 
 // This is a helper function for saving the input forms to a file.
+// If this function is changed, make sure it matches InputPanel::LoadInputForms()
 std::vector<std::string> InputPanel::SaveInputForms()
 {
 	std::vector<std::string> toSave;
+	toSave.clear();
 	toSave.push_back(std::to_string(this->GetCharge()));
 	toSave.push_back(std::to_string(this->GetConsumption()));
 	toSave.push_back(std::to_string(this->GetResistance()));
 	toSave.push_back(std::to_string(this->GetSpeed()));
 	toSave.push_back(std::to_string(this->GetWeight()));
 	return toSave;
+}
+
+// This is a helper function for loading the input forms from a file
+// If this function is changed, make sure it matches InputPanel::SaveInputForms()
+void InputPanel::LoadInputForms(std::vector<std::string> loaded)
+{
+	charge->SetValue( wxString(loaded[0]) );
+	consumption->SetValue( wxString(loaded[1]) );
+	resistance->SetValue( wxString(loaded[2]) );
+	speed->SetValue( wxString(loaded[3]) );
+	weight->SetValue( wxString(loaded[4]) );
 }
 
 
@@ -513,26 +528,37 @@ void MinFrame::OnClear(wxCommandEvent & event)
 // Save the input fields to a file for later use.
 void MinFrame::OnSave(wxCommandEvent & event)
 {
-
+	wxString        file;						//File name
+	
 	wxFileDialog
 		saveFileDialog(this, _("Save txt file"), "", "",
 			"text files (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-	if (saveFileDialog.ShowModal() == wxID_CANCEL)
-		return;     // the user changed idea...
 
-					// save the current contents in the file;
-					// this can be done with e.g. wxWidgets output streams:
-	wxFileOutputStream output_stream(saveFileDialog.GetPath());
-	if (!output_stream.IsOk())
-	{
-		wxLogError("Cannot save current contents in file '%s'.", saveFileDialog.GetPath());
-		return;
+	if (saveFileDialog.ShowModal() != wxID_OK) return;
+	file.Clear();
+	file = saveFileDialog.GetPath();
+
+	wxTextFile      saveFile(file);						//file object
+
+	// First check if the file exists, if it does, clear it out and open it, if not then create it
+	if (saveFile.Exists()) {
+		saveFile.Open();
+		saveFile.Clear();
 	}
+	else
+		saveFile.Create();
+
+	// Use the function to grab the inputs we need to save and store them in this string vector
 	std::vector<std::string> savingThis = in_p->SaveInputForms();
 
+	// Write those lines to the file
 	for (std::vector<std::string>::iterator it = savingThis.begin(); it != savingThis.end(); ++it) {
-		output_stream.Write((*it).c_str(), sizeof((*it).c_str()));
+		saveFile.AddLine(wxString(*it));
 	}
+
+	// Try to save the changes, if it fails give the user an error message
+	if (!saveFile.Write())
+		wxMessageBox("Failed to save file!");
 }
 
 // When the OnLoad event is generated:
@@ -541,26 +567,34 @@ void MinFrame::OnSave(wxCommandEvent & event)
 void MinFrame::OnLoad(wxCommandEvent & event) 
 {
 
+	wxString        file;						//File name
+	std::vector<std::string> loaded;
+
 	wxFileDialog
 		openFileDialog(this, _("Open txt file"), "", "",
 			"text files (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
-	if (openFileDialog.ShowModal() == wxID_CANCEL)
-		return;     // the user changed idea...
+	if (openFileDialog.ShowModal() != wxID_OK) return;
+	file.Clear();
+	file = openFileDialog.GetPath();
 
-					// proceed loading the file chosen by the user;
-					// this can be done with e.g. wxWidgets input streams:
-	wxFileInputStream input_stream(openFileDialog.GetPath());
-	if (!input_stream.IsOk())
-	{
-		wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
+	wxTextFile		openFile(file);						//file object
+
+	if (!openFile.Exists()) {
+		wxMessageBox("No such file exists");
 		return;
 	}
 
-	/*wxFileDialog* OpenDialog = new wxFileDialog(this, _("Load a file"), wxEmptyString, wxEmptyString, _("Text files (*.txt)"), wxFD_OPEN, wxDefaultPosition);
+	openFile.Open();
 
-	if (OpenDialog->ShowModal() == wxID_OK) {
-		CurrentDocPath = OpenDialog->GetPath();
-		MainEditBox->LoadFile(CurrentDocPath);
-		SetTitle(wxString("Edit - ") << OpenDialog->GetFilename());
-	}*/
+	// Start at the first line
+	loaded.push_back(openFile.GetFirstLine().ToStdString());
+	// Then go from there
+	while (!openFile.Eof()) {
+		loaded.push_back(
+			openFile.GetNextLine().ToStdString()
+			);
+	}
+
+	in_p->LoadInputForms(loaded);
+		
 }
