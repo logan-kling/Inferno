@@ -76,12 +76,16 @@ public:
 	void SetOutputField(float * out);
 	// Helper functions
 	void	makeSpeedsGraph(std::vector<double> distances);	//Elevation graph maker
+	void	HandleMainCalcs(double charge, double weight, double resistance);
+
+	float samples, distance;
+	std::vector<double> elevations;
 private:
 	wxStaticText *o_test;
 	wxTextCtrl *o_v1;
 	wxSizer *o_sizer;
 	mpWindow *outputGraph;
-	mpFXYVector *vectorLayer;	//layer for our elevation plot added to 'speedGraph' in 'MakeSpeedsGraph()'
+	mpFXYVector *vectorLayer, *batteryLayer, *changeLayer;	//layer for our elevation plot added to 'speedGraph' in 'MakeSpeedsGraph()'
 	void	prepareSpeedsGraph();
 };
 
@@ -202,6 +206,7 @@ InputPanel::InputPanel(wxWindow * parent)
 	wxArrayString choices;
 	choices.Add("Get Distance");
 	choices.Add("Get Speed");
+	choices.Add("Get Course");
 
 	vectorLayer = new mpFXYVector(_("Vector"));
 	elevationGraph = new mpWindow(this, -1, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
@@ -224,7 +229,7 @@ InputPanel::InputPanel(wxWindow * parent)
 	routeDistance->SetEditable(0);
 	routeSamples->SetEditable(0);
 	
-	buttonGroup = new wxRadioBox(this, wxID_RADIOBOX, "Distance/Speed:", wxDefaultPosition, wxDefaultSize, choices, 2, wxHORIZONTAL);
+	buttonGroup = new wxRadioBox(this, wxID_RADIOBOX, "Distance/Speed:", wxDefaultPosition, wxDefaultSize, choices, 3, wxHORIZONTAL);
 	
 	// Set the radio button
 	buttonGroup->SetSelection(1);
@@ -356,6 +361,39 @@ void OutputPanel::makeSpeedsGraph(std::vector<double> distances)
 	wxMessageBox("Distance versus Speed Graph Set");
 }
 
+void OutputPanel::HandleMainCalcs(double charge, double weight, double resistance)
+{
+	MyCar *car = new MyCar();
+	car->doMainCalcs(charge, weight, resistance, distance, samples, elevations);
+	std::vector<double> xAxis;
+	for (int i = 1; i <= samples-1; i++) {
+		xAxis.push_back(i);
+	}
+	vectorLayer->SetData(xAxis, car->velocities);
+	vectorLayer->SetContinuity(true);
+	wxPen vectorpen(*wxBLUE, 5, wxPENSTYLE_SOLID);
+	vectorLayer->SetPen(vectorpen);
+	vectorLayer->SetDrawOutsideMargins(true);
+	outputGraph->SetMargins(10, 10, 30, 60);
+	outputGraph->AddLayer(vectorLayer);
+
+	batteryLayer->SetData(xAxis, car->charges);
+	batteryLayer->SetContinuity(true);
+	wxPen vectorpen2(*wxGREEN, 5, wxPENSTYLE_SOLID);
+	batteryLayer->SetPen(vectorpen2);
+	batteryLayer->SetDrawOutsideMargins(true);
+	outputGraph->AddLayer(batteryLayer);
+
+	changeLayer->SetData(xAxis, car->changes);
+	changeLayer->SetContinuity(true);
+	wxPen vectorpen3(*wxRED, 3, wxPENSTYLE_SOLID);
+	changeLayer->SetPen(vectorpen3);
+	changeLayer->SetDrawOutsideMargins(true);
+	outputGraph->AddLayer(changeLayer);
+
+	outputGraph->Fit();
+}
+
 // Using no input,
 // This function prepares the graph of speeds by setting up the x and y axis,
 // And scaling the graph window.
@@ -397,8 +435,11 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	o_v1 = new wxTextCtrl(this, -1, "Output", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 
 	//Assign a graph element to the outputGraph variable
-	vectorLayer = new mpFXYVector(_("Vector"));
-	outputGraph = new mpWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	vectorLayer = new mpFXYVector(_("Speed"));
+	batteryLayer = new mpFXYVector(_("Battery"));
+	changeLayer = new mpFXYVector(_("changes"));
+	outputGraph = new mpWindow(this, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
+	prepareSpeedsGraph();
 	o_sizer->Add(
 		o_v1,
 		0,
@@ -408,9 +449,8 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	// Add the graph element
 	o_sizer->Add(
 		outputGraph,
-		0,				// Yes stretch
-		wxALL,
-		10);
+		1,				// Yes stretch
+		wxEXPAND);
 	
 	SetSizer(o_sizer);
 }
@@ -452,6 +492,9 @@ void MinFrame::OnRun(wxCommandEvent & event)
 			in_p->GetWeight(), 
 			in_p->GetResistance(), 
 			in_p->GetCharge()));
+	}
+	else if (in_p->GetRunOption() == 2) {
+		out_p->HandleMainCalcs(in_p->GetCharge(), in_p->GetWeight(), in_p->GetResistance());
 	}
 }
 
@@ -511,7 +554,12 @@ void MinFrame::OnImport(wxCommandEvent & event)
 		j++;
 	}
 	
+	out_p->samples = sampVal;
+	out_p->distance = distVal;
+	out_p->elevations = vectorY;
+
 	in_p->MakeElvGraph(vectorX, vectorY);
+
 }
 
 void MinFrame::OnClear(wxCommandEvent & event)
