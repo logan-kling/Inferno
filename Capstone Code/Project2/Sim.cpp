@@ -92,6 +92,87 @@ W=(Sum of forces)(distance)+(mass)(gravity)(change in height)
 (Watts)(in %, the old car had 95%)=(kg  )(m/s^2  )(sin of the degrees)
 */
 
+MyCar::MyCar()
+{
+}
+
+MyCar::MyCar(double charge, double weight, double efficiency, double drag, double area)
+{
+	batteryCharge = charge;
+	mass = weight;
+	motorEfficiency = efficiency;
+	dragCoef = drag;
+	crossSec = area;
+}
+
+void MyCar::doMainCalcs(double charge, double weight, double drag, float distance, float samples, std::vector<double> elevations)
+{
+	batteryCharge = charge;
+	mass = weight;
+	motorEfficiency = 0.95;
+	dragCoef = drag;
+	crossSec = 1.;
+
+	float secDistance = distance / samples;
+
+	for (int i = 0; i < samples - 1; i++) {
+		int roadAngle;
+		int elvChange = elevations[i] - elevations[i + 1];
+		
+		roadAngle = sin(secDistance / elvChange);
+
+		double velocity = bestVelocity(roadAngle);
+
+		//To make sure our car does not exceed resonable speeds
+		if (velocity > maxSpeed) {
+			velocity = maxSpeed;
+		}
+		else if (velocity < minSpeed) {
+			velocity = minSpeed;
+		}
+
+		velocities.push_back(velocity);
+
+		double directPower = wheelEnergy(velocity, secDistance, roadAngle);
+
+		double powerLoss = directPower * motorEfficiency;
+		ChangeCharge(powerLoss);
+		charges.push_back(batteryCharge);
+		changes.push_back(i);
+	}
+}
+
+double MyCar::bestVelocity(float roadAngle) {
+	return ((0.95 * wattPower) / (mass * sin(roadAngle)));
+}
+
+double MyCar::wheelEnergy(double velocity, double distance, float roadAngle) {
+	double energy;
+
+	// The two zeros near the end are for rolling mass and acceleration which we are neglecting for now (will be updated later)
+	energy = (1. / 3600.) * (mass * GRAVITY * (rollingResist * cos(roadAngle) + sin(roadAngle)) + 
+		0.0386 * (AIR_DENSITY * dragCoef * crossSec * pow(velocity, 2.)) + (mass + 0.)*0.) * distance;
+	
+	return energy;
+}
+
+//function returns power in Watts needed to travel
+double doPower(MyCar *car, double acceleration, double velocity, double roadAngle) {
+	double powerMotor;
+	double powerTravel;
+	double powerAcceleration;
+
+	powerMotor = car->motorEfficiency * pow((car->mass * acceleration + car->dragCoef * car->crossSec * pow(velocity, 2) +
+		car->rollingResist * car->mass * GRAVITY + car->mass * GRAVITY * sin(roadAngle)), 2);
+
+	powerTravel = velocity * (car->dragCoef * car->crossSec * pow(velocity , 2) +
+		car->rollingResist * car->mass * GRAVITY + car->mass * GRAVITY * sin(roadAngle));
+
+	powerAcceleration = car->mass * acceleration * velocity;
+
+	return powerMotor + powerTravel + powerAcceleration;
+}
+
 /*
 Conversion functions:
 Hp to Watt
