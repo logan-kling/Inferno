@@ -1,0 +1,248 @@
+%\documentclass{article}
+%\usepackage[utf8]{inputenc}
+
+%\title{Capstone Progress Report}
+%\author{zaengled }
+%\date{December 2017}
+
+%\begin{document}
+
+%\maketitle
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+%\usepackage{gensymb}
+
+\usepackage[letterpaper, textheight=9.5in, textwidth=7in]{geometry}
+%\geometry{textheight=9.5in, textwidth=7in}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		Inferno}
+\def \CapstoneTeamNumber{		43}
+\def \GroupMemberOne{			Dennie Devito}
+\def \GroupMemberTwo{			Logan Kling}
+\def \GroupMemberThree{			Dakota Zaengle}
+\def \CapstoneProjectName{		Inferno}
+\def \CapstoneSponsorCompany{	OSU - Phoenix Solar Racing}
+\def \CapstoneSponsorPerson{		Cailin Moore}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		Winter Progress Report}
+
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+\makeindex
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{singlespace}
+\begin{titlepage}
+    \pagenumbering{arabic}
+    	\includegraphics[height=4cm]{Shirt_Graphic}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            %{\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \GroupMemberOne \par
+                \GroupMemberTwo \par
+                \GroupMemberThree \par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        	This document is a review of what has been done over the past six weeks to develop our project. The Progress Report reviews what we have worked on individually and restates the major points of this project. In the Retrospectives section we also discuss our plans for moving forward in the following months.
+        \end{abstract}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+\newpage
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\section{Introduction}
+
+\subsection{Purpose}
+For this project we will develop a Solar Car Simulation as a minimal software that takes variables from the user and uses them to calculate the solar car's performance.
+The software will be used by the Solar Racing Team to estimate their cars performance. 
+They have not used software for this purpose in previous races and because any software to estimate the efficiency of vehicles is based on non-electric engines or does not take solar power into account, they have created this project. 
+There are some benefits from creating a new software including: designing a specific GUI that only includes the features they need, includes variables specific to the solar car, and can be modified by their team.
+
+\subsection{Goals}
+The end goals for this project are: 
+    \begin{enumerate}
+        \item To provide a simple and easy to use interface to allow team members to use the software efficiently. 
+        \item To make the simulation program estimate the energy usage of the vehicle over a given time period or distance at a given speed.
+        \item To estimate the required speed to use a given amount of energy to cover a given distance in a specified amount of time. 
+        \item To include factors like the electrical and mechanical efficiency of the vehicle and the prevailing weather conditions. 
+    \end{enumerate}
+These goals are discussed in greater detail in our project requirements document and include more specific criteria for completion of the project.
+
+\section{Progress}
+In the weeks since our Fall progress report we have been building our software in sections.
+We have most of the individual parts functioning.
+The GUI has its basic layout and we have a web page to display Google Maps that is used to take the elevation data along the requested route and save it to a file that our software can read from. 
+% where we are at in this project
+% we can talk about how the documents have helped us set up our plans and include a quick blurb about anything we have done so far to test out the software/libraries we will be using
+
+\subsection{Problems}
+% here just include any quick summary of latex problems/ software problems/ coming to terms with not having rigid guidelines like in other classes
+We have had a number of problems getting used to the libraries we are using.
+For example: wxWidgets \cite{wxWidgets} is not as web friendly as we expected.
+It is able to integrate simple web pages into the GUI but it cannot handle the Google Maps API we need and to solve this we now have a web page file that will run the necessary JavaScript and save the elevation results to a text file that our program can use later.
+This actually ended up helping us because now we have a data file that can be used offline to run the simulation on a pre-planned route which will let us demo it at the Expo without internet.
+
+\section{Retrospective}
+%positives column: anything good that happened
+%deltas column: changes that need to be implemented
+%actions column: specific actions that will be implemented in order to create the necessary changes
+
+\vspace{1cm}
+\begin{center}
+	\begin{tabular}{|p{0.3\linewidth}|p{0.3\linewidth}|p{0.3\linewidth}|} 
+		\hline
+		Positives   & Deltas   & Actions   \\
+		\hline
+		Phoenix Solar Racing has given us a good deal of freedom & The freedom should not be misused to delay work on the program & The next stage of building our software should include improving the accuracy of our programs graphs and giving those demos to PSR \\
+		We have been able to complete most parts of the software & We need to finalize our program by removing its inaccuracies & Over the break we will finish this program \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsection{Week One}
+I went to our early class on Tuesday.
+I learned that we would not have class on Thursday, or any day unless we receive some form of announcement stating otherwise.
+We did not have to meet with our TA this week.
+As my groupmates were not bothered by our scheduled time with our TA from last term, I worried about setting a new time with our TA, checked my preferred times with my groupmates and selected those times in a response to our TA's E-mail via Doodlepoll.
+The optimal times I chose for our group to meet with our TA were: 1-1:45 on Monday, 10:45-11:30 Tuesday, 1-1:45 Wednesday, or 11-11:30 Thursday.
+
+\subsection{Week Two}
+I did not do a lot this week.
+Dakota and I met with our TA at the same time and day of the week as we did last term.
+Daniel, our TA was, and is, understandably busy.
+He wanted us to bring him a coded GUI by next week.
+Dakota focused on the GUI while I focused on other classes, particularly learning Assembly.
+
+\subsection{Week Three}
+We went to Tuesdays early class where Kevin and Kirsten talked about Expo, and our midterm progress report and presentations.
+An important note about the expo was that we would need to request access to an Ethernet cable if we would need an internet connection.
+Kevin really emphasized how the WiFi would not work, nor would bluetooth or just about any radio signal.
+The midterm progress report would need to have three sections for all of us, each section being a thousand words, and we would also need to include a group conclusion reviewing the problems we ran into as well as what we still had left to do.
+We met with our TA shortly after that and promised him a program that could calculate the distance between two points on the same continent by next week.
+I wanted to make this application work offline as that would have made this application far more convenient for the OSU Phoenix Solar Racing Team and the program could work much more quickly with local data alone.
+In order to do this, I would have had to figure out how to store a map of the world as a detailed set of objects which also does not exceed a gigabyte in size.
+I did not think I would have to compile the data for such a map myself, but I vastly underestimated Google's openness based on the capability of their route finding API.
+Google Maps would not even give me a set of data regarding the longitude and latitude of major cities, let alone altitude.
+I did try to use Google maps API but I could not even successfully do that because I would have needed to create an entire browser framework to use it.
+I did try to create that browser framework, but I simply ran out of time.
+The one accomplishment I made for this week was creating a function that would calculate distance traveled from speeds 15-65mph at an incline given by the user, and an optional initial charge.
+I was able to do that because it was a pretty simple function, which unlike Google maps API, did not require such an exorbitant amount of research.
+
+\subsection{Week Four}
+We met with Daniel on Tuesday and promised him a program that could produce a graph from what I created last week.
+I found plenty of resources for creating a dynamic graph, but I did not need a dynamic graph and implementing a dynamic graph would be far more difficult than implementing a static graph.
+Eventually, I was forced to settle for implementing a dynamic graph.
+I tried to do this, but I ran out of time figuring out how to use wxWidgets to do this.
+
+\subsection{Week Five}
+Again, we  met with Daniel on Tuesday.
+As I had been unable to finish my portion of this program by Tuesday of this week, I again promised Daniel to implement a program that could produce a graph from an incline given by the user, and an optional initial charge.
+I discovered that I could not implement a dynamic graph with wxWidgets, despite the fact that wxWidgets claims it can be used to draw graphs!
+I worked to solve this by using wxMathPlot \cite{wxMathPlot}, but I could not even manage to make that work.
+
+\subsection{Week Six}
+Dakota and I met with Daniel on Tuesday.
+As I still had not finished my graphing functionality---and because half of the RAM in Dakota's laptop had broken, preventing him from opening more than one program or even the template powerpoint file for our poster---I worked exclusively on the poster to complete it by the next day.
+I finished at least a rough draft of our poster and sent it to our TA on Wednesday, but I will certainly need to make some revisions to it.
+The white border is an issue and I will need to improve the results and conclusion sections as we finish our program.
+I may also want to replace the pictures on our poster with higher resolution versions of themselves.
+
+\subsection{Week Seven}
+We had a class on Tuesday in which an employee for McAfee talked about working for his company and by extension, working in industry in general.
+I am grateful for that presentation, though I am not sure I would want to work for a company like McAfee.
+McAfee is not as bad as Norton in terms of bloatware, but I still do not consider their program cost effective.
+We met with our TA on Tuesday.
+As we had made so little progress, he recommended we reorganize our workload.
+Dakota decided to help with the graphing capabilities, while Dennie still promised to work on the weather API, but perhaps with help from Dakota.
+We also had a class on Thursday in which we along with groups forty one through fifty shared info about their projects.
+Our group also did an example demonstration, along with a few other groups.
+That is something we will need to practice heavily on spring term.
+I tried to get my code to print the graph to the screen.
+However, since Dakota managed to make WXMathPlot work with WxWidgets I figured that I should try to use that instead of printing my graph to the screen from scratch.
+I did not finish my graphing capability, but I did manage to upload the code I had worked on to the GitHub for once.
+
+\subsection{Week Eight}
+We all met with our TA this week.
+I almost finished printing the graph to the screen by Friday.
+
+\subsection{Week Nine}
+I finally finished the graphing capability.
+Dakota, Dennie and I met with our TA on Tuesday.
+I demoed my code to him then.
+However, I need to make it more accurate.
+The graph always has a negative exponential curve which is obviously very incorrect.
+The graph is also shifted to the right and has no axis, which is something I obviously need to add.
+I should probably also set it up to explicitly display the greatest distance at the given speed, on that graph.
+
+\subsection{Week Ten}
+We met with our TA on Tuesday of week ten.
+I also managed to make my graph a little more accurate.
+My graph still is not more than sixty percent accurate, so I will need to improve it over the break.
+
+\section{Individual Contribution}
+\subsection{Roles}
+Dakota has focused on the program itself, the mapping API, the graphing of elevations, and even the reading of variables to and from an external file.
+I have focused on calculating the distance gone given a speed, initial charge, rate of consumption, weight and charge.
+I also worked on calculating an array of distances gone from the previous variables with an array of speeds from 15 to 65 miles per hour.
+Dennie has been working on the weather API.
+
+\subsection{Contribution}
+Dakota has unquestionably contributed the most to this project.
+Dennie and I have worked on our respective duties but struggled with them.
+Dennie is even more busy than me, but he has managed to accomplish arguably more than me.
+
+\subsection{How we Function as a Team}
+We function fairly well as a team, though Dakota is obviously doing most of the work.
+I am glad Dakota has been so forgiving of Dennie's and my slow progress despite the fact that Dakota is at least as busy as me.
+
+\section{Conclusion}
+Now, we are here, working on this progress report.
+This entire quarter has been surprisingly busy given the fact that I am only taking three classes.
+I have tried to stay on top of this class, but I have had to balance it with my Computer Organization and Assembly Language Programming (ECE375) class.
+ECE375 has taken a minimum of thirty hours out of my week each week.
+My progress this term has been minimal and I hate myself for it, but I cannot afford to take any less than three classes a term.
+There is no excuse for my minimal amount of working code, but at least it is caused by my stupidity and not by laziness.
+
+On the plus side, every part of the program is working, we just need to fix all the little issues with our program before spring Term.
+Tying together this program should be a far simpler task as we have now completed the weather API and graphing capabilities.
+The problem is that I will be in Florida over the entire break, so Dakota will probably have to help with my portion of the project yet again.
+
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{ProgressReportCitations}
+
+\end{singlespace}
+\end{document}

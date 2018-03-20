@@ -45,7 +45,7 @@ float getDistance(float charge, //The initial charge of the car
 		inclineFactor = incline / 50 + 1;
 	else if (incline < 0) //If the car goes downhill
 		inclineFactor = -1 * incline / 50;
-	return ((charge * weight) / (consumption * inclineFactor + speed * resistance));
+	return ((charge / weight) / (consumption * inclineFactor + speed * resistance));
 }
 
 std::vector<double> getBestSpeed(float consumption, //How many Watt hours the car consumes per mile driven
@@ -62,7 +62,7 @@ std::vector<double> getBestSpeed(float consumption, //How many Watt hours the ca
 		inclineFactor = -1 * incline / 50;
 	std::vector<double> speeds(51);// = new float[50];
 	for (uint_fast8_t itterator = 15, j = 0; itterator <= 65; itterator++, j++) {
-		speeds[j] = (double)((charge * weight) / (consumption * inclineFactor + itterator * resistance));
+		speeds[j] = (double)((charge / weight) / (consumption * inclineFactor + itterator * resistance));
 	}
 	return speeds;
 }
