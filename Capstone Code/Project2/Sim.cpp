@@ -67,21 +67,6 @@ std::vector<double> getBestSpeed(float consumption, //How many Watt hours the ca
 	return speeds;
 }
 
-/* 
-Drag Function from https://physics.info/drag/
-pressure drag: R=1/2qCAv^2 or simple drag: R=-bv
-a typical car has C of 0.25 to 0.35
-
-Relating power: 
-Simple drag: P=bv^(n+1)
-Pressure drag: P=1/2qCAv^3
-
-Variables: 
-q is the fluid density,
-C is the coefficient of drag,
-A is the area,
-v of course is the speed
-*/
 
 /*
 Power or work to go up an given height function
@@ -99,6 +84,7 @@ MyCar::MyCar()
 MyCar::MyCar(double charge, double weight, double efficiency, double drag, double area)
 {
 	batteryCharge = charge;
+	maxBatteryCharge = charge;
 	mass = weight;
 	motorEfficiency = efficiency;
 	dragCoef = drag;
@@ -107,11 +93,21 @@ MyCar::MyCar(double charge, double weight, double efficiency, double drag, doubl
 
 void MyCar::doMainCalcs(double charge, double weight, double drag, float distance, float samples, std::vector<double> elevations)
 {
+	maxBatteryCharge = charge;
 	batteryCharge = charge;
 	mass = weight;
 	motorEfficiency = 0.95;
 	dragCoef = drag;
 	crossSec = 1.;
+
+
+	std::vector<double> velChoose;
+	double numSpeeds = 10;
+	double diffVel = maxSpeed - minSpeed;
+	double changeVel = diffVel / numSpeeds;
+	for (int i = 1; i <= numSpeeds; i++) {
+		velChoose.push_back(minSpeed + changeVel * i);
+	}
 
 	float secDistance = distance / samples;
 
@@ -121,25 +117,54 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 		
 		roadAngle = sin(secDistance / elvChange);
 
-		double velocity = bestVelocity(roadAngle);
+		// The velocity for this section, limited by horsepower(wattpower) up a hill
+		//double velocity = bestVelocity(roadAngle);
 
 		//To make sure our car does not exceed resonable speeds
-		if (velocity > maxSpeed) {
+		/*if (velocity > maxSpeed) {
 			velocity = maxSpeed;
 		}
 		else if (velocity < minSpeed) {
 			velocity = minSpeed;
+		}*/
+
+		double directPower;
+		double temp;
+		int chosen = 0;
+		directPower = wheelEnergy(velChoose[0], secDistance, roadAngle);
+		for (int j = 1; j < velChoose.size() - 1; j++) {
+			temp = wheelEnergy(velChoose[j], secDistance, roadAngle);
+			if (temp < directPower) {
+				directPower = temp;
+				chosen = j;
+			}
+		}
+		
+
+		
+
+		double powerLoss = directPower / motorEfficiency;
+
+		// If our current battery charge would drop below the minimum
+		if ((batteryCharge - powerLoss) < (maxBatteryCharge * minCharge)) {
+			WaitForRecharge(); //Then we should wait for the battery to charge back up
 		}
 
-		velocities.push_back(velocity);
+		ChangeCharge(-1 * powerLoss);
 
-		double directPower = wheelEnergy(velocity, secDistance, roadAngle);
-
-		double powerLoss = directPower * motorEfficiency;
-		ChangeCharge(powerLoss);
 		charges.push_back(batteryCharge);
-		changes.push_back(i);
+		velocities.push_back(velChoose[chosen]);
+
+		//changes is just for testing purposes
+		//changes.push_back(i);
 	}
+}
+
+/* Take solar input from panels and the current charge, calculate the time
+	until the current charge reaches the minimum charge. */
+void MyCar::WaitForRecharge() {
+	//For now I am just setting the battery to recharged, the wait will be implemented later.
+	batteryCharge = maxBatteryCharge * targetCharge;
 }
 
 double MyCar::bestVelocity(float roadAngle) {

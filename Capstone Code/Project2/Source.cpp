@@ -186,7 +186,7 @@ MinFrame::MinFrame(const wxString& title)
 	in_p = new InputPanel(splitter);
 	out_p = new OutputPanel(splitter);
 	splitter->SplitVertically(in_p, out_p);
-	splitter->SetMinimumPaneSize(200);
+	splitter->SetMinimumPaneSize(20);
 
 }
 
@@ -205,7 +205,7 @@ InputPanel::InputPanel(wxWindow * parent)
 	
 	wxArrayString choices;
 	choices.Add("Get Distance");
-	choices.Add("Get Speed");
+	choices.Add("Get Best Speed");
 	choices.Add("Get Course");
 
 	vectorLayer = new mpFXYVector(_("Vector"));
@@ -225,11 +225,10 @@ InputPanel::InputPanel(wxWindow * parent)
 	routeSamples = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 
 	speed->SetEditable(0);
-	incline->SetEditable(0);
 	routeDistance->SetEditable(0);
 	routeSamples->SetEditable(0);
 	
-	buttonGroup = new wxRadioBox(this, wxID_RADIOBOX, "Distance/Speed:", wxDefaultPosition, wxDefaultSize, choices, 3, wxHORIZONTAL);
+	buttonGroup = new wxRadioBox(this, wxID_RADIOBOX, "Run Mode:", wxDefaultPosition, wxDefaultSize, choices, 3, wxHORIZONTAL);
 	
 	// Set the radio button
 	buttonGroup->SetSelection(1);
@@ -265,8 +264,12 @@ InputPanel::InputPanel(wxWindow * parent)
 	route_sizer->Add(routeSamples, 0, wxALL, 10);
 
 	i_sizer->Add(route_sizer, 0, wxEXPAND, 10);
+	i_sizer->Hide(route_sizer, true);
 
-	this->SetSizer(i_sizer);
+	SetSizer(i_sizer);
+	route_sizer->SetSizeHints(this);
+	i_sizer->SetSizeHints(this);
+
 }
 
 // This is a helper function for saving the input forms to a file.
@@ -384,13 +387,6 @@ void OutputPanel::HandleMainCalcs(double charge, double weight, double resistanc
 	batteryLayer->SetDrawOutsideMargins(true);
 	outputGraph->AddLayer(batteryLayer);
 
-	changeLayer->SetData(xAxis, car->changes);
-	changeLayer->SetContinuity(true);
-	wxPen vectorpen3(*wxRED, 3, wxPENSTYLE_SOLID);
-	changeLayer->SetPen(vectorpen3);
-	changeLayer->SetDrawOutsideMargins(true);
-	outputGraph->AddLayer(changeLayer);
-
 	outputGraph->Fit();
 }
 
@@ -419,10 +415,24 @@ void InputPanel::OnRadioBoxChange(wxCommandEvent& event)
 {
 	if (buttonGroup->GetString(event.GetSelection()) == "Get Distance") {
 		speed->SetEditable(1);
+		incline->SetEditable(1);
+		if (i_sizer->IsShown(route_sizer))
+			i_sizer->Hide(route_sizer, true);
+		Layout();
 		
 	}
-	else if (buttonGroup->GetString(event.GetSelection()) == "Get Speed") {
+	else if (buttonGroup->GetString(event.GetSelection()) == "Get Best Speed") {
 		speed->SetEditable(0);
+		incline->SetEditable(1);
+		if (i_sizer->IsShown(route_sizer))
+			i_sizer->Hide(route_sizer, true);
+		Layout();
+	}
+	else if (buttonGroup->GetString(event.GetSelection()) == "Get Course") {
+		speed->SetEditable(0);
+		incline->SetEditable(0);
+		i_sizer->Show(route_sizer, true);
+		Layout();
 	}
 }
 
@@ -453,6 +463,7 @@ OutputPanel::OutputPanel(wxWindow * parent)
 		wxEXPAND);
 	
 	SetSizer(o_sizer);
+	o_sizer->SetSizeHints(this);
 }
 
 // Set the first output field to the given float value
