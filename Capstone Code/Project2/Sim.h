@@ -18,19 +18,23 @@ public:
 	double wheelEnergy(double velocity, double distance, float roadAngle);
 
 	void ChangeCharge(double diff) { batteryCharge += diff; };	//Add or subtract from the charge
+	void WaitForRecharge();
 
 	std::vector<double> velocities;
 	std::vector<double> charges;
 
 	std::vector<double> changes;
 
-	double wattPower = 149140;	//"horsepower" in watts (Watt)
-	double batteryCharge;		//In KilowattHours	(KWh)
-	double motorEfficiency = 0.95;	//In percent		(%)
-	double mass;				//In Kilograms		(kg)
-	double dragCoef = 0.29;			//Drag Coefficient or C, dimensionless (Defaulting to a ford escape)
-	double crossSec = 1;			//Cross section area for drag calculations (m^3)
-	double rollingResist = 0.0055; //Rolling resistance of the tires, default is the bmx tires used for solar cars
+	double	wattPower = 149140;	// "horsepower" in watts (Watt)
+	double	maxBatteryCharge;	// This is the maximum ammount the battery can be charged to in KilowattHours (KWh)
+	double	batteryCharge;		// In KilowattHours	(KWh)
+	double	targetCharge = 0.90;		// (%) When the battery hits minimum, the simulation should wait until the battery is recharged to this point
+	double	minCharge = 0.05;			// (%) When the batter hits this level it pauses the car until it has recharged to the target
+	double	motorEfficiency = 0.95;		// In percent		(%)
+	double	mass;				// In Kilograms		(kg)
+	double	dragCoef = 0.29;	// Drag Coefficient or C, dimensionless (Defaulting to a ford escape)
+	double	crossSec = 1;		// Cross section area for drag calculations (m^3)
+	double	rollingResist = 0.0055;		// Rolling resistance of the tires, default is the bmx tires used for solar cars
 
 	/* These are the bounds set by the user, not the car's hard limit. */
 	double maxSpeed = 96;			//Maximum speed		(kph)
@@ -38,7 +42,8 @@ public:
 
 	/*This is the MAXIMUM input with perfect sunlight conditions to the
 	 *	car from ALL the solar pannels		*/
-	double solarInput;			//In Watts			(Watt)
+	double solarWattsPeak;			//In Watts			(Watt)
+	double solarSystemEfficiency = 0.80;   //in percent		(%)
 };
 
 float testIToO(float in1, float in2, float in3);
