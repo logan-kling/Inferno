@@ -1,113 +1,138 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title>Directions service</title>
     <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto','sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-      }
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        #global {
+            padding: 2%;
+            border: 2px solid #888;
+        }
+        h1.help{
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #999999;
+            font-family: 'Roboto', 'sans-serif';
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #floating-panel {
+            position: absolute;
+            top: 10px;
+            left: 25%;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+            text-align: center;
+            font-family: 'Roboto', 'sans-serif';
+            line-height: 30px;
+            padding-left: 10px;
+        }
     </style>
-	<script src="https://www.google.com/jsapi"></script>
-  </head>
-  <body>
-    <div id="floating-panel">
+    <script src="https://www.google.com/jsapi"></script>
+</head>
+<body>
+<div id="floating-panel">
     <b>Start: </b>
     <input type="text" name="start" id="start" value="Corvallis">
     <b>End: </b>
     <input type="text" name="end" id="end" value="Seattle">
-	<button type="button" id="go">Go!</button>
+    <button type="button" id="go">Go!</button>
+</div>
+<div id="map" style="height:50%;"></div>
+<div id="global">
+    <div id="buttons" style="height:30px;">
+        <button type="button" id="elv">Calculate Elevation</button>
+        <button type="button" id="save">Save</button>
     </div>
-    <div id="map"style="height:50%;"></div>
-	<div id="buttons" style="height:30px;">
-		<button type="button" id="elv">Calculate Elevation</button>
-		<button type="button" id="save">Save</button>
-	</div>
-	<div id="elevation_chart"></div>
-    <script>
-	  google.load('visualization', '1', {packages: ['columnchart']});
-	  var path = [];
-	  var elv = [];
-	  var samp = 500;
-	  var dist = -10;
-      function initMap() {
+    <div id="elevation_chart"></div>
+    <div>
+        <section>
+            <h1 class="help">Help</h1>
+            <h2>To use:</h2>
+            <p>Start by typing a start and end location in the panel above the map and click "Go!".</p>
+            <p>Once the route is set click "Calculate Elevation" below the map to display a graph of the elevation from point A to point B</p>
+            <p>To use this route in the simulation program, click "Save" and choose a name for the file. Import the file into the simulation program when you are ready to use it!</p>
+        </section>
+    </div>
+</div>
+<script>
+    google.load('visualization', '1', {packages: ['columnchart']});
+    var path = [];
+    var elv = [];
+    var samp = 500;
+    var dist = -10;
+
+    function initMap() {
         var directionsService = new google.maps.DirectionsService;
         var directionsDisplay = new google.maps.DirectionsRenderer({
-			draggable: true
-		});
+            draggable: true
+        });
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 7,
-          center: {lat: 41.85, lng: -87.65}
+            zoom: 9,
+            center: {lat: 44.5637, lng: -123.2794}
         });
         directionsDisplay.setMap(map);
-		
-		var elevator = new google.maps.ElevationService;
-        var onChangeHandler = function() {
-          calculateAndDisplayRoute(directionsService, directionsDisplay, map, elevator);
-        };
-		var doElevation = function() {
-		  pathElevation(path, elevator, map);
-		};
-		var doSave = function() {
-		  download(elv, 'elv.txt', 'text/plain');
-		};
-        document.getElementById('go').addEventListener('click', onChangeHandler);
-		document.getElementById('elv').addEventListener('click', doElevation);
-		document.getElementById('save').addEventListener('click', doSave);
-		
-      }
 
-      function calculateAndDisplayRoute(directionsService, directionsDisplay, map, elevator) {
+        var elevator = new google.maps.ElevationService;
+        var onChangeHandler = function () {
+            calculateAndDisplayRoute(directionsService, directionsDisplay, map, elevator);
+        };
+        var doElevation = function () {
+            pathElevation(path, elevator, map);
+        };
+        var doSave = function () {
+            download(elv, 'elv.txt', 'text/plain');
+        };
+        document.getElementById('go').addEventListener('click', onChangeHandler);
+        document.getElementById('elv').addEventListener('click', doElevation);
+        document.getElementById('save').addEventListener('click', doSave);
+
+    }
+
+    function calculateAndDisplayRoute(directionsService, directionsDisplay, map, elevator) {
         directionsService.route({
-          origin: document.getElementById('start').value,
-          destination: document.getElementById('end').value,
-          travelMode: 'DRIVING'
-        }, function(response, status) {
-          if (status === 'OK') {
-            directionsDisplay.setDirections(response);
-			path = response.routes[0].overview_path;
-			dist = response.routes[0].legs[0].distance.value;
-			window.alert("distance is: " + dist);
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
+            origin: document.getElementById('start').value,
+            destination: document.getElementById('end').value,
+            travelMode: 'DRIVING'
+        }, function (response, status) {
+            if (status === 'OK') {
+                directionsDisplay.setDirections(response);
+                path = response.routes[0].overview_path;
+                dist = response.routes[0].legs[0].distance.value;
+            } else {
+                window.alert('Directions request failed due to ' + status);
+            }
         });
-      }
-	  function pathElevation(p, elevator, map){
-		elevator.getElevationAlongPath({
-			'path':p,
-			'samples':samp
-		}, plotElevation);
-	  }
-	  function plotElevation(elevations, status) {
+    }
+
+    function pathElevation(p, elevator, map) {
+        elevator.getElevationAlongPath({
+            'path': p,
+            'samples': samp
+        }, plotElevation);
+    }
+
+    function plotElevation(elevations, status) {
         var chartDiv = document.getElementById('elevation_chart');
         if (status !== 'OK') {
-          // Show the error code inside the chartDiv.
-          chartDiv.innerHTML = 'Cannot show elevation: request failed because ' +
-              status;
-          return;
+            // Show the error code inside the chartDiv.
+            chartDiv.innerHTML = 'Cannot show elevation: request failed because ' +
+                status;
+            return;
         }
         // Create a new chart in the elevation_chart DIV.
         var chart = new google.visualization.ColumnChart(chartDiv);
@@ -120,36 +145,37 @@
         data.addColumn('string', 'Sample');
         data.addColumn('number', 'Elevation');
         for (var i = 0; i < elevations.length; i++) {
-          data.addRow(['', elevations[i].elevation]);
-		  elv.push(" " + elevations[i].elevation);
+            data.addRow(['', elevations[i].elevation]);
+            elv.push(" " + elevations[i].elevation);
         }
 
         // Draw the chart using the data within its DIV.
         chart.draw(data, {
-          height: 150,
-          legend: 'none',
-          titleY: 'Elevation (m)'
+            height: 150,
+            legend: 'none',
+            titleY: 'Elevation (m)'
         });
-      }
-	  function download(text, name, type) {
-		text.unshift(samp);
-		text.unshift(dist);
-	  
-	    var file = new Blob([text], {type: type});
-		var a = document.createElement("a"), url = URL.createObjectURL(file);
-		
-		a.href = url;
-		a.download = name;
-		document.body.appendChild(a);
-		a.click();
-		setTimeout(function() {
-			document.body.removeChild(a);
-			window.URL.revokeObjectURL(url);
-		}, 0);
-	  }
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL52m1hRkjWP0bdbqHDF6So--4o7sGtIY&callback=initMap">
-    </script>
-  </body>
+    }
+
+    function download(text, name, type) {
+        text.unshift(samp);
+        text.unshift(dist);
+
+        var file = new Blob([text], {type: type});
+        var a = document.createElement("a"), url = URL.createObjectURL(file);
+
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL52m1hRkjWP0bdbqHDF6So--4o7sGtIY&callback=initMap">
+</script>
+</body>
 </html>

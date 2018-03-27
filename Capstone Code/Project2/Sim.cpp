@@ -99,7 +99,11 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 	motorEfficiency = 0.95;
 	dragCoef = drag;
 	crossSec = 1.;
-
+	tripTime = 0.;
+	solarWattsPeak = 300.; // (Watt) 0.3kW, this would be an input of 0.3kW per hour or 0.3kWh
+	// solarSystemEfficiency is default to 80% so we will leave it at that
+	// This means about 80% of whatever sunlight we get is lost in the system
+	// solarStrength is set to 100%, this is the ammount of sunlight hitting the solar panels
 
 	std::vector<double> velChoose;
 	double numSpeeds = 10;
@@ -114,6 +118,7 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 	for (int i = 0; i < samples - 1; i++) {
 		int roadAngle;
 		int elvChange = elevations[i] - elevations[i + 1];
+		double secTime;
 		
 		roadAngle = sin(secDistance / elvChange);
 
@@ -139,10 +144,11 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 				chosen = j;
 			}
 		}
-		
+		// velocity in m/s, distance in m, secTime in hours
+		secTime = ((secDistance / velChoose[chosen]) / 60) / 60;
 
 		
-
+		double solarGain = (solarWattsPeak * solarStrength * solarSystemEfficiency) * secTime;
 		double powerLoss = directPower / motorEfficiency;
 
 		// If our current battery charge would drop below the minimum
@@ -150,6 +156,7 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 			WaitForRecharge(); //Then we should wait for the battery to charge back up
 		}
 
+		ChangeCharge(solarGain);
 		ChangeCharge(-1 * powerLoss);
 
 		charges.push_back(batteryCharge);
@@ -167,6 +174,7 @@ void MyCar::WaitForRecharge() {
 	batteryCharge = maxBatteryCharge * targetCharge;
 }
 
+//not in use
 double MyCar::bestVelocity(float roadAngle) {
 	return ((0.95 * wattPower) / (mass * sin(roadAngle)));
 }
@@ -181,6 +189,7 @@ double MyCar::wheelEnergy(double velocity, double distance, float roadAngle) {
 	return energy;
 }
 
+//not in use
 //function returns power in Watts needed to travel
 double doPower(MyCar *car, double acceleration, double velocity, double roadAngle) {
 	double powerMotor;

@@ -44,6 +44,9 @@ public:
 	 *	car from ALL the solar pannels		*/
 	double solarWattsPeak;			//In Watts			(Watt)
 	double solarSystemEfficiency = 0.80;   //in percent		(%)
+	double solarStrength = 1.0;			// (%) this is how much sunlight is actually hitting the panels
+
+	double tripTime;
 };
 
 float testIToO(float in1, float in2, float in3);
