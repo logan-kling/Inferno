@@ -62,7 +62,7 @@ std::vector<double> getBestSpeed(float consumption, //How many Watt hours the ca
 		inclineFactor = -1 * incline / 50;
 	std::vector<double> speeds(51);// = new float[50];
 	for (uint_fast8_t itterator = 15, j = 0; itterator <= 65; itterator++, j++) {
-		speeds[j] = (double)((charge / weight) / (consumption * inclineFactor + itterator * resistance));
+		speeds[j] = (double)((1000 * (charge + log2((double)itterator / 4 - (double)incline / 14) * weight) / weight) / (consumption * inclineFactor + itterator * resistance));
 	}
 	return speeds;
 }
