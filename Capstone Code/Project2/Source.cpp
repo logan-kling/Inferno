@@ -72,8 +72,11 @@ private:
 class OutputPanel : public wxPanel {
 public:
 	OutputPanel(wxWindow * parent);
-	void SetOutputField(float out);
-	void SetOutputField(float * out);
+	void setSpeedField(float out);
+	void setSpeedField(std::string out);
+	void setDistanceField(float out);
+	void setDistanceField(std::string out);
+	//void setSpeedField(float * out);
 	// Helper functions
 	void	makeSpeedsGraph(std::vector<double> distances);	//Elevation graph maker
 	void	HandleMainCalcs(double charge, double weight, double resistance);
@@ -81,8 +84,10 @@ public:
 	float samples, distance;
 	std::vector<double> elevations;
 private:
-	wxStaticText *o_test;
-	wxTextCtrl *o_v1;
+	wxStaticText *o_t1,
+		*o_t2;
+	wxTextCtrl *o_v1,
+		*o_v2;
 	wxSizer *o_sizer;
 	mpWindow *outputGraph;
 	mpFXYVector *vectorLayer, *batteryLayer, *changeLayer;	//layer for our elevation plot added to 'speedGraph' in 'MakeSpeedsGraph()'
@@ -426,6 +431,7 @@ void InputPanel::OnRadioBoxChange(wxCommandEvent& event)
 		incline->SetEditable(1);
 		if (i_sizer->IsShown(route_sizer))
 			i_sizer->Hide(route_sizer, true);
+		//SetLabel();
 		Layout();
 	}
 	else if (buttonGroup->GetString(event.GetSelection()) == "Get Course") {
@@ -441,8 +447,10 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY) {
 
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, this, "Output");
-	o_sizer->Add(new wxStaticText(this, wxID_ANY, "Result:"));
-	o_v1 = new wxTextCtrl(this, -1, "Output", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	o_t1 = new wxStaticText(this, wxID_ANY, "Best Speed:");
+	o_v1 = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	o_t2 = new wxStaticText(this, wxID_ANY, "Distance:");
+	o_v2 = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 
 	//Assign a graph element to the outputGraph variable
 	vectorLayer = new mpFXYVector(_("Speed"));
@@ -451,7 +459,22 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	outputGraph = new mpWindow(this, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
 	prepareSpeedsGraph();
 	o_sizer->Add(
+		o_t1,
+		0,
+		wxALL,
+		0);
+	o_sizer->Add(
 		o_v1,
+		0,
+		wxALL,
+		10);
+	o_sizer->Add(
+		o_t2,
+		0,
+		wxALL,
+		0);
+	o_sizer->Add(
+		o_v2,
 		0,
 		wxALL,
 		10);
@@ -466,14 +489,31 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	o_sizer->SetSizeHints(this);
 }
 
-// Set the first output field to the given float value
-void OutputPanel::SetOutputField(float out)
+// Set the first output (speed) field to the given float value
+void OutputPanel::setSpeedField(float out)
 {
 	o_v1->SetValue(std::to_string(out));
 }
+// Set the first output (speed) field to the given float value
+void OutputPanel::setSpeedField(std::string out)
+{
+	o_v1->SetValue(out);
+}
+
+//Set the second output (distance) field to the given float value
+void OutputPanel::setDistanceField(float out)
+{
+	o_v2->SetValue(std::to_string(out));
+}
+//Set the second output (distance) field to the given string value
+void OutputPanel::setDistanceField(std::string out)
+{
+	o_v2->SetValue(out);
+}
+
 
 /*/ Overload for multiple floats
-void OutputPanel::SetOutputField(float* out)
+void OutputPanel::setSpeedField(float* out)
 {
 	wxString outString;
 	for (int i = sizeof(out); i > 0; i--) {
@@ -488,21 +528,34 @@ void OutputPanel::SetOutputField(float* out)
 // Set the output field with the results of the run.
 void MinFrame::OnRun(wxCommandEvent & event)
 {
-	//out_p->SetOutputField(testMiles(in_p->GetConsumption(), in_p->GetWeight()));
+	//out_p->setSpeedField(testMiles(in_p->GetConsumption(), in_p->GetWeight()));
 	if (in_p->GetRunOption() == 0) {
-		out_p->SetOutputField(getDistance(in_p->GetCharge(), 
-			in_p->GetConsumption(), 
-			in_p->GetIncline(), 
-			in_p->GetWeight(), 
-			in_p->GetSpeed(), 
-			in_p->GetResistance()));
+		out_p->setSpeedField("");
+		out_p->setDistanceField((getDistance(in_p->GetCharge(),
+			in_p->GetConsumption(),
+			in_p->GetIncline(),
+			in_p->GetWeight(),
+			in_p->GetSpeed(),
+			in_p->GetResistance())));
 	}
 	else if (in_p->GetRunOption() == 1) {
-		out_p->makeSpeedsGraph(getBestSpeed(in_p->GetConsumption(), 
-			in_p->GetIncline(), 
-			in_p->GetWeight(), 
-			in_p->GetResistance(), 
-			in_p->GetCharge()));
+		std::vector<double> speeds = getBestSpeed(in_p->GetConsumption(),
+			in_p->GetIncline(),
+			in_p->GetWeight(),
+			in_p->GetResistance(),
+			in_p->GetCharge());
+		//Read the max distance from the front of the vector
+		out_p->setDistanceField(speeds.front());
+
+		//Remove the first index of the vector entirely
+		speeds.erase(speeds.begin());
+
+		//Read the max speed from the front of the vector
+		out_p->setSpeedField(speeds.front());
+
+		//Remove the second (now first) index of the vector entirely
+		speeds.erase(speeds.begin());
+		out_p->makeSpeedsGraph(speeds);
 	}
 	else if (in_p->GetRunOption() == 2) {
 		out_p->HandleMainCalcs(in_p->GetCharge(), in_p->GetWeight(), in_p->GetResistance());

@@ -45,7 +45,7 @@ float getDistance(float charge, //The initial charge of the car
 		inclineFactor = incline / 50 + 1;
 	else if (incline < 0) //If the car goes downhill
 		inclineFactor = -1 * incline / 50;
-	return ((charge / weight) / (consumption * inclineFactor + speed * resistance));
+	return (float)((1000 * charge * log2((float)speed / 8 - (float)incline / 28 + 1)) / (consumption * inclineFactor * log(weight + 1) + speed * resistance));
 }
 
 std::vector<double> getBestSpeed(float consumption, //How many Watt hours the car consumes per mile driven
@@ -60,9 +60,17 @@ std::vector<double> getBestSpeed(float consumption, //How many Watt hours the ca
 		inclineFactor = incline / 50 + 1;
 	else if (incline < 0) //If the car goes downhill
 		inclineFactor = -1 * incline / 50;
-	std::vector<double> speeds(51);// = new float[50];
-	for (uint_fast8_t itterator = 15, j = 0; itterator <= 65; itterator++, j++) {
-		speeds[j] = (double)((1000 * charge * log2((double)itterator / 8 - (double)incline / 28 + 1)) / (consumption * inclineFactor + itterator * resistance));
+	std::vector<double> speeds;
+	speeds.reserve(53);
+	speeds.emplace_back((double)((1000 * charge * log2((double)15 / 8 - (double)incline / 28 + 1)) / (consumption * inclineFactor * log(weight + 1) + 15 * resistance)));
+	speeds.emplace_back((double)15);
+	speeds.emplace_back(speeds.front());
+	for (uint_fast8_t itterator = 16; itterator <= 65; itterator++) {
+		speeds.emplace_back((double)((1000 * charge * log2((double)itterator / 8 - (double)incline / 28 + 1)) / (consumption * inclineFactor * log(weight + 1) + itterator * resistance)));
+		if (speeds.back() > speeds.front()) {
+			speeds.front() = speeds.back();
+			speeds[1] = (double)itterator;
+		}
 	}
 	return speeds;
 }

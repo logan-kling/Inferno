@@ -1,8 +1,3 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Project2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Sim.cpp
-c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\sim.cpp(120): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\sim.cpp(123): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\sim.cpp(139): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\sim.cpp(140): warning C4018: '<': signed/unsigned mismatch
-c:\users\logan\documents\logan\computer science\cs462\inferno\capstone code\project2\sim.cpp(141): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Source.cpp
   Project2.vcxproj -> C:\Users\logan\Documents\Logan\Computer Science\CS462\Inferno\Capstone Code\Debug\CapstoneBase.exe
