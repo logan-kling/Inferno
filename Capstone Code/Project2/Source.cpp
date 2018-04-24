@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 #include <cctype>
+#include <Windows.h>
 
 #include <wx/wx.h>
 #include <wx/app.h>
@@ -115,6 +116,7 @@ private:
 	wxTextCtrl *MainEditBox;
 
 	void OnRun(wxCommandEvent& event);
+	void OnMap(wxCommandEvent& event);
 	void OnImport(wxCommandEvent& event);
 	void OnClear(wxCommandEvent& event);
 	void OnSave(wxCommandEvent& event);
@@ -126,6 +128,7 @@ private:
 /* wxIDs for menu items */
 enum {
 	Edit_Run,
+	Edit_Launch_Map,
 	Edit_Import,
 	Edit_Clear,
 	File_Save,
@@ -135,6 +138,7 @@ enum {
 /* Event tables for menu items! */
 wxBEGIN_EVENT_TABLE(MinFrame, wxFrame)
 EVT_MENU(Edit_Run, MinFrame::OnRun)
+EVT_MENU(Edit_Launch_Map, MinFrame::OnMap)
 EVT_MENU(Edit_Import, MinFrame::OnImport)
 EVT_MENU(File_Save, MinFrame::OnSave)
 EVT_MENU(File_Load, MinFrame::OnLoad)
@@ -169,6 +173,7 @@ MinFrame::MinFrame(const wxString& title)
 	// Edit Menu
 	editMenu->Append(Edit_Clear, "&Clear Forms", "Empty all the form fields");
 	editMenu->Append(Edit_Run, "&Run", "Begin or end the simulation");
+	editMenu->Append(Edit_Launch_Map, "&Open Elevation Map", "Open the browser to get elevation data");
 	editMenu->Append(Edit_Import, "&Import Elevation", "Import elevation data from Google");
 	menuBar->Append(editMenu, "&Edit");
 
@@ -560,6 +565,12 @@ void MinFrame::OnRun(wxCommandEvent & event)
 	else if (in_p->GetRunOption() == 2) {
 		out_p->HandleMainCalcs(in_p->GetCharge(), in_p->GetWeight(), in_p->GetResistance());
 	}
+}
+
+// Open the Google Map webpage for the user to get elevation data from.
+void MinFrame::OnMap(wxCommandEvent& event) {
+	ShellExecute(NULL, L"open", L"file:///.\\route.html",
+		NULL, NULL, SW_SHOWNORMAL);
 }
 
 // When the elevation event is generated:
