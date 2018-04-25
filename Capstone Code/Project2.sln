@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CapstoneBase", "Project2\Project2.vcxproj", "{2699A2EB-51BD-467A-974C-7C2F7CA95596}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup1", "Setup1\Setup1.vdproj", "{F4CEF7F2-4B3A-4915-A44F-E10A8C94D67A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest1", "UnitTest1\UnitTest1.vcxproj", "{24DB997C-F184-476A-BA91-FBBC4F7D9F81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,14 @@ Global
 		{F4CEF7F2-4B3A-4915-A44F-E10A8C94D67A}.Debug|x86.ActiveCfg = Debug
 		{F4CEF7F2-4B3A-4915-A44F-E10A8C94D67A}.Release|x64.ActiveCfg = Release
 		{F4CEF7F2-4B3A-4915-A44F-E10A8C94D67A}.Release|x86.ActiveCfg = Release
+		{24DB997C-F184-476A-BA91-FBBC4F7D9F81}.Debug|x64.ActiveCfg = Debug|x64
+		{24DB997C-F184-476A-BA91-FBBC4F7D9F81}.Debug|x64.Build.0 = Debug|x64
+		{24DB997C-F184-476A-BA91-FBBC4F7D9F81}.Debug|x86.ActiveCfg = Debug|Win32
+		{24DB997C-F184-476A-BA91-FBBC4F7D9F81}.Debug|x86.Build.0 = Debug|Win32
+		{24DB997C-F184-476A-BA91-FBBC4F7D9F81}.Release|x64.ActiveCfg = Release|x64
+		{24DB997C-F184-476A-BA91-FBBC4F7D9F81}.Release|x64.Build.0 = Release|x64
+		{24DB997C-F184-476A-BA91-FBBC4F7D9F81}.Release|x86.ActiveCfg = Release|Win32
+		{24DB997C-F184-476A-BA91-FBBC4F7D9F81}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

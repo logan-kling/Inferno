@@ -50,7 +50,7 @@ public:
 };
 
 float testIToO(float in1, float in2, float in3);
-float testMiles(float bat_voltage, float bat_size);
+extern float testMiles(float bat_voltage, float bat_size);
 
 float getDistance(float charge, //The initial charge of the car
 	float consumption, //How many Watt hours the car consumes per mile driven

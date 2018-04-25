@@ -569,7 +569,7 @@ void MinFrame::OnRun(wxCommandEvent & event)
 
 // Open the Google Map webpage for the user to get elevation data from.
 void MinFrame::OnMap(wxCommandEvent& event) {
-	ShellExecute(NULL, L"open", L"file:///.\\route.html",
+	ShellExecute(NULL, L"open", L"file:///C\:\\Users\\tapoz\\Documents\\GitHub\\Inferno\\Capstone\ Code\\webviewCode\\route.html",
 		NULL, NULL, SW_SHOWNORMAL);
 }
 

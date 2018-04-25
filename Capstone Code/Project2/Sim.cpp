@@ -21,7 +21,7 @@ float testIToO(float in1, float in2, float in3) {
 //  And goes 50 MPH the whole distance
 // Output:
 //  Distance traveled by vehicle on the charge
-float testMiles(float bat_voltage, float bat_size) {
+extern float testMiles(float bat_voltage, float bat_size) {
 
 	float wh_per_mile;
 
