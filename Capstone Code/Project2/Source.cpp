@@ -25,34 +25,39 @@
 #include "SimIDs.h"		// Contains our custom wxIDs
 
 const static enum displayType {
-	TextBox,
+	Text,
 	Graph
 };
 
-class Field
+class Field : public TextField, public GraphField
 {
 public:
-	Field();
+	Field(std::string name, displayType type);
 
 protected:
+	wxStaticText title;
 	std::string fieldName;
 	displayType fieldType;
 };
 
-class TextField : public Field
+class TextField
 {
 public:
+	TextField();
 
-private:
+protected:
+	wxTextCtrl input;
 	bool editable;
 };
 
-class GraphField : public Field
+class GraphField
 {
 public:
+	GraphField();
 
-private:
-
+protected:
+	mpFXYVector vector;
+	mpWindow graph;
 };
 
 class MinApp : public wxApp {
