@@ -18,10 +18,42 @@
 #include <wx/msgdlg.h>
 #include <wx/radiobox.h>
 #include <wx/wfstream.h>
+#include <string>
 
 #include "mathplot.h"	// The library we are using to create graphs
 #include "Sim.h"		// The file for our simulation functions
 #include "SimIDs.h"		// Contains our custom wxIDs
+
+const static enum displayType {
+	TextBox,
+	Graph
+};
+
+class Field
+{
+public:
+	Field();
+
+protected:
+	std::string fieldName;
+	displayType fieldType;
+};
+
+class TextField : public Field
+{
+public:
+
+private:
+	bool editable;
+};
+
+class GraphField : public Field
+{
+public:
+
+private:
+
+};
 
 class MinApp : public wxApp {
 public:
