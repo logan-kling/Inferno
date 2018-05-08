@@ -1,191 +1,5 @@
-#include <string>
-#pragma warning(disable:4996)
-#include <sstream>
-#include <iostream>
-#include <cctype>
-#include <Windows.h>
+#include "Source.h"
 
-#include <wx/wx.h>
-#include <wx/app.h>
-#include <wx/frame.h>
-#include <wx/menu.h>
-#include <wx/panel.h>
-#include <wx/sizer.h>
-#include <wx/splitter.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/textfile.h>
-#include <wx/msgdlg.h>
-#include <wx/radiobox.h>
-#include <wx/wfstream.h>
-#include <string>
-
-#include "mathplot.h"	// The library we are using to create graphs
-#include "Sim.h"		// The file for our simulation functions
-#include "SimIDs.h"		// Contains our custom wxIDs
-
-const static enum displayType {
-	Text,
-	Graph
-};
-
-class Field : public TextField, public GraphField
-{
-public:
-	Field(std::string name, displayType type);
-
-protected:
-	wxStaticText title;
-	std::string fieldName;
-	displayType fieldType;
-};
-
-class TextField
-{
-public:
-	TextField();
-
-protected:
-	wxTextCtrl input;
-	bool editable;
-};
-
-class GraphField
-{
-public:
-	GraphField();
-
-protected:
-	mpFXYVector vector;
-	mpWindow graph;
-};
-
-class MinApp : public wxApp {
-public:
-	virtual bool OnInit();
-};
-
-// This class contains:
-//  all the forms the user needs to fill out to run the program
-//  a selector for the run option
-//  a graph to display imported elevation data
-class InputPanel : public wxPanel {
-public:
-	InputPanel(wxWindow * parent);
-
-	// Get functions for private member content
-	float	GetConsumption() const { return (float)atof(consumption->GetValue()); };
-	float	GetWeight() const { return (float)atof(weight->GetValue()); };
-	float	GetResistance() const { return (float)atof(resistance->GetValue()); };
-	float	GetCharge() const { return (float)atof(charge->GetValue()); };
-	float	GetIncline() const { return (float)atof(incline->GetValue()); };
-	float	GetSpeed() const { return (float)atof(speed->GetValue()); };
-	int		GetRunOption() { return buttonGroup->GetSelection(); };
-
-	// Helper functions
-	std::vector<std::string> SaveInputForms();										//Save form helper
-	void	LoadInputForms(std::vector<std::string> loaded);
-
-	void	MakeElvGraph(std::vector<double> vectorX, std::vector<double> vectorY);	//Elevation graph maker
-	void	SetElvFields(float distance, float samples);
-	void    SetLoadedValues(std::vector<double> loadvec);
-
-private:
-	void	OnRadioBoxChange(wxCommandEvent& event);								//Radio Box Listener
-	void	PrepElvGraph();															//Elevation graph setup
-
-private:
-	wxStaticText *i_test;
-	wxTextCtrl *consumption, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples;
-	wxSizer *i_sizer, *route_sizer;
-	wxRadioBox *buttonGroup;	//Radio buttons for selecting run mode
-	mpWindow *elevationGraph;
-	mpFXYVector *vectorLayer;	//layer for our elevation plot added to 'elevationGraph' in 'MakeElvGraph()'
-	wxDECLARE_EVENT_TABLE();
-};
-
-// This class contains:
-//  the output fields to display our run data
-//  a graph for display use of data after run
-class OutputPanel : public wxPanel {
-public:
-	OutputPanel(wxWindow * parent);
-	void setSpeedField(float out);
-	void setSpeedField(std::string out);
-	void setDistanceField(float out);
-	void setDistanceField(std::string out);
-	//void setSpeedField(float * out);
-	// Helper functions
-	void	makeSpeedsGraph(std::vector<double> distances);	//Elevation graph maker
-	void	HandleMainCalcs(double charge, double weight, double resistance);
-
-	float samples, distance;
-	std::vector<double> elevations;
-private:
-	wxStaticText *o_t1,
-		*o_t2;
-	wxTextCtrl *o_v1,
-		*o_v2;
-	wxSizer *o_sizer;
-	mpWindow *outputGraph;
-	mpFXYVector *vectorLayer, *batteryLayer, *changeLayer;	//layer for our elevation plot added to 'speedGraph' in 'MakeSpeedsGraph()'
-	void	prepareSpeedsGraph();
-};
-
-// This class contains:
-//  The overall layout of our program
-//  The menu bar
-//  The input and output panels
-//  This class is the parent of the other classes.
-class MinFrame : public wxFrame {
-public:
-	MinFrame(const wxString& title);
-
-	InputPanel *in_p;
-	OutputPanel *out_p;
-
-private:
-	wxMenuBar *menuBar;
-	wxMenu *fileMenu;
-	wxMenu *editMenu;
-	wxMenu *helpMenu;
-	wxString CurrentDocPath;
-	wxTextCtrl *MainEditBox;
-
-	void OnRun(wxCommandEvent& event);
-	void OnMap(wxCommandEvent& event);
-	void OnImport(wxCommandEvent& event);
-	void OnClear(wxCommandEvent& event);
-	void OnSave(wxCommandEvent& event);
-	void OnLoad(wxCommandEvent& event);
-
-	wxDECLARE_EVENT_TABLE();
-};
-
-/* wxIDs for menu items */
-enum {
-	Edit_Run,
-	Edit_Launch_Map,
-	Edit_Import,
-	Edit_Clear,
-	File_Save,
-	File_Load
-};
-
-/* Event tables for menu items! */
-wxBEGIN_EVENT_TABLE(MinFrame, wxFrame)
-EVT_MENU(Edit_Run, MinFrame::OnRun)
-EVT_MENU(Edit_Launch_Map, MinFrame::OnMap)
-EVT_MENU(Edit_Import, MinFrame::OnImport)
-EVT_MENU(File_Save, MinFrame::OnSave)
-EVT_MENU(File_Load, MinFrame::OnLoad)
-EVT_MENU(Edit_Clear, MinFrame::OnClear)
-wxEND_EVENT_TABLE()
-
-/* Event table for Input Pannel! */
-wxBEGIN_EVENT_TABLE(InputPanel, wxPanel)
-	EVT_RADIOBOX(wxID_RADIOBOX, InputPanel::OnRadioBoxChange)
-wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MinApp);
 
@@ -221,10 +35,6 @@ MinFrame::MinFrame(const wxString& title)
 
 	SetMenuBar(menuBar);
 
-	// Menu bar is now done and placed
-
-	// This is for everything else
-
 	// Create a split window so we can have input and output side by side
 	wxSplitterWindow *splitter = new wxSplitterWindow(this, 
 		wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER);
@@ -250,6 +60,9 @@ bool MinApp::OnInit() {
 InputPanel::InputPanel(wxWindow * parent)
 	: wxPanel(parent, wxID_ANY){
 	
+	inputForms = Forms(this);
+	
+
 	wxArrayString choices;
 	choices.Add("Get Distance");
 	choices.Add("Get Best Speed");
@@ -281,6 +94,11 @@ InputPanel::InputPanel(wxWindow * parent)
 	buttonGroup->SetSelection(1);
 	
 	i_sizer->Add(buttonGroup);
+
+	for (int iterator = 0; iterator < inputForms.formFields.size(); iterator++) {
+		i_sizer->Add(inputForms.formFields[iterator]->title);
+		i_sizer->Add(inputForms.formFields[iterator]->input, 0, wxALL, 10);
+	}
 
 	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Motor Consumption:"));
 	i_sizer->Add(
@@ -358,7 +176,6 @@ void InputPanel::MakeElvGraph(std::vector<double> vectorX, std::vector<double> v
 	elevationGraph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
 	elevationGraph->AddLayer(vectorLayer);			//Adds the plotted x/y coordinates to our graph
 	elevationGraph->Fit();							//Zoom the graph properly after everything has been added
-	//wxMessageBox("Elevation Graph Set");
 }
 
 void InputPanel::SetElvFields(float distance, float samples)
@@ -757,4 +574,77 @@ void MinFrame::OnLoad(wxCommandEvent & event)
 
 	in_p->LoadInputForms(loaded);
 		
+}
+
+Field::Field(std::string name, displayType type, wxWindow *parent, bool edit)
+{
+	fieldName = name;
+	fieldType = type;
+	title = new wxStaticText(parent, wxID_ANY, fieldName);
+	switch (fieldType) {
+	case Text:
+		TextField(parent, edit);
+		break;
+
+	case Graph:
+		GraphField();
+		wxMessageBox("Graph not done yet!");
+		break;
+	}
+}
+
+Forms::Forms()
+{
+}
+
+Forms::Forms(wxWindow *parent)
+{
+	formFields.push_back(new Field("Input test", Text, parent, UNLOCKED));
+	formFields.push_back(new Field("Locked input test", Text, parent, LOCKED));
+	formFields.push_back(new Field("Last input test", Text, parent, UNLOCKED));
+}
+
+TextField::TextField()
+{
+}
+
+TextField::TextField(wxWindow *parent, bool edit)
+{
+	input = new wxTextCtrl(parent, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	input->SetEditable(editable);
+}
+
+GraphField::GraphField()
+{
+	//prepareGraph();
+}
+
+void GraphField::prepareGraph()
+{
+	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);//Set the font for the graph
+	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);		//Label the x axis
+	mpScaleY* yaxis = new mpScaleY(wxT("Y"), mpALIGN_LEFT, true);					//Label the y axis
+	xaxis->SetFont(graphFont);														//Set font for x axis
+	yaxis->SetFont(graphFont);														//Set font for y axis
+	xaxis->SetDrawOutsideMargins(false);											//Dont't draw the axis outside margins
+	yaxis->SetDrawOutsideMargins(false);
+	graph->AddLayer(xaxis);												//add the axis to the graph
+	graph->AddLayer(yaxis);
+	graph->EnableDoubleBuffer(true);										//reduces flicker when graph is drawn
+	graph->SetMPScrollbars(true);											//adds scroll bars if the graph window is too small
+
+}
+
+void GraphField::setGraph(std::vector<double> vectorX, std::vector<double> vectorY)
+{
+
+	graphVector->SetData(vectorX, vectorY);			//Adds the x and y coords to the layer
+	graphVector->SetContinuity(true);				//Draw lines in between the points
+	wxPen vectorpen(*wxBLUE, 5, wxPENSTYLE_SOLID);	//Set line size and color
+	graphVector->SetPen(vectorpen);					//gives the pen to the layer
+	graphVector->SetDrawOutsideMargins(false);		//Makes sure the graph isnt drawn outside of the graph bounds
+	graph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
+	graph->AddLayer(graphVector);			//Adds the plotted x/y coordinates to our graph
+	graph->Fit();							//Zoom the graph properly after everything has been added
+
 }

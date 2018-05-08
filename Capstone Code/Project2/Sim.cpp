@@ -165,7 +165,7 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 		}
 
 		ChangeCharge(solarGain);
-		ChangeCharge(-1 * powerLoss);
+		ChangeCharge((double)-1 * powerLoss);
 
 		charges.push_back(batteryCharge);
 		velocities.push_back(velChoose[chosen]);
