@@ -1,8 +1,9 @@
 ﻿E:\VisualStudioEnterprise2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Project2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Source.cpp
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.h(37): warning C4091: 'static ': ignored on left of 'const displayType' when no variable is declared
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(102): warning C4018: '<': signed/unsigned mismatch
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(430): warning C4129: ':': unrecognized character escape sequence
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(430): warning C4129: ' ': unrecognized character escape sequence
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(126): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(176): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(71): warning C4101: 'm_value': unreferenced local variable
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(370): warning C4129: ':': unrecognized character escape sequence
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(370): warning C4129: ' ': unrecognized character escape sequence
   Project2.vcxproj -> C:\Users\tapoz\Documents\GitHub\Inferno\Capstone Code\Debug\CapstoneBase.exe
   Project2.vcxproj -> C:\Users\tapoz\Documents\GitHub\Inferno\Capstone Code\Debug\CapstoneBase.pdb (Partial PDB)
