@@ -58,7 +58,7 @@ private:
 	void	PrepElvGraph();															//Elevation graph setup
 
 private:
-	wxStaticText *i_test;
+	wxStaticText *label_s, *label_i;
 	wxTextCtrl *consumption, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples;
 	wxSizer *i_sizer, *route_sizer;
 	wxRadioBox *buttonGroup;	//Radio buttons for selecting run mode
@@ -84,7 +84,7 @@ public:
 
 	float samples, distance;
 	std::vector<double> elevations;
-private:
+
 	wxStaticText *o_t1,
 		*o_t2;
 	wxTextCtrl *o_v1,
@@ -196,8 +196,11 @@ MinFrame::MinFrame(const wxString& title)
 	in_p = new InputPanel(splitter);
 	out_p = new OutputPanel(splitter);
 	splitter->SplitVertically(in_p, out_p);
+
 	splitter->SetMinimumPaneSize(20);
 
+	SetMinClientSize(wxSize(500, 600));
+	SetClientSize(wxSize(500, 600));
 }
 
 
@@ -234,11 +237,14 @@ InputPanel::InputPanel(wxWindow * parent)
 	routeDistance = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 	routeSamples = new wxTextCtrl(this, -1, "0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
 
+	label_s = new wxStaticText(this, wxID_ANY, "Speed:");
+	label_i = new wxStaticText(this, wxID_ANY, "Incline:");
+
 	speed->SetEditable(0);
 	routeDistance->SetEditable(0);
 	routeSamples->SetEditable(0);
 	
-	buttonGroup = new wxRadioBox(this, wxID_RADIOBOX, "Run Mode:", wxDefaultPosition, wxDefaultSize, choices, 3, wxHORIZONTAL);
+	buttonGroup = new wxRadioBox(this, wxID_RADIOBOX, "Run Mode:", wxDefaultPosition, wxDefaultSize, choices, 3, wxVERTICAL);
 	
 	// Set the radio button
 	buttonGroup->SetSelection(1);
@@ -261,10 +267,10 @@ InputPanel::InputPanel(wxWindow * parent)
 	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Charge:"));
 	i_sizer->Add(charge, 0, wxALL, 10);
 
-	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Speed:"));
+	i_sizer->Add(label_s);
 	i_sizer->Add(speed, 0, wxALL, 10);
 
-	i_sizer->Add(new wxStaticText(this, wxID_ANY, "Incline:"));
+	i_sizer->Add(label_i);
 	i_sizer->Add(incline, 0, wxALL, 10);
 
 	route_sizer->Add(elevationGraph, 1, wxEXPAND);
@@ -275,6 +281,8 @@ InputPanel::InputPanel(wxWindow * parent)
 
 	i_sizer->Add(route_sizer, 0, wxEXPAND, 10);
 	i_sizer->Hide(route_sizer, true);
+	i_sizer->Hide(speed, true);
+	i_sizer->Hide(label_s, true);
 
 	SetSizer(i_sizer);
 	route_sizer->SetSizeHints(this);
@@ -362,6 +370,8 @@ void InputPanel::PrepElvGraph() {
 in the inputPannel */
 void OutputPanel::makeSpeedsGraph(std::vector<double> distances)
 {
+	outputGraph->DelAllLayers(false, true);			//Clear the grpah to redraw
+	prepareSpeedsGraph();
 	std::vector<double> speeds = {15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65};
 	vectorLayer->SetData(speeds, distances);			//Adds the x and y coords to the layer
 	vectorLayer->SetContinuity(true);				//Draw lines in between the points
@@ -371,7 +381,6 @@ void OutputPanel::makeSpeedsGraph(std::vector<double> distances)
 	outputGraph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
 	outputGraph->AddLayer(vectorLayer);			//Adds the plotted x/y coordinates to our graph
 	outputGraph->Fit();							//Zoom the graph properly after everything has been added
-	wxMessageBox("Distance versus Speed Graph Set");
 }
 
 void OutputPanel::HandleMainCalcs(double charge, double weight, double resistance)
@@ -426,16 +435,26 @@ void InputPanel::OnRadioBoxChange(wxCommandEvent& event)
 	if (buttonGroup->GetString(event.GetSelection()) == "Get Distance") {
 		speed->SetEditable(1);
 		incline->SetEditable(1);
-		if (i_sizer->IsShown(route_sizer))
+		if (i_sizer->IsShown(route_sizer)) {
 			i_sizer->Hide(route_sizer, true);
+		}
+		i_sizer->Show(incline, true);
+		i_sizer->Show(label_i, true);
+		i_sizer->Show(speed, true);
+		i_sizer->Show(label_s, true);
 		Layout();
 		
 	}
 	else if (buttonGroup->GetString(event.GetSelection()) == "Get Best Speed") {
 		speed->SetEditable(0);
 		incline->SetEditable(1);
-		if (i_sizer->IsShown(route_sizer))
+		if (i_sizer->IsShown(route_sizer)) {
 			i_sizer->Hide(route_sizer, true);
+		}
+		i_sizer->Show(incline, true);
+		i_sizer->Show(label_i, true);
+		i_sizer->Hide(speed, true);
+		i_sizer->Hide(label_s, true);
 		//SetLabel();
 		Layout();
 	}
@@ -443,6 +462,10 @@ void InputPanel::OnRadioBoxChange(wxCommandEvent& event)
 		speed->SetEditable(0);
 		incline->SetEditable(0);
 		i_sizer->Show(route_sizer, true);
+		i_sizer->Hide(speed, true);
+		i_sizer->Hide(incline, true);
+		i_sizer->Hide(label_i, true);
+		i_sizer->Hide(label_s, true);
 		Layout();
 	}
 }
@@ -460,7 +483,6 @@ OutputPanel::OutputPanel(wxWindow * parent)
 	//Assign a graph element to the outputGraph variable
 	vectorLayer = new mpFXYVector(_("Speed"));
 	batteryLayer = new mpFXYVector(_("Battery"));
-	changeLayer = new mpFXYVector(_("changes"));
 	outputGraph = new mpWindow(this, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
 	prepareSpeedsGraph();
 	o_sizer->Add(
@@ -542,6 +564,11 @@ void MinFrame::OnRun(wxCommandEvent & event)
 			in_p->GetWeight(),
 			in_p->GetSpeed(),
 			in_p->GetResistance())));
+		out_p->o_sizer->Show(out_p->o_t1, true);
+		out_p->o_sizer->Show(out_p->o_v1, true);
+		out_p->o_sizer->Show(out_p->o_t2, true);
+		out_p->o_sizer->Show(out_p->o_v2, true);
+		out_p->o_sizer->Hide(out_p->outputGraph, true);
 	}
 	else if (in_p->GetRunOption() == 1) {
 		std::vector<double> speeds = getBestSpeed(in_p->GetConsumption(),
@@ -560,11 +587,24 @@ void MinFrame::OnRun(wxCommandEvent & event)
 
 		//Remove the second (now first) index of the vector entirely
 		speeds.erase(speeds.begin());
-		out_p->makeSpeedsGraph(speeds);
+		out_p->makeSpeedsGraph(speeds); 
+		out_p->o_sizer->Show(out_p->o_t1, true);
+		out_p->o_sizer->Show(out_p->o_v1, true);
+		out_p->o_sizer->Show(out_p->o_t2, true);
+		out_p->o_sizer->Show(out_p->o_v2, true);
+		out_p->o_sizer->Show(out_p->outputGraph, true);
 	}
 	else if (in_p->GetRunOption() == 2) {
 		out_p->HandleMainCalcs(in_p->GetCharge(), in_p->GetWeight(), in_p->GetResistance());
+		out_p->o_sizer->Hide(out_p->o_t1, true);
+		out_p->o_sizer->Hide(out_p->o_v1, true);
+		out_p->o_sizer->Hide(out_p->o_t2, true);
+		out_p->o_sizer->Hide(out_p->o_v2, true);
+		out_p->o_sizer->Show(out_p->outputGraph, true);
+
+
 	}
+	Layout();
 }
 
 // Open the Google Map webpage for the user to get elevation data from.
