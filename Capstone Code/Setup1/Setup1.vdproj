@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_9E61A0AAB37C4B28BEF80C11FA612AB6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A18DB06361334B3BA502FD95D0080C23"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -55,6 +61,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -71,6 +93,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -116,6 +146,26 @@
             {
             "SourcePath" = "8:C:\\Windows\\System32\\ucrtbased.dll"
             "TargetName" = "8:ucrtbased.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_BD5338A80594401F8886DC5279975DFD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9E61A0AAB37C4B28BEF80C11FA612AB6"
+            {
+            "SourcePath" = "8:..\\webviewCode\\route.html"
+            "TargetName" = "8:route.html"
             "Tag" = "8:"
             "Folder" = "8:_BD5338A80594401F8886DC5279975DFD"
             "Condition" = "8:"
@@ -220,7 +270,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SolarSim"
         "ProductCode" = "8:{678507C7-8742-433D-AE0D-316FCAD18E89}"
-        "PackageCode" = "8:{4277A806-D212-4331-A6A8-4A73DE2A1793}"
+        "PackageCode" = "8:{BA157ADD-2D03-452E-BDA8-6C3E4A18B981}"
         "UpgradeCode" = "8:{E62398D8-8965-49E2-A15A-2436CDFEA0D4}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
