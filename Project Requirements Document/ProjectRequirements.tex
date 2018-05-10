@@ -166,14 +166,15 @@
     \begin{enumerate}
         \item Group 1: Our first set of variables. We can use these to test the program both for accuracy and for usability.
         \begin{enumerate}
-            \item Electric Motor Consumption
+            \item Vehicle Mass
+            \item Electric Motor Efficiency
             \item Battery Charge
             \item Solar Panel Input
             \item Distance
         \end{enumerate}
         \item Group 2: After testing the GUI and making sure the first group is working correctly we will add these next variables.
         \begin{enumerate}
-            \item Cloud Coverage
+            \item Level of Sunlight
             \item Air Resistance (Drag)
             \item Course Altitude Change from Start to End
         \end{enumerate}
@@ -196,7 +197,7 @@
         \item As a driver I want to give the program speed and battery charge to see how far the car can go with my given conditions so I can plan the race. \textit{This can be added after the second group of variables. It should take a week with story number seven.}
         \item As a driver I want to give the program battery charge and the car's information to see what speeds will save the most energy. \textit{This can be added after the second group of variables. It should take us a week.}
         \item As a driver I want the program to use information about the altitude of the course so it can take into account variation in uphill vs downhill.
-        \item As a driver I want the program to use information from the weather to calculate how much sunlight the solar panels will get.
+        \item As a driver I want the program to use information from the weather to calculate how much sunlight the solar panels will get. \textit{This is related to Stretch Goal 1.}
     \end{enumerate}
     
     \subsection{Requirements}
@@ -204,12 +205,9 @@
     %acceptance testing
     \begin{enumerate}
         \item Provide a program that uses the variables from Group 1 and Group 2 described in Section 3.1 to calculate the performance of the simulated car. 
-        \item Make sure \textit{at least} Cailin Moore, Nolan Dahl, and Gray Johnson are comfortable using the software. We would like to have them test the GUI using acceptance testing before we finish. As long as the three of them give it a 4 out of 7 or above we will consider this complete.
+        \item Make sure \textit{at least} Cailin Moore and Nolan Dahl are comfortable using the software. We would like to have them test the GUI using acceptance testing before we finish. As long as the three of them give it a 4 out of 7 or above we will consider this complete.
         % number that can run
         \item Verify the program can be run without crashing on the system the PSR team will be using at least 95\% of the time.
-        % remove psr, give a percent accuracy?
-        \item Make the program accurate to within 60\% of the results of the real car based on a given 10 mile drive.
-        Make sure our margin of error never exceeds 40\%. \textit{This requirement may be considered fulfilled after testing with the race logs from the team's last car in case they are unable to build the new car before we finish the project in Spring of 2018.}
         \item Provide an API to plan a route and return elevation data for the simulation.
     \end{enumerate}
     
@@ -233,11 +231,27 @@
         
     \subsection{Stretch Goals}
     \begin{enumerate}
+        \item Import weather data from an API using a city name or address. This can be used to calculate air density from temperature and ideally sunlight from cloud coverage.
         \item Record the angle of the sun and the direction the car is facing.
         %\item Include some API to map the elevation changes of the route in detail. 
         \item Include variables from Group 3.
     \end{enumerate}
     
+\section{Change Log}
+
+\vspace{0.5cm}
+\begin{center}
+\begin{tabular}{|p{0.3\linewidth}|p{0.3\linewidth}|p{0.3\linewidth}|} 
+\hline
+Date   & Section   & Changes   \\
+\hline
+5/9/18 & 3.1 & Modified the variable groups. Included 'Vehicle Mass', Changed 'Electric Motor Consumption' to 'Electric Motor Efficiency', Changed 'Cloud Coverage' to Level of Sunlight', Changed 'Wind Resistance' to 'Air Resistance (Drag)'. Removed Electric Motor Consumption Based on Speed' and moved 'Course Altitude Change from Start to End' from Group 3 to Group 2 as it has been implemented. \\
+5/9/18 & 3.2 & Clarified the User Stories as requested by Daniel our TA. Most stories were reworded, 7 was removed and the new story 7 reflects our new requirement 4. 8 was added as a story for our partially implemented bonus goal.\\
+5/9/18 & 3.3 & Removed the original requirement 4 which pertained to testing on the new car or old race data. Added a new 4th requirement to include the map functionality which has already been implemented. Removed Gray Johnson from the list of required test users.\\
+5/9/18 & 3.5 & Changed Goal 3 to Goal 1 and reworded to reflect what has been done.  \\
+\hline
+\end{tabular}
+\end{center}
     
 
 \end{singlespace}
