@@ -1,5 +1,6 @@
 #include <string>
 #pragma warning(disable:4996)
+#pragma warning(disable:4003)
 #include <sstream>
 #include <iostream>
 #include <cctype>
@@ -19,13 +20,22 @@
 #include <wx/radiobox.h>
 #include <wx/wfstream.h>
 
-#include <string>
-
 
 #include "mathplot.h"	// The library we are using to create graphs
 #include "Sim.h"		// The file for our simulation functions
 #include "SimIDs.h"		// Contains our custom wxIDs
 
+class Field
+{
+public:
+	Field(std::string name, wxPanel *parent);
+
+	double get();
+	void set(double v);
+
+	wxTextCtrl *field;
+	wxStaticText *label;
+};
 
 class MinApp : public wxApp {
 public:
@@ -62,13 +72,14 @@ private:
 	/*
 		Input Variables
 	*/
-	wxTextCtrl *consumption, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples;
+	Field *consumption, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples;
 	wxSizer *i_sizer, *route_sizer;
 	wxRadioBox *buttonGroup;	//Radio buttons for selecting run mode
 	
 	/*
 		Output Variables
 	*/
+	Field *bestSpeed, *bestDistance;
 	wxStaticText *o_t1, *o_t2;
 	wxTextCtrl *o_v1, *o_v2;
 	wxSizer *o_sizer;
@@ -76,7 +87,7 @@ private:
 	/*
 		Graph Variables:
 	*/
-	mpFXYVector *elevationLayer, *batteryLayer, *changeLayer, *speedLayer;
+	mpFXYVector *elevationLayer, *batteryLayer, *speedLayer;
 	mpWindow *outputGraph, *outputGraph2, *elevationGraph;
 	float samples, distance;
 	std::vector<double> elevations;
@@ -88,7 +99,7 @@ private:
 	/*
 		Graph Functions:
 	*/
-	void	setGraph(mpWindow *graph, mpFXYVector *layer, std::vector<double> vectorX, std::vector<double> vectorY);
+	void	setGraph(mpWindow *graph, mpFXYVector *layer, std::vector<double> vectorX, std::vector<double> vectorY, wxColor color);
 	void	prepareGraph(mpWindow *graph);
 
 	std::vector<std::string> SaveInputForms();
