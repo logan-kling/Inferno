@@ -28,18 +28,20 @@ MinFrame::MinFrame(const wxString& title)
 
 	// Edit Menu
 	editMenu->Append(Edit_Clear, "&Clear Forms", "Empty all the form fields");
-	editMenu->Append(Edit_Run, "&Run", "Begin or end the simulation");
-	editMenu->Append(Edit_Launch_Map, "&Open Elevation Map", "Open the browser to get elevation data");
+	editMenu->Append(Edit_Run, "&Run", "Run the simulation");
+	editMenu->AppendSeparator();
 	editMenu->Append(Edit_Import, "&Import Elevation", "Import elevation data from Google");
 	menuBar->Append(editMenu, "&Edit");
 
 	// Help Menu
-	helpMenu->Append(wxID_ABOUT, "&About", "Version Info");
+	helpMenu->Append(wxID_ABOUT, "&About", "Program Info");
 	helpMenu->Append(Help_Walkthrough, "&Walkthrough", "Guide for program use");
 	menuBar->Append(helpMenu, "&Help");
 
 	SetMenuBar(menuBar);
 
+	CreateStatusBar();
+	SetStatusText("Solar Simulation");
 	// ---------------------------------------------------
 	// DUAL PANEL IMPLEMENTATION (Input/Output)
 	// ---------------------------------------------------
@@ -167,8 +169,8 @@ MinFrame::MinFrame(const wxString& title)
 	// INITIALIZE PROGRAM SIZING
 	// ---------------------------------------------------
 
-	SetMinClientSize(wxSize(600, 600));
-	SetClientSize(600, 650);
+	SetMinClientSize(wxSize(650, 650));
+	SetClientSize(650, 650);
 
 	//These items need to be hidden since we are starting on radio button 1
 	// and unfortunately initializing the radio button selection does not call
@@ -258,9 +260,16 @@ void MinFrame::HandleMainCalcs(double charge, double weight, double resistance)
 
 	tripTime->set(car->driveTime);
 	chargeTime->set(car->rechargeTime);
+	
+	// Convert from meters to kilometers
+	for (int i = 0; i < distance_list.size(); i++) {
+		distance_list.at(i) = distance_list.at(i) / 1000;
+	}
+	// We have to remove the rear element to make this fit.
+	distance_list.pop_back();
 
-	outputGraph->setGraph(xAxis, car->velocities, *wxBLUE);
-	outputGraph2->setGraph(xAxis, car->charges, *wxGREEN);
+	outputGraph->setGraph(distance_list, car->velocities, *wxBLUE);
+	outputGraph2->setGraph(distance_list, car->charges, *wxGREEN);
 
 }
 
@@ -373,12 +382,6 @@ void MinFrame::OnRun(wxCommandEvent & event)
 	}
 }
 
-// Open the Google Map webpage for the user to get elevation data from.
-void MinFrame::OnMap(wxCommandEvent& event) {
-	ShellExecute(NULL, L"open", L"file:///C\:\\Users\\tapoz\\Documents\\GitHub\\Inferno\\Capstone\ Code\\webviewCode\\route.html",
-		NULL, NULL, SW_SHOWNORMAL);
-}
-
 // When the elevation event is generated:
 // Open a file dialog to select which file to load from,
 // parse the contents and send them to in_p memeber function:
@@ -438,6 +441,7 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	samples = sampVal;
 	distance = distVal;
 	elevations = vectorY;
+	distance_list = vectorX;
 
 	elevationGraph->setGraph(vectorX, vectorY, *wxBLUE);
 	//setGraph(elevationGraph, elevationLayer, vectorX, vectorY, *wxBLUE);

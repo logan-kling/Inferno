@@ -9,5 +9,6 @@
     <ClInclude Include="Sim.h" />
     <ClInclude Include="SimIDs.h" />
     <ClInclude Include="mathplot.h" />
+    <ClInclude Include="Source.h" />
   </ItemGroup>
 </Project>
