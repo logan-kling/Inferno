@@ -173,6 +173,8 @@ MinFrame::MinFrame(const wxString& title)
 	//These items need to be hidden since we are starting on radio button 1
 	// and unfortunately initializing the radio button selection does not call
 	// our OnRadioBoxChange!
+	routeDistance->field->SetEditable(0);
+	routeSamples->field->SetEditable(0);
 	speed->hide();
 	elevationGraph->hide();
 	outputGraph2->hide();
