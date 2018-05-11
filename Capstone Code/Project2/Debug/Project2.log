@@ -2,11 +2,11 @@
   Source.cpp
 c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(132): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
 c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(163): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(394): warning C4018: '<': signed/unsigned mismatch
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(408): warning C4129: ':': unrecognized character escape sequence
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(408): warning C4129: ' ': unrecognized character escape sequence
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(608): warning C4927: illegal conversion; more than one user-defined conversion has been implicitly applied
-  c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(608): note: while calling the constructor 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(const _Elem *const )'
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(362): warning C4018: '<': signed/unsigned mismatch
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(376): warning C4129: ':': unrecognized character escape sequence
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(376): warning C4129: ' ': unrecognized character escape sequence
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(576): warning C4927: illegal conversion; more than one user-defined conversion has been implicitly applied
+  c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(576): note: while calling the constructor 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(const _Elem *const )'
           with
           [
               _Elem=char

@@ -184,24 +184,7 @@ MinFrame::MinFrame(const wxString& title)
 	out_p->Layout();
 }
 
-void MinFrame::prepareGraph(mpWindow * graph)
-{
-	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);//Set the font for the graph
-	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);		//Label the x axis
-	mpScaleY* yaxis = new mpScaleY(wxT("Y"), mpALIGN_LEFT, true);					//Label the y axis
-	xaxis->SetFont(graphFont);														//Set font for x axis
-	yaxis->SetFont(graphFont);														//Set font for y axis
-	xaxis->SetDrawOutsideMargins(false);											//Dont't draw the axis outside margins
-	yaxis->SetDrawOutsideMargins(false);
-	graph->AddLayer(xaxis);												//add the axis to the graph
-	graph->AddLayer(yaxis);
-	graph->EnableDoubleBuffer(true);										//reduces flicker when graph is drawn
-	graph->SetMPScrollbars(true);											//adds scroll bars if the graph window is too small
-}
-
-
 // This is basically the 'main()' function, program starts here
-
 bool MinApp::OnInit() 
 {
 	MinFrame* frame = new MinFrame("SolarSim");
@@ -249,21 +232,6 @@ void MinFrame::LoadInputForms(std::vector<std::string> loaded)
 	efficiency->set(loaded[8]);
 	horsepower->set(loaded[9]);
 
-}
-
-
-/*	Use two vectors of x and y coords to make a plot and add it to the graph
-	in the inputPannel */
-void MinFrame::setGraph(mpWindow *graph, mpFXYVector *layer, std::vector<double> vectorX, std::vector<double> vectorY, wxColor color)
-{
-	layer->SetData(vectorX, vectorY);			//Adds the x and y coords to the layer
-	layer->SetContinuity(true);				//Draw lines in between the points
-	wxPen vectorpen(color, 5, wxPENSTYLE_SOLID);	//Set line size and color
-	layer->SetPen(vectorpen);					//gives the pen to the layer
-	layer->SetDrawOutsideMargins(false);		//Makes sure the graph isnt drawn outside of the graph bounds
-	graph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
-	graph->AddLayer(layer);			//Adds the plotted x/y coordinates to our graph
-	graph->Fit();							//Zoom the graph properly after everything has been added
 }
 
 void MinFrame::SetElvFields(float distance, float samples)
