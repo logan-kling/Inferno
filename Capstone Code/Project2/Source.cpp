@@ -40,8 +40,10 @@ MinFrame::MinFrame(const wxString& title)
 
 	SetMenuBar(menuBar);
 
+	// Status bar at the bottom of the window, shows descriptions of some mouse-over items
 	CreateStatusBar();
 	SetStatusText("Solar Simulation");
+	
 	// ---------------------------------------------------
 	// DUAL PANEL IMPLEMENTATION (Input/Output)
 	// ---------------------------------------------------
@@ -75,16 +77,22 @@ MinFrame::MinFrame(const wxString& title)
 
 
 	/*	Create the form fields	*/
-	i_sizer = new wxStaticBoxSizer(wxVERTICAL, in_p, "Input");
-	course_sizer = new wxGridSizer(2, 5, 10);
+	i_sizer = new wxStaticBoxSizer(wxVERTICAL, in_p, "Input");	// The main sizer for our input panel
+	course_sizer = new wxGridSizer(2, 5, 10);					// Sizer to hold variables specific to 'Get Course'
+	route_sizer = new wxGridSizer(2, 5, 5);						// Sizer to put the two elevation variables side by side
+
 	consumption = new Field("Motor Consumption:", in_p);
 	weight = new Field("Weight (kg):", in_p);
 	resistance = new Field("Vehicle Drag (const):", in_p);
 	charge = new Field("Charge (WattHours):", in_p);
 	speed = new Field("Speed (km/h):", in_p);
 	incline = new Field("Incline:", in_p);
+
+	// These inputs are set by the elevation import and should not be user modified
 	routeDistance = new Field("Route Distance (meters):", in_p);
 	routeSamples = new Field("Number of samples:", in_p);
+	routeDistance->asizer(route_sizer);
+	routeSamples->asizer(route_sizer);
 
 
 	// These inputs are only used in 'Get Course' so they are in their own sizer
@@ -124,10 +132,7 @@ MinFrame::MinFrame(const wxString& title)
 	//Add the course sizer
 	i_sizer->Add(course_sizer, 0, wxALL, 10);
 
-	elevationGraph->wrapper->Add(routeDistance->label);
-	elevationGraph->wrapper->Add(routeDistance->field, 0, wxALL, 10);
-	elevationGraph->wrapper->Add(routeSamples->label);
-	elevationGraph->wrapper->Add(routeSamples->field, 0, wxALL, 10);
+	elevationGraph->wrapper->Add(route_sizer);
 
 	i_sizer->Add(elevationGraph->wrapper, 0, wxEXPAND, 10);
 
@@ -260,13 +265,6 @@ void MinFrame::HandleMainCalcs(double charge, double weight, double resistance)
 
 	tripTime->set(car->driveTime);
 	chargeTime->set(car->rechargeTime);
-	
-	// Convert from meters to kilometers
-	for (int i = 0; i < distance_list.size(); i++) {
-		distance_list.at(i) = distance_list.at(i) / 1000;
-	}
-	// We have to remove the rear element to make this fit.
-	distance_list.pop_back();
 
 	outputGraph->setGraph(distance_list, car->velocities, *wxBLUE);
 	outputGraph2->setGraph(distance_list, car->charges, *wxGREEN);
@@ -442,6 +440,13 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	distance = distVal;
 	elevations = vectorY;
 	distance_list = vectorX;
+
+	// Convert from meters to kilometers
+	for (int i = 0; i < distance_list.size(); i++) {
+		distance_list.at(i) = distance_list.at(i) / 1000;
+	}
+	// We have to remove the rear element to make this fit.
+	distance_list.pop_back();
 
 	elevationGraph->setGraph(vectorX, vectorY, *wxBLUE);
 	//setGraph(elevationGraph, elevationLayer, vectorX, vectorY, *wxBLUE);

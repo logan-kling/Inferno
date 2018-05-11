@@ -147,7 +147,7 @@ private:
 	Field *consumption, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples; // Used by multiple run modes
 	Field *solarInput, *solarStrength, *efficiency, *horsepower; // Specific to GetCourse
 	wxSizer *i_sizer;
-	wxGridSizer *course_sizer;
+	wxGridSizer *course_sizer, *route_sizer;
 	wxRadioBox *buttonGroup;	// Radio buttons for selecting run mode
 	
 	/*
