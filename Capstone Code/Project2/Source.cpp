@@ -74,14 +74,26 @@ MinFrame::MinFrame(const wxString& title)
 
 	/*	Create the form fields	*/
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, in_p, "Input");
+	course_sizer = new wxGridSizer(2, 5, 10);
 	consumption = new Field("Motor Consumption:", in_p);
 	weight = new Field("Weight (kg):", in_p);
 	resistance = new Field("Vehicle Drag (const):", in_p);
-	charge = new Field("Charge (Watthours):", in_p);
+	charge = new Field("Charge (WattHours):", in_p);
 	speed = new Field("Speed (km/h):", in_p);
 	incline = new Field("Incline:", in_p);
 	routeDistance = new Field("Route Distance (meters):", in_p);
 	routeSamples = new Field("Number of samples:", in_p);
+
+
+	// These inputs are only used in 'Get Course' so they are in their own sizer
+	solarInput = new Field("Solar input (WattHours):", in_p); 
+	solarStrength = new Field("Solar Strength (% 1.00 - 0.0):", in_p);
+	efficiency = new Field("Motor Efficiency (% 1.00 - 0.0):", in_p);
+	horsepower = new Field("Motor Horsepower (Hp):", in_p);
+	solarInput->asizer(course_sizer);
+	solarStrength->asizer(course_sizer);
+	horsepower->asizer(course_sizer);
+	efficiency->asizer(course_sizer);
 
 	/*	Create the radio button selector and set it  */
 	buttonGroup = new wxRadioBox(in_p, wxID_RADIOBOX, "Run Mode:", wxDefaultPosition, wxDefaultSize, choices, 3, wxVERTICAL);
@@ -107,6 +119,9 @@ MinFrame::MinFrame(const wxString& title)
 	i_sizer->Add(incline->label);
 	i_sizer->Add(incline->field, 0, wxALL, 10);
 
+	//Add the course sizer
+	i_sizer->Add(course_sizer, 0, wxALL, 10);
+
 	elevationGraph->wrapper->Add(routeDistance->label);
 	elevationGraph->wrapper->Add(routeDistance->field, 0, wxALL, 10);
 	elevationGraph->wrapper->Add(routeSamples->label);
@@ -123,16 +138,23 @@ MinFrame::MinFrame(const wxString& title)
 
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, out_p, "Output");
 	bestSpeed = new Field("Best Speed(km/h):", out_p);
-	bestDistance = new Field("Distance(Kilometers):", out_p);
+	bestDistance = new Field("Distance(meters):", out_p);
+	tripTime = new Field("Total Trip Time(hours):", out_p);
+	chargeTime = new Field("Time Spent Recharging(hours):", out_p);
 
 	//Assign a graph element to the outputGraph variable
 	outputGraph = new Graph("Speed", "X: Distance(km), Y: Speed(km/h)", out_p);
-	outputGraph2 = new Graph("Battery", "X: Distance(km), Y: Charge(Watthours)", out_p);
+	outputGraph2 = new Graph("Battery", "X: Distance(km), Y: Charge(KWh)", out_p);
 
 	o_sizer->Add(bestSpeed->label, 0, wxALL, 10);
 	o_sizer->Add(bestSpeed->field, 0, wxALL, 10);
 	o_sizer->Add(bestDistance->label, 0, wxALL, 10);
 	o_sizer->Add(bestDistance->field, 0, wxALL, 10);
+
+	o_sizer->Add(tripTime->label, 0, wxALL, 10);
+	o_sizer->Add(tripTime->field, 0, wxALL, 10);
+	o_sizer->Add(chargeTime->label, 0, wxALL, 10);
+	o_sizer->Add(chargeTime->field, 0, wxALL, 10);
 
 	// Add the graph element
 	o_sizer->Add(outputGraph->wrapper, 1, wxEXPAND);
@@ -141,9 +163,12 @@ MinFrame::MinFrame(const wxString& title)
 	out_p->SetSizer(o_sizer, wxEXPAND);
 	o_sizer->SetSizeHints(out_p);
 
+	// ---------------------------------------------------
+	// INITIALIZE PROGRAM SIZING
+	// ---------------------------------------------------
+
 	SetMinClientSize(wxSize(600, 600));
 	SetClientSize(600, 650);
-
 
 	//These items need to be hidden since we are starting on radio button 1
 	// and unfortunately initializing the radio button selection does not call
@@ -151,6 +176,9 @@ MinFrame::MinFrame(const wxString& title)
 	speed->hide();
 	elevationGraph->hide();
 	outputGraph2->hide();
+	tripTime->hide();
+	chargeTime->hide();
+	i_sizer->Hide(course_sizer, true);
 
 	in_p->Layout();
 	out_p->Layout();
@@ -193,11 +221,16 @@ std::vector<std::string> MinFrame::SaveInputForms()
 {
 	std::vector<std::string> toSave;
 	toSave.clear();
-	toSave.push_back(std::string(charge->field->GetValue()));
-	toSave.push_back(std::string(consumption->field->GetValue()));
-	toSave.push_back(std::string(resistance->field->GetValue()));
-	toSave.push_back(std::string(speed->field->GetValue()));
-	toSave.push_back(std::string(weight->field->GetValue()));
+	toSave.push_back(consumption->gets());
+	toSave.push_back(weight->gets());
+	toSave.push_back(resistance->gets());
+	toSave.push_back(charge->gets());
+	toSave.push_back(incline->gets());
+	toSave.push_back(speed->gets());
+	toSave.push_back(solarInput->gets());
+	toSave.push_back(solarStrength->gets());
+	toSave.push_back(efficiency->gets());
+	toSave.push_back(horsepower->gets());
 	return toSave;
 }
 
@@ -205,11 +238,17 @@ std::vector<std::string> MinFrame::SaveInputForms()
 // If this function is changed, make sure it matches InputPanel::SaveInputForms()
 void MinFrame::LoadInputForms(std::vector<std::string> loaded)
 {
-	charge->field->SetValue( wxString(loaded[0]) );
-	consumption->field->SetValue( wxString(loaded[1]) );
-	resistance->field->SetValue( wxString(loaded[2]) );
-	speed->field->SetValue( wxString(loaded[3]) );
-	weight->field->SetValue( wxString(loaded[4]) );
+	consumption->set(loaded[0]);
+	weight->set(loaded[1]);
+	resistance->set(loaded[2]);
+	charge->set(loaded[3]);
+	incline->set(loaded[4]);
+	speed->set(loaded[5]);
+	solarInput->set(loaded[6]);
+	solarStrength->set(loaded[7]);
+	efficiency->set(loaded[8]);
+	horsepower->set(loaded[9]);
+
 }
 
 
@@ -233,47 +272,25 @@ void MinFrame::SetElvFields(float distance, float samples)
 	routeSamples->field->SetValue(wxString(std::to_string(samples)));
 }
 
-void MinFrame::SetLoadedValues(std::vector<double> loadvec)
-{
-	consumption->field->SetValue(wxString(std::to_string(loadvec[0])));
-	weight->field->SetValue(wxString(std::to_string(loadvec[1])));
-	resistance->field->SetValue(wxString(std::to_string(loadvec[2])));
-	charge->field->SetValue(wxString(std::to_string(loadvec[3])));
-	incline->field->SetValue(wxString(std::to_string(loadvec[4])));
-	speed->field->SetValue(wxString(std::to_string(loadvec[5])));
-}
-
 
 void MinFrame::HandleMainCalcs(double charge, double weight, double resistance)
 {
 	MyCar *car = new MyCar();
+	car->solarStrength = solarStrength->get();
+	car->wattPower = HpToWatt(horsepower->get());
+	car->motorEfficiency = efficiency->get();
+	car->solarWattsPeak = solarInput->get();
 	car->doMainCalcs(charge, weight, resistance, distance, samples, elevations);
 	std::vector<double> xAxis;
 	for (int i = 1; i <= samples-1; i++) {
 		xAxis.push_back(i);
 	}
 
-	//setGraph(outputGraph, speedLayer, xAxis, car->velocities, *wxBLUE);
-	//setGraph(outputGraph2, batteryLayer, xAxis, car->charges, *wxGREEN);
+	tripTime->set(car->driveTime);
+	chargeTime->set(car->rechargeTime);
+
 	outputGraph->setGraph(xAxis, car->velocities, *wxBLUE);
 	outputGraph2->setGraph(xAxis, car->charges, *wxGREEN);
-
-	/*speedLayer->SetData(xAxis, car->velocities);
-	speedLayer->SetContinuity(true);
-	wxPen vectorpen(*wxBLUE, 5, wxPENSTYLE_SOLID);
-	speedLayer->SetPen(vectorpen);
-	speedLayer->SetDrawOutsideMargins(true);
-	outputGraph->SetMargins(10, 10, 30, 60);
-	outputGraph->AddLayer(speedLayer);
-	outputGraph->Fit();*/
-
-	/*batteryLayer->SetData(xAxis, car->charges);
-	batteryLayer->SetContinuity(true);
-	wxPen vectorpen2(*wxGREEN, 5, wxPENSTYLE_SOLID);
-	batteryLayer->SetPen(vectorpen2);
-	batteryLayer->SetDrawOutsideMargins(true);
-	outputGraph2->AddLayer(batteryLayer);
-	outputGraph2->Fit();*/
 
 }
 
@@ -290,12 +307,14 @@ void MinFrame::OnRadioBoxChange(wxCommandEvent& event)
 		consumption->show();
 		speed->show();
 		incline->show();
+		i_sizer->Hide(course_sizer, true);
 
 		bestSpeed->hide();
 		bestDistance->show();
+		tripTime->hide();
+		chargeTime->hide();
 		outputGraph->hide();
 		outputGraph2->hide();
-		//o_sizer->Hide(outputGraph2, true);
 
 		i_sizer->Layout();
 		o_sizer->Layout();
@@ -306,12 +325,14 @@ void MinFrame::OnRadioBoxChange(wxCommandEvent& event)
 		consumption->show();
 		speed->hide();
 		incline->show();
+		i_sizer->Hide(course_sizer, true);
 
 		bestSpeed->show();
 		bestDistance->show();
+		tripTime->hide();
+		chargeTime->hide();
 		outputGraph->show();
 		outputGraph2->hide();
-		//o_sizer->Hide(outputGraph2, true);
 
 		i_sizer->Layout();
 		o_sizer->Layout();
@@ -321,12 +342,14 @@ void MinFrame::OnRadioBoxChange(wxCommandEvent& event)
 		consumption->hide();
 		speed->hide();
 		incline->hide();
+		i_sizer->Show(course_sizer, true);
 
 		bestSpeed->hide();
 		bestDistance->hide();
+		tripTime->show();
+		chargeTime->show();
 		outputGraph->show();
 		outputGraph2->show();
-		//o_sizer->Show(outputGraph2, true);
 
 		i_sizer->Layout();
 		o_sizer->Layout();
@@ -431,14 +454,14 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	//wxMessageBox(wxString(std::to_string(distStr)));
 	//wxMessageBox(wxString(std::to_string(sampStr)));
 	SetElvFields(distVal, sampVal);
-	
+	double secDist = distVal / sampVal;
 	/* ### This section reads in all the elevation points in the file ### */
 	while (ss >> i) {
 		vectorY.push_back(i);
 		if (ss.peek() == ',' || ss.peek() == ' ') {
 			ss.ignore();
 		}
-		vectorX.push_back(j);
+		vectorX.push_back(j * secDist);
 		j++;
 	}
 	
@@ -453,11 +476,11 @@ void MinFrame::OnImport(wxCommandEvent & event)
 
 void MinFrame::OnClear(wxCommandEvent & event)
 {
-	std::vector<double> zeroVec;
+	std::vector<std::string> zeroVec;
 	for (int i = 0; i < 10; i++) {
-		zeroVec.push_back(0.0);
+		zeroVec.push_back(std::to_string(0.0));
 	}
-	SetLoadedValues(zeroVec);
+	LoadInputForms(zeroVec);
 }
 
 // When the OnSave event is generated:
@@ -532,7 +555,12 @@ void MinFrame::OnLoad(wxCommandEvent & event)
 			);
 	}
 
-	LoadInputForms(loaded);
+	if (loaded.size() < 10) {
+		wxMessageBox(wxT("This load file was not valid!"));
+	}
+	else {
+		LoadInputForms(loaded);
+	}
 		
 }
 
@@ -575,6 +603,11 @@ double Field::get()
 	return atof(field->GetValue());
 }
 
+std::string Field::gets()
+{
+	return field->GetValue();
+}
+
 void Field::set(double v)
 {
 	field->SetValue(std::to_string(v));
@@ -583,6 +616,14 @@ void Field::set(double v)
 void Field::set(std::string s)
 {
 	field->SetValue(wxString(s));
+}
+
+void Field::asizer(wxGridSizer *siz)
+{
+	wxBoxSizer *box = new wxBoxSizer(wxVERTICAL);
+	box->Add(label);
+	box->Add(field);
+	siz->Add(box);
 }
 
 void Field::hide()
@@ -617,14 +658,19 @@ void Graph::updateText(std::string new_legend)
 
 void Graph::setGraph(std::vector<double> vectorX, std::vector<double> vectorY, wxColor color)
 {
+	/* These two steps prevent the graph from being improperly deleted when you close the program after multiple runs */
+	graph->DelAllLayers(false, true);			//Delete everything but the graph
+	prepareGraph();								//Re-prepare the graph
+
+
 	vector->SetData(vectorX, vectorY);			//Adds the x and y coords to the layer
 	vector->SetContinuity(true);				//Draw lines in between the points
 	wxPen vectorpen(color, 5, wxPENSTYLE_SOLID);	//Set line size and color
 	vector->SetPen(vectorpen);					//gives the pen to the layer
 	vector->SetDrawOutsideMargins(false);		//Makes sure the graph isnt drawn outside of the graph bounds
-	graph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
-	graph->AddLayer(vector);			//Adds the plotted x/y coordinates to our graph
-	graph->Fit();							//Zoom the graph properly after everything has been added
+	graph->SetMargins(10, 10, 30, 60);			//Sets our margins, top->right->bottom->left
+	graph->AddLayer(vector);					//Adds the plotted x/y coordinates to our graph
+	graph->Fit();								//Zoom the graph properly after everything has been added
 }
 
 void Graph::prepareGraph()
@@ -636,10 +682,10 @@ void Graph::prepareGraph()
 	yaxis->SetFont(graphFont);														//Set font for y axis
 	xaxis->SetDrawOutsideMargins(false);											//Dont't draw the axis outside margins
 	yaxis->SetDrawOutsideMargins(false);
-	graph->AddLayer(xaxis);												//add the axis to the graph
+	graph->AddLayer(xaxis);															//add the axis to the graph
 	graph->AddLayer(yaxis);
-	graph->EnableDoubleBuffer(true);										//reduces flicker when graph is drawn
-	graph->SetMPScrollbars(true);											//adds scroll bars if the graph window is too small
+	graph->EnableDoubleBuffer(true);												//reduces flicker when graph is drawn
+	graph->SetMPScrollbars(true);													//adds scroll bars if the graph window is too small
 }
 
 void Graph::hide()

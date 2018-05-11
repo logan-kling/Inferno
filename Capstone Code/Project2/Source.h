@@ -25,40 +25,83 @@
 #include "Sim.h"		// The file for our simulation functions
 #include "SimIDs.h"		// Contains our custom wxIDs
 
+
+/*
+This class is intended as a more user friendly way of pairing a text box with a label.
+Now they can be hidden and shown together.
+*/
 class Field
 {
 public:
+
+	/*
+	@param name: the name you give to this Field
+	@param parent: the wxPanel this Field will be contained in
+	*/
 	Field(std::string name, wxPanel *parent);
 
+	// Return the field value as a double
 	double get();
+
+	// Return the field value as a string
+	std::string gets();
+
+	// Set the field value from a double
 	void set(double v);
+
+	// Set the field value from a string
 	void set(std::string s);
 
+	//For adding specifically to a grid sizer, this keeps the field and label together.
+	void asizer(wxGridSizer *siz);
+
+	// Hide the element
 	void hide();
+
+	// Show the element
 	void show();
 
-	wxPanel *parent_ref;
-	wxTextCtrl *field;
-	wxStaticText *label;
+	
+	wxPanel *parent_ref;		// Reference the parent so we can get the holding sizer from inside this class
+	wxTextCtrl *field;			// The text field
+	wxStaticText *label;		// The label for the text field
 };
 
+/*
+This class is intended as a more user friendly way of handling graphs.
+This lets them keep a label and a description and easily be shown/hidden and set
+*/
 class Graph
 {
 public:
+	
+	/*
+	@param name: the name you want to give this graph (can not be changed later)
+	@param description: How this graph should be read, We use "X: 'units of x', Y: 'units of y'" (can be changed later)
+	@param parent: the wxPanel this Graph will be contained in
+	*/
 	Graph(std::string name, std::string description, wxPanel *parent);
 
+	// Update the description of this graph (name can not be changed)
 	void updateText(std::string new_legend);
+
+	// Set the graph using x and y vectors and the color to draw the graph in
 	void setGraph(std::vector<double> vectorX, std::vector<double> vectorY, wxColor color);
+
+	// Prepare the graph, set up the X and Y axis, margins, etc
 	void prepareGraph();
 
+	// Hide the element
 	void hide();
+
+	// Show the element
 	void show();
 
-	wxPanel *parent_ref;
-	wxStaticBoxSizer* wrapper;
-	wxStaticText* legend;
-	mpFXYVector* vector;
-	mpWindow* graph;
+	wxPanel *parent_ref;		// Reference the parent so we can get the holding sizer from inside this class
+	wxStaticBoxSizer* wrapper;	// A sizer to keep everything in and provide a name to the graph
+	wxStaticText* legend;		// Description of the graph
+	mpFXYVector* vector;		// The vector that will be drawn on the graph
+	mpWindow* graph;			// The graph element
 };
 
 class MinApp : public wxApp {
@@ -96,8 +139,10 @@ private:
 	/*
 		Input Variables
 	*/
-	Field *consumption, *efficiency, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples;
-	wxSizer *i_sizer, *route_sizer;
+	Field *consumption, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples;
+	Field *solarInput, *solarStrength, *efficiency, *horsepower;
+	wxSizer *i_sizer;
+	wxGridSizer *course_sizer;
 	wxRadioBox *buttonGroup;	//Radio buttons for selecting run mode
 	
 	/*
@@ -127,7 +172,6 @@ private:
 	std::vector<std::string> SaveInputForms();
 	void	LoadInputForms(std::vector<std::string> loaded);
 	void	SetElvFields(float distance, float samples);
-	void    SetLoadedValues(std::vector<double> loadvec);
 
 	void	HandleMainCalcs(double charge, double weight, double resistance);
 	

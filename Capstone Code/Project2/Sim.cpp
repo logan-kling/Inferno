@@ -104,11 +104,9 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 	maxBatteryCharge = charge;
 	batteryCharge = charge;
 	mass = weight;
-	motorEfficiency = 0.95;
 	dragCoef = drag;
 	crossSec = 1.;
-	tripTime = 0.;
-	solarWattsPeak = 300.; // (Watt) 0.3kW, this would be an input of 0.3kW per hour or 0.3kWh
+	driveTime = 0.;
 	// solarSystemEfficiency is default to 80% so we will leave it at that
 	// This means about 80% of whatever sunlight we get is lost in the system
 	// solarStrength is set to 100%, this is the ammount of sunlight hitting the solar panels
@@ -170,9 +168,7 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 		charges.push_back(batteryCharge);
 		velocities.push_back(velChoose[chosen]);
 
-		totalTime += secTime;
-		//changes is just for testing purposes
-		//changes.push_back(i);
+		driveTime += secTime;
 	}
 }
 
@@ -180,6 +176,7 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 	until the current charge reaches the minimum charge. */
 void MyCar::WaitForRecharge() {
 	double neededCharge = (maxBatteryCharge * targetCharge) - batteryCharge;
+	rechargeTime += neededCharge / (solarWattsPeak * solarSystemEfficiency *  solarStrength);
 	batteryCharge = maxBatteryCharge * targetCharge;
 }
 
@@ -191,9 +188,12 @@ double MyCar::bestVelocity(float roadAngle) {
 double MyCar::wheelEnergy(double velocity, double distance, float roadAngle) {
 	double energy;
 
+	//CONVERT KM/H to M/S
+	double velmps = (velocity / 60 / 60) * 1000;
+
 	// The two zeros near the end are for rolling mass and acceleration which we are neglecting for now (will be updated later)
 	energy = (1. / 3600.) * (mass * GRAVITY * (rollingResist * cos(roadAngle) + sin(roadAngle)) + 
-		0.0386 * (AIR_DENSITY * dragCoef * crossSec * pow(velocity, 2.)) + (mass + 0.)*0.) * distance;
+		0.0386 * (AIR_DENSITY * dragCoef * crossSec * pow(velmps, 2.)) + (mass + 0.)*0.) * distance;
 	
 	return energy;
 }

@@ -1,8 +1,16 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Project2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿E:\VisualStudioEnterprise2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Project2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Source.cpp
-c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(117): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
-c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(141): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
-c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(371): warning C4018: '<': signed/unsigned mismatch
-c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(385): warning C4129: ':': unrecognized character escape sequence
-c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(385): warning C4129: ' ': unrecognized character escape sequence
-  Project2.vcxproj -> C:\Users\tapoz\OneDrive\Documents\GitHub\Inferno\Capstone Code\Debug\CapstoneBase.exe
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(132): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(163): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(394): warning C4018: '<': signed/unsigned mismatch
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(408): warning C4129: ':': unrecognized character escape sequence
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(408): warning C4129: ' ': unrecognized character escape sequence
+c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(608): warning C4927: illegal conversion; more than one user-defined conversion has been implicitly applied
+  c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(608): note: while calling the constructor 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(const _Elem *const )'
+          with
+          [
+              _Elem=char
+          ]
+  e:\visualstudioenterprise2017\vc\tools\msvc\14.11.25503\include\xstring(1975): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string'
+  Project2.vcxproj -> C:\Users\tapoz\Documents\GitHub\Inferno\Capstone Code\Debug\CapstoneBase.exe
+  Project2.vcxproj -> C:\Users\tapoz\Documents\GitHub\Inferno\Capstone Code\Debug\CapstoneBase.pdb (Partial PDB)
