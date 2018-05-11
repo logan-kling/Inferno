@@ -23,9 +23,9 @@ public:
 	std::vector<double> velocities;
 	std::vector<double> charges;
 
-	std::vector<double> changes;
-
-	double	wattPower = 149140;	// "horsepower" in watts (Watt)
+	double	driveTime = 0.0;
+	double	rechargeTime = 0.0;
+	double	wattPower = 149140.0;	// "horsepower" in watts (Watt)
 	double	maxBatteryCharge;	// This is the maximum ammount the battery can be charged to in KilowattHours (KWh)
 	double	batteryCharge;		// In KilowattHours	(KWh)
 	double	targetCharge = 0.90;		// (%) When the battery hits minimum, the simulation should wait until the battery is recharged to this point
@@ -42,11 +42,9 @@ public:
 
 	/*This is the MAXIMUM input with perfect sunlight conditions to the
 	 *	car from ALL the solar pannels		*/
-	double solarWattsPeak;			//In Watts			(Watt)
-	double solarSystemEfficiency = 0.80;   //in percent		(%)
+	double solarWattsPeak = 3000;			//In Watts			(Watt)
+	double solarSystemEfficiency = 0.80;   //in percent		(%) This is how much energy makes it into the batteries from the panels
 	double solarStrength = 1.0;			// (%) this is how much sunlight is actually hitting the panels
-
-	double tripTime;
 };
 
 float testIToO(float in1, float in2, float in3);
