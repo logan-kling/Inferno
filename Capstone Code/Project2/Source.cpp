@@ -35,7 +35,7 @@ MinFrame::MinFrame(const wxString& title)
 
 	// Help Menu
 	helpMenu->Append(wxID_ABOUT, "&About", "Version Info");
-	helpMenu->Append(wxID_ANY, "&Walkthrough", "Guide for program use");
+	helpMenu->Append(Help_Walkthrough, "&Walkthrough", "Guide for program use");
 	menuBar->Append(helpMenu, "&Help");
 
 	SetMenuBar(menuBar);
@@ -64,7 +64,7 @@ MinFrame::MinFrame(const wxString& title)
 	choices.Add("Get Course");
 
 	/*	Create and prepare elevation graph	*/
-	elevationLayer = new mpFXYVector(_("Vector"));
+	elevationLayer = new mpFXYVector(_("Elevation"));
 	elevationGraph = new mpWindow(in_p, -1, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
 	prepareGraph(elevationGraph);
 
@@ -126,37 +126,33 @@ MinFrame::MinFrame(const wxString& title)
 	// ---------------------------------------------------
 
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, out_p, "Output");
-	o_t1 = new wxStaticText(out_p, wxID_ANY, "Best Speed:");
-	o_v1 = new wxTextCtrl(out_p, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
-	o_t2 = new wxStaticText(out_p, wxID_ANY, "Distance:");
-	o_v2 = new wxTextCtrl(out_p, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	bestSpeed = new Field("Best Speed:", out_p);
+	bestDistance = new Field("Distance:", out_p);
 
 	//Assign a graph element to the outputGraph variable
 	speedLayer = new mpFXYVector(_("Speed"));
 	batteryLayer = new mpFXYVector(_("Battery"));
 	outputGraph = new mpWindow(out_p, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
 	outputGraph2 = new mpWindow(out_p, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
+	prepareGraph(outputGraph);
 	prepareGraph(outputGraph2);
 
-	o_sizer->Add(o_t1, 0, wxALL, 10);
-	o_sizer->Add(o_v1, 0, wxALL, 10);
-	o_sizer->Add(o_t2, 0, wxALL, 10);
-	o_sizer->Add(o_v2, 0, wxALL, 10);
+	o_sizer->Add(bestSpeed->label, 0, wxALL, 10);
+	o_sizer->Add(bestSpeed->field, 0, wxALL, 10);
+	o_sizer->Add(bestDistance->label, 0, wxALL, 10);
+	o_sizer->Add(bestDistance->field, 0, wxALL, 10);
 
 	// Add the graph element
-	o_sizer->Add(
-		outputGraph,
-		1,				// Yes stretch
-		wxEXPAND);
+	o_sizer->Add(outputGraph, 1, wxEXPAND);
 	o_sizer->Add(outputGraph2, 1, wxEXPAND);
 
 	out_p->SetSizer(o_sizer, wxEXPAND);
 	o_sizer->SetSizeHints(out_p);
 
-	Layout();
-
 	SetMinClientSize(wxSize(600, 600));
 	SetClientSize(600, 650);
+
+	Layout();
 }
 
 void MinFrame::prepareGraph(mpWindow * graph)
@@ -282,34 +278,62 @@ void MinFrame::HandleMainCalcs(double charge, double weight, double resistance)
 
 /* This Function looks at the radio button box in InputPanel and is called when
 *  that changes. 
-*  When called, depending on the option it should change which simulation function gets run.
+*  When called, depending on the option it should change which simulation function 
+*  gets run and which fields are displayed.
 */
 void MinFrame::OnRadioBoxChange(wxCommandEvent& event)
 {
 	if (buttonGroup->GetString(event.GetSelection()) == "Get Distance") {
 		i_sizer->Hide(route_sizer, true);
+		i_sizer->Show(consumption->label, true);
+		i_sizer->Show(consumption->field, true);
 		i_sizer->Show(speed->label, true);
 		i_sizer->Show(speed->field, true);
 		i_sizer->Show(incline->label, true);
 		i_sizer->Show(incline->field, true);
-		Layout();
+
+		o_sizer->Hide(bestSpeed->label, true);
+		o_sizer->Hide(bestSpeed->field, true);
+		o_sizer->Hide(outputGraph, true);
+		o_sizer->Hide(outputGraph2, true);
+
+		i_sizer->Layout();
+		o_sizer->Layout();
 		
 	}
 	else if (buttonGroup->GetString(event.GetSelection()) == "Get Best Speed") {
 		i_sizer->Hide(route_sizer, true);
+		i_sizer->Show(consumption->label, true);
+		i_sizer->Show(consumption->field, true);
 		i_sizer->Hide(speed->label, true);
 		i_sizer->Hide(speed->field, true);
 		i_sizer->Show(incline->label, true);
 		i_sizer->Show(incline->field, true);
-		Layout();
+
+		o_sizer->Show(bestSpeed->label, true);
+		o_sizer->Show(bestSpeed->field, true);
+		o_sizer->Show(outputGraph, true);
+		o_sizer->Hide(outputGraph2, true);
+
+		i_sizer->Layout();
+		o_sizer->Layout();
 	}
 	else {
 		i_sizer->Show(route_sizer, true);
+		i_sizer->Hide(consumption->label, true);
+		i_sizer->Hide(consumption->field, true);
 		i_sizer->Hide(speed->label, true);
 		i_sizer->Hide(speed->field, true);
 		i_sizer->Hide(incline->label, true);
 		i_sizer->Hide(incline->field, true);
-		Layout();
+
+		o_sizer->Hide(bestSpeed->label, true);
+		o_sizer->Hide(bestSpeed->field, true);
+		o_sizer->Show(outputGraph, true);
+		o_sizer->Show(outputGraph2, true);
+
+		i_sizer->Layout();
+		o_sizer->Layout();
 	}
 }
 
@@ -320,7 +344,7 @@ void MinFrame::OnRadioBoxChange(wxCommandEvent& event)
 void MinFrame::OnRun(wxCommandEvent & event)
 {
 	//setspeedfield(testmiles(in_p->getconsumption(), in_p->getweight()));
-	if (buttonGroup->GetString(event.GetSelection()) == "Get Distance") {
+	if (buttonGroup->GetSelection() == 0) {
 		bestSpeed->set(0);
 		bestDistance->set((getDistance(charge->get(),
 			consumption->get(),
@@ -329,7 +353,7 @@ void MinFrame::OnRun(wxCommandEvent & event)
 			speed->get(),
 			resistance->get())));
 	}
-	else if (buttonGroup->GetString(event.GetSelection()) == "Get Best Speed") {
+	else if (buttonGroup->GetSelection() == 1) {
 		std::vector<double> speeds = getBestSpeed(consumption->get(),
 			incline->get(),
 			weight->get(),
@@ -524,10 +548,16 @@ void MinFrame::OnAbout(wxCommandEvent & event)
 	wxMessageBox(wxT("Solar Car Simulation\n 2018 Senior Capstone\n Dennie Devito, Logan Kling, and Dakota Zaengle"), wxT("About"), wxICON_INFORMATION | wxOK);
 }
 
+void MinFrame::OnHelp(wxCommandEvent & event)
+{
+	wxMessageBox(wxT("Walkthrough for Solar Car Simulation\n"), wxT("Walkthrough"), wxOK);
+}
+
 Field::Field(std::string name, wxPanel *parent)
 {
 	label = new wxStaticText(parent, -1, name);
 	field = new wxTextCtrl(parent, -1, "0.0", wxDefaultPosition, wxDefaultSize, wxTE_LEFT);
+	parent_ref = parent;
 }
 
 double Field::get()
@@ -538,4 +568,33 @@ double Field::get()
 void Field::set(double v)
 {
 	field->SetValue(std::to_string(v));
+}
+
+void Field::set(std::string s)
+{
+	field->SetValue(wxString(s));
+}
+
+Graph::Graph(std::string name, std::string description, wxPanel * parent)
+{
+	parent_ref = parent;
+	graph = new mpWindow(parent, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
+	wrapper = new wxStaticBoxSizer(wxVERTICAL, parent, name);
+	legend = new wxStaticText(parent, -1, description);
+	prepareGraph();
+
+	wrapper->Add(legend);
+	wrapper->Add(graph);
+}
+
+void Graph::updateText(std::string rename, std::string new_legend)
+{
+}
+
+void Graph::setGraph(std::vector<double> vectorX, std::vector<double> vectorY, wxColor color)
+{
+}
+
+void Graph::prepareGraph()
+{
 }

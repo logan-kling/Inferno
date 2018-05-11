@@ -32,9 +32,28 @@ public:
 
 	double get();
 	void set(double v);
+	void set(std::string s);
 
+	wxPanel *parent_ref;
 	wxTextCtrl *field;
 	wxStaticText *label;
+};
+
+class Graph
+{
+public:
+	Graph(std::string name, std::string description, wxPanel *parent);
+
+	void updateText(std::string rename, std::string new_legend);
+	void setGraph(std::vector<double> vectorX, std::vector<double> vectorY, wxColor color);
+	void prepareGraph();
+
+
+	wxPanel *parent_ref;
+	wxStaticBoxSizer* wrapper;
+	wxStaticText* legend;
+	mpFXYVector* vector;
+	mpWindow* graph;
 };
 
 class MinApp : public wxApp {
@@ -72,16 +91,14 @@ private:
 	/*
 		Input Variables
 	*/
-	Field *consumption, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples;
+	Field *consumption, *efficiency, *weight, *resistance, *charge, *incline, *speed, *routeDistance, *routeSamples;
 	wxSizer *i_sizer, *route_sizer;
 	wxRadioBox *buttonGroup;	//Radio buttons for selecting run mode
 	
 	/*
 		Output Variables
 	*/
-	Field *bestSpeed, *bestDistance;
-	wxStaticText *o_t1, *o_t2;
-	wxTextCtrl *o_v1, *o_v2;
+	Field *bestSpeed, *bestDistance, *tripTime, *chargeTime;
 	wxSizer *o_sizer;
 
 	/*
@@ -120,6 +137,7 @@ private:
 	void OnLoad(wxCommandEvent& event);
 	void OnQuit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
+	void OnHelp(wxCommandEvent& event);
 	void OnRadioBoxChange(wxCommandEvent& event);								//Radio Box Listener
 
 	wxDECLARE_EVENT_TABLE();
@@ -132,7 +150,8 @@ enum {
 	Edit_Import,
 	Edit_Clear,
 	File_Save,
-	File_Load
+	File_Load,
+	Help_Walkthrough
 };
 
 /* Event table */
@@ -145,5 +164,6 @@ EVT_MENU(File_Load, MinFrame::OnLoad)
 EVT_MENU(Edit_Clear, MinFrame::OnClear)
 EVT_MENU(wxID_EXIT, MinFrame::OnQuit)
 EVT_MENU(wxID_ABOUT, MinFrame::OnAbout)
+EVT_MENU(Help_Walkthrough, MinFrame::OnHelp)
 EVT_RADIOBOX(wxID_RADIOBOX, MinFrame::OnRadioBoxChange)
 wxEND_EVENT_TABLE()
