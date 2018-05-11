@@ -34,6 +34,9 @@ public:
 	void set(double v);
 	void set(std::string s);
 
+	void hide();
+	void show();
+
 	wxPanel *parent_ref;
 	wxTextCtrl *field;
 	wxStaticText *label;
@@ -44,10 +47,12 @@ class Graph
 public:
 	Graph(std::string name, std::string description, wxPanel *parent);
 
-	void updateText(std::string rename, std::string new_legend);
+	void updateText(std::string new_legend);
 	void setGraph(std::vector<double> vectorX, std::vector<double> vectorY, wxColor color);
 	void prepareGraph();
 
+	void hide();
+	void show();
 
 	wxPanel *parent_ref;
 	wxStaticBoxSizer* wrapper;
@@ -105,7 +110,7 @@ private:
 		Graph Variables:
 	*/
 	mpFXYVector *elevationLayer, *batteryLayer, *speedLayer;
-	mpWindow *outputGraph, *outputGraph2, *elevationGraph;
+	Graph* outputGraph, *outputGraph2, *elevationGraph;
 	float samples, distance;
 	std::vector<double> elevations;
 
@@ -135,6 +140,8 @@ private:
 	void OnClear(wxCommandEvent& event);
 	void OnSave(wxCommandEvent& event);
 	void OnLoad(wxCommandEvent& event);
+
+	/* CALL graph->Destroy() FOR ALL GRAPHS HERE OR THE PROGRAM BREAKS!!!*/
 	void OnQuit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
 	void OnHelp(wxCommandEvent& event);

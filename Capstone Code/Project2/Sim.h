@@ -25,6 +25,8 @@ public:
 
 	std::vector<double> changes;
 
+	double	totalTime = 0.0;
+	double	rechargeTime = 0.0;
 	double	wattPower = 149140;	// "horsepower" in watts (Watt)
 	double	maxBatteryCharge;	// This is the maximum ammount the battery can be charged to in KilowattHours (KWh)
 	double	batteryCharge;		// In KilowattHours	(KWh)

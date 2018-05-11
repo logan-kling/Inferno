@@ -64,19 +64,21 @@ MinFrame::MinFrame(const wxString& title)
 	choices.Add("Get Course");
 
 	/*	Create and prepare elevation graph	*/
-	elevationLayer = new mpFXYVector(_("Elevation"));
-	elevationGraph = new mpWindow(in_p, -1, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
-	prepareGraph(elevationGraph);
+	
+	elevationGraph = new Graph("Elevation", "X: Distance(meters), Y: Height(meters)",in_p);
+	
+	//elevationLayer = new mpFXYVector(_("Elevation"));
+	//elevationGraph = new mpWindow(in_p, -1, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
+	//prepareGraph(elevationGraph);
 
 
 	/*	Create the form fields	*/
 	i_sizer = new wxStaticBoxSizer(wxVERTICAL, in_p, "Input");
-	route_sizer = new wxStaticBoxSizer(wxVERTICAL, in_p, "Route Information");
 	consumption = new Field("Motor Consumption:", in_p);
 	weight = new Field("Weight (kg):", in_p);
 	resistance = new Field("Vehicle Drag (const):", in_p);
-	charge = new Field("Charge (KWh):", in_p);
-	speed = new Field("Speed (Mph):", in_p);
+	charge = new Field("Charge (Watthours):", in_p);
+	speed = new Field("Speed (km/h):", in_p);
 	incline = new Field("Incline:", in_p);
 	routeDistance = new Field("Route Distance (meters):", in_p);
 	routeSamples = new Field("Number of samples:", in_p);
@@ -105,20 +107,14 @@ MinFrame::MinFrame(const wxString& title)
 	i_sizer->Add(incline->label);
 	i_sizer->Add(incline->field, 0, wxALL, 10);
 
-	route_sizer->Add(elevationGraph, 1, wxEXPAND);
-	route_sizer->Add(routeDistance->label);
-	route_sizer->Add(routeDistance->field, 0, wxALL, 10);
-	route_sizer->Add(routeSamples->label);
-	route_sizer->Add(routeSamples->field, 0, wxALL, 10);
+	elevationGraph->wrapper->Add(routeDistance->label);
+	elevationGraph->wrapper->Add(routeDistance->field, 0, wxALL, 10);
+	elevationGraph->wrapper->Add(routeSamples->label);
+	elevationGraph->wrapper->Add(routeSamples->field, 0, wxALL, 10);
 
-	i_sizer->Add(route_sizer, 0, wxEXPAND, 10);
-
-	i_sizer->Hide(speed->label, true);
-	i_sizer->Hide(speed->field, true);
-	i_sizer->Hide(route_sizer, true);
+	i_sizer->Add(elevationGraph->wrapper, 0, wxEXPAND, 10);
 
 	in_p->SetSizer(i_sizer, wxEXPAND);
-	route_sizer->SetSizeHints(in_p);
 	i_sizer->SetSizeHints(in_p);
 
 	// ---------------------------------------------------
@@ -126,16 +122,12 @@ MinFrame::MinFrame(const wxString& title)
 	// ---------------------------------------------------
 
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, out_p, "Output");
-	bestSpeed = new Field("Best Speed:", out_p);
-	bestDistance = new Field("Distance:", out_p);
+	bestSpeed = new Field("Best Speed(km/h):", out_p);
+	bestDistance = new Field("Distance(Kilometers):", out_p);
 
 	//Assign a graph element to the outputGraph variable
-	speedLayer = new mpFXYVector(_("Speed"));
-	batteryLayer = new mpFXYVector(_("Battery"));
-	outputGraph = new mpWindow(out_p, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
-	outputGraph2 = new mpWindow(out_p, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
-	prepareGraph(outputGraph);
-	prepareGraph(outputGraph2);
+	outputGraph = new Graph("Speed", "X: Distance(km), Y: Speed(km/h)", out_p);
+	outputGraph2 = new Graph("Battery", "X: Distance(km), Y: Charge(Watthours)", out_p);
 
 	o_sizer->Add(bestSpeed->label, 0, wxALL, 10);
 	o_sizer->Add(bestSpeed->field, 0, wxALL, 10);
@@ -143,8 +135,8 @@ MinFrame::MinFrame(const wxString& title)
 	o_sizer->Add(bestDistance->field, 0, wxALL, 10);
 
 	// Add the graph element
-	o_sizer->Add(outputGraph, 1, wxEXPAND);
-	o_sizer->Add(outputGraph2, 1, wxEXPAND);
+	o_sizer->Add(outputGraph->wrapper, 1, wxEXPAND);
+	o_sizer->Add(outputGraph2->wrapper, 1, wxEXPAND);
 
 	out_p->SetSizer(o_sizer, wxEXPAND);
 	o_sizer->SetSizeHints(out_p);
@@ -152,7 +144,16 @@ MinFrame::MinFrame(const wxString& title)
 	SetMinClientSize(wxSize(600, 600));
 	SetClientSize(600, 650);
 
-	Layout();
+
+	//These items need to be hidden since we are starting on radio button 1
+	// and unfortunately initializing the radio button selection does not call
+	// our OnRadioBoxChange!
+	speed->hide();
+	elevationGraph->hide();
+	outputGraph2->hide();
+
+	in_p->Layout();
+	out_p->Layout();
 }
 
 void MinFrame::prepareGraph(mpWindow * graph)
@@ -216,7 +217,6 @@ void MinFrame::LoadInputForms(std::vector<std::string> loaded)
 	in the inputPannel */
 void MinFrame::setGraph(mpWindow *graph, mpFXYVector *layer, std::vector<double> vectorX, std::vector<double> vectorY, wxColor color)
 {
-	
 	layer->SetData(vectorX, vectorY);			//Adds the x and y coords to the layer
 	layer->SetContinuity(true);				//Draw lines in between the points
 	wxPen vectorpen(color, 5, wxPENSTYLE_SOLID);	//Set line size and color
@@ -253,8 +253,10 @@ void MinFrame::HandleMainCalcs(double charge, double weight, double resistance)
 		xAxis.push_back(i);
 	}
 
-	setGraph(outputGraph, speedLayer, xAxis, car->velocities, *wxBLUE);
-	setGraph(outputGraph2, batteryLayer, xAxis, car->charges, *wxGREEN);
+	//setGraph(outputGraph, speedLayer, xAxis, car->velocities, *wxBLUE);
+	//setGraph(outputGraph2, batteryLayer, xAxis, car->charges, *wxGREEN);
+	outputGraph->setGraph(xAxis, car->velocities, *wxBLUE);
+	outputGraph2->setGraph(xAxis, car->charges, *wxGREEN);
 
 	/*speedLayer->SetData(xAxis, car->velocities);
 	speedLayer->SetContinuity(true);
@@ -284,53 +286,47 @@ void MinFrame::HandleMainCalcs(double charge, double weight, double resistance)
 void MinFrame::OnRadioBoxChange(wxCommandEvent& event)
 {
 	if (buttonGroup->GetString(event.GetSelection()) == "Get Distance") {
-		i_sizer->Hide(route_sizer, true);
-		i_sizer->Show(consumption->label, true);
-		i_sizer->Show(consumption->field, true);
-		i_sizer->Show(speed->label, true);
-		i_sizer->Show(speed->field, true);
-		i_sizer->Show(incline->label, true);
-		i_sizer->Show(incline->field, true);
+		elevationGraph->hide();
+		consumption->show();
+		speed->show();
+		incline->show();
 
-		o_sizer->Hide(bestSpeed->label, true);
-		o_sizer->Hide(bestSpeed->field, true);
-		o_sizer->Hide(outputGraph, true);
-		o_sizer->Hide(outputGraph2, true);
+		bestSpeed->hide();
+		bestDistance->show();
+		outputGraph->hide();
+		outputGraph2->hide();
+		//o_sizer->Hide(outputGraph2, true);
 
 		i_sizer->Layout();
 		o_sizer->Layout();
 		
 	}
 	else if (buttonGroup->GetString(event.GetSelection()) == "Get Best Speed") {
-		i_sizer->Hide(route_sizer, true);
-		i_sizer->Show(consumption->label, true);
-		i_sizer->Show(consumption->field, true);
-		i_sizer->Hide(speed->label, true);
-		i_sizer->Hide(speed->field, true);
-		i_sizer->Show(incline->label, true);
-		i_sizer->Show(incline->field, true);
+		elevationGraph->hide();
+		consumption->show();
+		speed->hide();
+		incline->show();
 
-		o_sizer->Show(bestSpeed->label, true);
-		o_sizer->Show(bestSpeed->field, true);
-		o_sizer->Show(outputGraph, true);
-		o_sizer->Hide(outputGraph2, true);
+		bestSpeed->show();
+		bestDistance->show();
+		outputGraph->show();
+		outputGraph2->hide();
+		//o_sizer->Hide(outputGraph2, true);
 
 		i_sizer->Layout();
 		o_sizer->Layout();
 	}
 	else {
-		i_sizer->Show(route_sizer, true);
-		i_sizer->Hide(consumption->label, true);
-		i_sizer->Hide(consumption->field, true);
-		i_sizer->Hide(speed->label, true);
-		i_sizer->Hide(speed->field, true);
-		i_sizer->Hide(incline->label, true);
-		i_sizer->Hide(incline->field, true);
+		elevationGraph->show();
+		consumption->hide();
+		speed->hide();
+		incline->hide();
 
-		o_sizer->Hide(bestSpeed->label, true);
-		o_sizer->Hide(bestSpeed->field, true);
-		o_sizer->Show(outputGraph, true);
-		o_sizer->Show(outputGraph2, true);
+		bestSpeed->hide();
+		bestDistance->hide();
+		outputGraph->show();
+		outputGraph2->show();
+		//o_sizer->Show(outputGraph2, true);
 
 		i_sizer->Layout();
 		o_sizer->Layout();
@@ -372,11 +368,12 @@ void MinFrame::OnRun(wxCommandEvent & event)
 		speeds.erase(speeds.begin());
 
 		std::vector<double> vec;
-		for (int i = 0; i < speeds.size(); i++) {
+		for (int i = 16; i < speeds.size() + 16; i++) {
 			vec.push_back((double)i);
 		}
 
-		setGraph(outputGraph, speedLayer, speeds, vec, *wxBLUE);
+		//setGraph(outputGraph, speedLayer, vec, speeds, *wxBLUE);
+		outputGraph->setGraph(vec, speeds, *wxBLUE);
 	}
 	else {
 		HandleMainCalcs(charge->get(), weight->get(), resistance->get());
@@ -449,7 +446,8 @@ void MinFrame::OnImport(wxCommandEvent & event)
 	distance = distVal;
 	elevations = vectorY;
 
-	setGraph(elevationGraph, elevationLayer, vectorX, vectorY, *wxBLUE);
+	elevationGraph->setGraph(vectorX, vectorY, *wxBLUE);
+	//setGraph(elevationGraph, elevationLayer, vectorX, vectorY, *wxBLUE);
 
 }
 
@@ -540,6 +538,9 @@ void MinFrame::OnLoad(wxCommandEvent & event)
 
 void MinFrame::OnQuit(wxCommandEvent & event)
 {
+	elevationGraph->graph->Destroy();
+	outputGraph->graph->Destroy();
+	outputGraph2->graph->Destroy();
 	Close(true);
 }
 
@@ -550,7 +551,16 @@ void MinFrame::OnAbout(wxCommandEvent & event)
 
 void MinFrame::OnHelp(wxCommandEvent & event)
 {
-	wxMessageBox(wxT("Walkthrough for Solar Car Simulation\n"), wxT("Walkthrough"), wxOK);
+	wxString wlk = "This program has three run modes, selectable using the radio buttons.\n";
+	wlk += "Get Distance uses a set speed and other variables to return the best case distance\n";
+	wlk += "Get Best Speed uses an array of speeds from 16 to 65 to find the one that maximizes distance\n";
+	wlk += "Get Course uses elevation input from the Google Maps webpage to calculate performance over long distance\n";
+	wlk += " -The graph of charge will suddenly jump up when the charge reaches a minimum percent. ";
+	wlk += "This is what happens when the car is low on power, the simulation calculates the time it would take to recharge the cells to a target percentage and then sets it to that percent. ";
+	wlk += "\n\n";
+	wlk += "To access the map, if you installed using the setup package, route.html will be located in your install folder. ";
+	wlk += "If you are running from the github download, route.html will be in the project directory and the webviewCode folder. ";
+	wxMessageBox(wlk, wxT("Walkthrough"), wxOK);
 }
 
 Field::Field(std::string name, wxPanel *parent)
@@ -575,26 +585,69 @@ void Field::set(std::string s)
 	field->SetValue(wxString(s));
 }
 
+void Field::hide()
+{
+	parent_ref->GetSizer()->Hide(field, true);
+	parent_ref->GetSizer()->Hide(label, true);
+}
+
+void Field::show()
+{
+	parent_ref->GetSizer()->Show(label, true);
+	parent_ref->GetSizer()->Show(field, true);
+}
+
 Graph::Graph(std::string name, std::string description, wxPanel * parent)
 {
 	parent_ref = parent;
 	graph = new mpWindow(parent, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), wxSUNKEN_BORDER);
+	vector = new mpFXYVector(_("Vector"));
 	wrapper = new wxStaticBoxSizer(wxVERTICAL, parent, name);
 	legend = new wxStaticText(parent, -1, description);
 	prepareGraph();
 
 	wrapper->Add(legend);
-	wrapper->Add(graph);
+	wrapper->Add(graph, 1, wxEXPAND);
 }
 
-void Graph::updateText(std::string rename, std::string new_legend)
+void Graph::updateText(std::string new_legend)
 {
+	legend->SetLabelText(new_legend);
 }
 
 void Graph::setGraph(std::vector<double> vectorX, std::vector<double> vectorY, wxColor color)
 {
+	vector->SetData(vectorX, vectorY);			//Adds the x and y coords to the layer
+	vector->SetContinuity(true);				//Draw lines in between the points
+	wxPen vectorpen(color, 5, wxPENSTYLE_SOLID);	//Set line size and color
+	vector->SetPen(vectorpen);					//gives the pen to the layer
+	vector->SetDrawOutsideMargins(false);		//Makes sure the graph isnt drawn outside of the graph bounds
+	graph->SetMargins(10, 10, 30, 60);		//Sets our margins, top->right->bottom->left
+	graph->AddLayer(vector);			//Adds the plotted x/y coordinates to our graph
+	graph->Fit();							//Zoom the graph properly after everything has been added
 }
 
 void Graph::prepareGraph()
 {
+	wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);//Set the font for the graph
+	mpScaleX* xaxis = new mpScaleX(wxT("X"), mpALIGN_BOTTOM, true, mpX_NORMAL);		//Label the x axis
+	mpScaleY* yaxis = new mpScaleY(wxT("Y"), mpALIGN_LEFT, true);					//Label the y axis
+	xaxis->SetFont(graphFont);														//Set font for x axis
+	yaxis->SetFont(graphFont);														//Set font for y axis
+	xaxis->SetDrawOutsideMargins(false);											//Dont't draw the axis outside margins
+	yaxis->SetDrawOutsideMargins(false);
+	graph->AddLayer(xaxis);												//add the axis to the graph
+	graph->AddLayer(yaxis);
+	graph->EnableDoubleBuffer(true);										//reduces flicker when graph is drawn
+	graph->SetMPScrollbars(true);											//adds scroll bars if the graph window is too small
+}
+
+void Graph::hide()
+{
+	parent_ref->GetSizer()->Hide(wrapper, true);
+}
+
+void Graph::show()
+{
+	parent_ref->GetSizer()->Show(wrapper, true);
 }

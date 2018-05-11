@@ -170,6 +170,7 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 		charges.push_back(batteryCharge);
 		velocities.push_back(velChoose[chosen]);
 
+		totalTime += secTime;
 		//changes is just for testing purposes
 		//changes.push_back(i);
 	}
@@ -178,7 +179,7 @@ void MyCar::doMainCalcs(double charge, double weight, double drag, float distanc
 /* Take solar input from panels and the current charge, calculate the time
 	until the current charge reaches the minimum charge. */
 void MyCar::WaitForRecharge() {
-	//For now I am just setting the battery to recharged, the wait will be implemented later.
+	double neededCharge = (maxBatteryCharge * targetCharge) - batteryCharge;
 	batteryCharge = maxBatteryCharge * targetCharge;
 }
 
