@@ -5,6 +5,11 @@ earlier versions should have guides on the wxWiki.
 
 wxWidgets can also be used with command line compilers and other IDEs.
 
+Documentation for wxWidgets can be found here:
+  http://docs.wxwidgets.org/3.0/
+
+Example wxWidgets code for just about every possible wxWidgets item can be found in '<wxWidgets install path>\samples'
+
 -----------------------------------------------------------
 Install
 -----------------------------------------------------------
