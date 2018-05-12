@@ -1,3 +1,15 @@
+/*
+
+Computer Science Senior Capstone --- Fall 2017-Spring 2018
+
+Solar Car Simulation
+
+Dakota Zaengle, Logan Kling, Dennie Devito
+
+Prepared for: Phoenix Solar Racing
+
+*/
+
 #include <string>
 #pragma warning(disable:4996)
 #pragma warning(disable:4003)
