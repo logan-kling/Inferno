@@ -81,7 +81,7 @@ MinFrame::MinFrame(const wxString& title)
 	course_sizer = new wxGridSizer(2, 5, 10);					// Sizer to hold variables specific to 'Get Course'
 	route_sizer = new wxGridSizer(2, 5, 5);						// Sizer to put the two elevation variables side by side
 
-	consumption = new Field("Motor Consumption:", in_p);
+	consumption = new Field("Motor Consumption(Watts/Km):", in_p);
 	weight = new Field("Weight (kg):", in_p);
 	resistance = new Field("Vehicle Drag (const):", in_p);
 	charge = new Field("Charge (WattHours):", in_p);
@@ -146,12 +146,12 @@ MinFrame::MinFrame(const wxString& title)
 	o_sizer = new wxStaticBoxSizer(wxVERTICAL, out_p, "Output");
 	bestSpeed = new Field("Best Speed(km/h):", out_p);
 	bestDistance = new Field("Distance(meters):", out_p);
-	tripTime = new Field("Total Trip Time(hours):", out_p);
+	tripTime = new Field("Time Spent Driving(hours):", out_p);
 	chargeTime = new Field("Time Spent Recharging(hours):", out_p);
 
 	//Assign a graph element to the outputGraph variable
 	outputGraph = new Graph("Speed", "X: Distance(km), Y: Speed(km/h)", out_p);
-	outputGraph2 = new Graph("Battery", "X: Distance(km), Y: Charge(KWh)", out_p);
+	outputGraph2 = new Graph("Battery", "X: Distance(km), Y: Charge(Watthours)", out_p);
 
 	o_sizer->Add(bestSpeed->label, 0, wxALL, 10);
 	o_sizer->Add(bestSpeed->field, 0, wxALL, 10);
@@ -309,6 +309,7 @@ void MinFrame::OnRadioBoxChange(wxCommandEvent& event)
 		tripTime->hide();
 		chargeTime->hide();
 		outputGraph->show();
+		outputGraph->updateText("X: Speed(km/h), Y: Distance(m)");
 		outputGraph2->hide();
 
 		i_sizer->Layout();
@@ -326,6 +327,7 @@ void MinFrame::OnRadioBoxChange(wxCommandEvent& event)
 		tripTime->show();
 		chargeTime->show();
 		outputGraph->show();
+		outputGraph->updateText("X: Distance(km), Y: Speed(km/h)");
 		outputGraph2->show();
 
 		i_sizer->Layout();

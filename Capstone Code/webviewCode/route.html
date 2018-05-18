@@ -89,6 +89,8 @@
 
         var elevator = new google.maps.ElevationService;
         var onChangeHandler = function () {
+			path = [];
+			elevation = [];
             calculateAndDisplayRoute(directionsService, directionsDisplay, map, elevator);
         };
         var doElevation = function () {

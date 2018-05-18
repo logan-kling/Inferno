@@ -1,16 +1,22 @@
-﻿E:\VisualStudioEnterprise2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Project2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Project2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  mathplot.cpp
+  Sim.cpp
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\sim.cpp(126): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\sim.cpp(129): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\sim.cpp(145): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\sim.cpp(146): warning C4018: '<': signed/unsigned mismatch
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\sim.cpp(147): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Source.cpp
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(137): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(168): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(369): warning C4018: '<': signed/unsigned mismatch
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(443): warning C4018: '<': signed/unsigned mismatch
-c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(585): warning C4927: illegal conversion; more than one user-defined conversion has been implicitly applied
-  c:\users\tapoz\documents\github\inferno\capstone code\project2\source.cpp(585): note: while calling the constructor 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(const _Elem *const )'
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(139): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(170): warning C4305: 'argument': truncation from 'wxStretch' to 'bool'
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(373): warning C4018: '<': signed/unsigned mismatch
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(447): warning C4018: '<': signed/unsigned mismatch
+c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(589): warning C4927: illegal conversion; more than one user-defined conversion has been implicitly applied
+  c:\users\tapoz\onedrive\documents\github\inferno\capstone code\project2\source.cpp(589): note: while calling the constructor 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(const _Elem *const )'
           with
           [
               _Elem=char
           ]
-  e:\visualstudioenterprise2017\vc\tools\msvc\14.11.25503\include\xstring(1975): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string'
-  Project2.vcxproj -> C:\Users\tapoz\Documents\GitHub\Inferno\Capstone Code\Debug\CapstoneBase.exe
-  Project2.vcxproj -> C:\Users\tapoz\Documents\GitHub\Inferno\Capstone Code\Debug\CapstoneBase.pdb (Partial PDB)
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.13.26128\include\xstring(2158): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string'
+  Generating Code...
+  Project2.vcxproj -> C:\Users\tapoz\OneDrive\Documents\GitHub\Inferno\Capstone Code\Debug\CapstoneBase.exe
