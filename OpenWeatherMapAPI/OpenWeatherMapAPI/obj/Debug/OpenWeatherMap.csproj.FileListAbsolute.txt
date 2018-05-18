@@ -1,0 +1,8 @@
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\howto_list_temperatures.Properties.Resources.resources
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\OpenWeatherMap.csproj.GenerateResource.Cache
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\howto_list_temperatures.exe
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\howto_list_temperatures.pdb
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\bin\Debug\howto_list_temperatures.exe.config
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\bin\Debug\howto_list_temperatures.exe
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\bin\Debug\howto_list_temperatures.pdb
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\OpenWeatherMapAPI.OpenWeatherMapForm.resources

@@ -1,0 +1,46 @@
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\howto_list_temperatures.Properties.Resources.resources
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\OpenWeatherMapAPI.csproj.GenerateResource.Cache
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\howto_list_temperatures.exe
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\howto_list_temperatures.pdb
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\obj\Debug\OpenWeatherMapAPI.OpenWeatherMapAPIForm.resources
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\bin\Debug\howto_list_temperatures.exe.config
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\bin\Debug\howto_list_temperatures.exe
+C:\Users\joshu\Downloads\howto_list_temperatures1\howto_list_temperatures\bin\Debug\howto_list_temperatures.pdb
+C:\Users\joshu\Downloads\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.exe.config
+C:\Users\joshu\Downloads\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.exe
+C:\Users\joshu\Downloads\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.pdb
+C:\Users\joshu\Downloads\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csprojResolveAssemblyReference.cache
+C:\Users\joshu\Downloads\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.OpenWeatherMapAPIForm.resources
+C:\Users\joshu\Downloads\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.Properties.Resources.resources
+C:\Users\joshu\Downloads\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csproj.GenerateResource.Cache
+C:\Users\joshu\Downloads\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.exe
+C:\Users\joshu\Downloads\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.pdb
+C:\Users\joshu\Documents\EMIS Group\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.exe.config
+C:\Users\joshu\Documents\EMIS Group\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.exe
+C:\Users\joshu\Documents\EMIS Group\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.pdb
+C:\Users\joshu\Documents\EMIS Group\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csprojResolveAssemblyReference.cache
+C:\Users\joshu\Documents\EMIS Group\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.OpenWeatherMapAPIForm.resources
+C:\Users\joshu\Documents\EMIS Group\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.Properties.Resources.resources
+C:\Users\joshu\Documents\EMIS Group\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csproj.GenerateResource.Cache
+C:\Users\joshu\Documents\EMIS Group\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.exe
+C:\Users\joshu\Documents\EMIS Group\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.pdb
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.exe.config
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.exe
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.pdb
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csprojResolveAssemblyReference.cache
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.OpenWeatherMapAPIForm.resources
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.Properties.Resources.resources
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csproj.GenerateResource.Cache
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csproj.CoreCompileInputs.cache
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.exe
+C:\Users\Dennie Devito\Documents\GitHub\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.pdb
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.exe.config
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.exe
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\bin\Debug\howto_list_temperatures.pdb
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csprojResolveAssemblyReference.cache
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.OpenWeatherMapAPIForm.resources
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.Properties.Resources.resources
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csproj.GenerateResource.Cache
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\OpenWeatherMapAPI.csproj.CoreCompileInputs.cache
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.exe
+C:\Users\bruno\Desktop\OW\OpenWeatherMapAPI-20180227T221224Z-001\OpenWeatherMapAPI\OpenWeatherMapAPI\OpenWeatherMapAPI\obj\Debug\howto_list_temperatures.pdb
