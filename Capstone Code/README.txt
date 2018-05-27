@@ -11,7 +11,15 @@ Documentation for wxWidgets can be found here:
 Example wxWidgets code for just about every possible wxWidgets item can be found in '<wxWidgets install path>\samples'
 
 -----------------------------------------------------------
-Install
+Contents
+-----------------------------------------------------------
+* Install - wxWidgets
+* Troubleshooting
+* Using the Installer Package
+* File Guide
+
+-----------------------------------------------------------
+Install - wxWidgets
 -----------------------------------------------------------
 
 Start by going here: https://www.wxwidgets.org/downloads/ and downloading the 3.1.0 version of the wxWidgets installer.
@@ -79,3 +87,16 @@ Running the file should simply open the webpage in your default browser!
 **IMPORTANT**
 Google Maps requires that you have a valid API key, this is how they keep track of how many requests your website makes and how much they should bill you if you pay for more than the basic package.
 It's currently using my API key but Google is changing how these keys are handled (they will require you to set up billing) which means that eventually it will need to be updated.
+
+-----------------------------------------------------------
+File Guide
+-----------------------------------------------------------
+** FOLDERS **
+/Debug - This is where the project as a whole gets built to.
+/OpenWeatherMapAPI - This contains the Weather API. Un-used in the main program it can get temperature data and cloud coverage.
+/Project2 - The code for the main Project is contained here. 
+/Setup1 - The installer package creates its installers here.
+/UnitTest1 - Some basic Unit Tests for the math code in Sim.h/.cpp
+** FILES **
+Project2.sln - The solution file for the whole project. Open this in Visual Studio to modify the program.
+README.txt - You Are Here! This should contain general info about anything in the project.
