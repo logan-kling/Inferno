@@ -1,4 +1,4 @@
 # Inferno
-Repository for all files &amp; documentation
+Repository for all files &amp; documentation related to the Solar Car Simulation for OSU's Phoenix Solar Racing Team. This is a program to simulate the performance of the Phoenix Solar Racing teams solar car in order to improve their race strategy. Far more detailed information about this can be found in the [Project Requirements Document](https://github.com/logan-kling/Inferno/tree/master/Project%20Requirements%20Document), [Technology Review](https://github.com/logan-kling/Inferno/tree/master/Technology%20Review), &amp; Progress Report folders. The most up to date progress report being the one for the [Winter Final](https://github.com/logan-kling/Inferno/tree/master/Progress%20Report%20Winter%20Final/Logan%20Kling).
 
-Code related readme is in 'Capstone Code' folder
+The [Capstone Code](https://github.com/logan-kling/Inferno/tree/master/Capstone%20Code) folder contains a README with far more technical details on the program.
